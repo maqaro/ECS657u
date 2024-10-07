@@ -41,6 +41,13 @@ public class PlayerMovement : MonoBehaviour
         MovePlayer();
     }
 
+    private void ApplyCustomGravity()
+    {
+        if (isGrounded)
+        {
+            rb.AddForce(Vector3.down * 20f, ForceMode.Acceleration);
+        }
+    }
     void Update()
     {
         isGrounded = (Mathf.Abs(rb.velocity.y) < 0.001f) ? true : false;
@@ -54,7 +61,8 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            rb.drag = 0;
+            rb.drag = 4;
+            ApplyCustomGravity();
         }
     }
 
