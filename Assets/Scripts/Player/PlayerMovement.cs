@@ -14,6 +14,21 @@ public class PlayerMovement : MonoBehaviour
     public float airMultiplier;
     bool readyToJump = true;
 
+    [Header("Attacking")]
+    public float attackDistance = 3f;
+    public float attackDelay = 0.4f;
+    public float attackSpeed = 1f;
+    public float attackDamage = 1;
+    public LayerMask attackLayer;
+
+    public GameObject hitEffect;
+    public AudioClip swordSwing;
+    public AudioClip hitSound;
+
+    bool attacking = false;
+    bool readyToAttack = true;
+    int attackCount = 0;
+
     [Header("Keybinds")]
     public KeyCode jumpKey = KeyCode.Space;
 
@@ -56,6 +71,13 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.drag = 0;
         }
+
+        if (input.Attack.IsPressed())
+        {
+            Attack();
+        }
+
+        SetAnimations();
     }
 
     private void MyInput()
@@ -104,5 +126,38 @@ public class PlayerMovement : MonoBehaviour
 
     private void resetJump(){
         readyToJump = true;
+    }
+
+    public void Attack(){
+        if (!readyToAttack || attack) return;
+        
+        readyToAttack = false;
+        attacking = true;
+
+        Invoke(nameof(ResetAttack), attackSpeed);
+        Invoke(nameof(ResetReadyToAttack), attackDelay);
+
+        audioSource.pitch = Random.Range(0.9f, 1.1f);
+        audioSource.PlayOneShot(swordSwing);
+    }
+
+    void ResetAttack(){
+        attacking = false;
+        readyToAttack = true;
+    }
+
+    void AttackRaycast(){
+        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out RaycastHit hit, attackDistance, attackLayer)){
+            HitTarget(hit.point);
+            
+        }
+    }
+
+    void HitTarget(Vector3 pos){
+        audioSource.pitch = 1;
+        audioSource.PlayOneShot(hitSound);
+
+        GameObject G0 = Instantiate(hitEffect, pos, Quaternion.identity);
+        Destroy(G0, 20);
     }
 }
