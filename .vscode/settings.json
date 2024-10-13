@@ -56,5 +56,6 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "ECS657u.sln"
+    "dotnet.defaultSolution": "ECS657u.sln",
+    "dotnet.preferCSharpExtension": true
 }
