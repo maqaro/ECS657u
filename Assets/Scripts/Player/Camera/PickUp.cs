@@ -9,6 +9,9 @@ public class PickUpScript : MonoBehaviour
     public Transform holdPos;
     public Camera playerCamera;
     private Animator swordAnimator;
+    private float originalSenX = 0f;
+    private float originalSenY = 0f;
+
     public float throwForce = 500f; 
     public float pickUpRange = 50f; 
     private float rotationSensitivity = 1f; 
@@ -17,15 +20,13 @@ public class PickUpScript : MonoBehaviour
     private bool canDrop = true; 
     private int LayerNumber; 
 
-    //Reference to script which includes mouse movement of player (looking around)
-    //we want to disable the player looking around when rotating the object
-    //example below 
-    //MouseLookScript mouseLookScript;
+
+    PlayerCam PlayerCamScript;
     void Start()
     {
         LayerNumber = LayerMask.NameToLayer("HoldLayer"); 
         swordAnimator = sword.GetComponent<Animator>();
-        //mouseLookScript = player.GetComponent<MouseLookScript>();
+        PlayerCamScript = playerCamera.GetComponent<PlayerCam>();
     }
 
     void Update()
@@ -107,24 +108,36 @@ public class PickUpScript : MonoBehaviour
         {
             canDrop = false; 
 
-            //disable player being able to look around
-            //mouseLookScript.verticalSensitivity = 0f;
-            //mouseLookScript.lateralSensitivity = 0f;
+            if (originalSenX == 0 && originalSenY == 0)
+            {
+                originalSenX = PlayerCamScript.senX;
+                originalSenY = PlayerCamScript.senY;
+            }
+
+            PlayerCamScript.senX = 0f;
+            PlayerCamScript.senY = 0f;
 
             float XaxisRotation = Input.GetAxis("Mouse X") * rotationSensitivity;
             float YaxisRotation = Input.GetAxis("Mouse Y") * rotationSensitivity;
-            //rotate the object depending on mouse X-Y Axis
-            heldObj.transform.Rotate(Vector3.down, XaxisRotation);
-            heldObj.transform.Rotate(Vector3.right, YaxisRotation);
+
+            heldObj.transform.Rotate(Vector3.down, XaxisRotation);   
+            heldObj.transform.Rotate(Vector3.right, YaxisRotation); 
         }
         else
         {
-            //re-enable player being able to look around
-            //mouseLookScript.verticalSensitivity = originalvalue;
-            //mouseLookScript.lateralSensitivity = originalvalue;
+            if (originalSenX != 0 && originalSenY != 0)
+            {
+                PlayerCamScript.senX = originalSenX;
+                PlayerCamScript.senY = originalSenY;
+
+                originalSenX = 0;
+                originalSenY = 0;
+            }
+
             canDrop = true;
         }
     }
+
 
     void ThrowObject()
     {
