@@ -8,6 +8,8 @@ public class PlayerMovement : MonoBehaviour
     private float moveSpeed;
     public float walkSpeed;
     public float sprintSpeed;
+    public float dashSpeed;
+    public float dashSpeedChangeFactor;
 
     public float acceleration = 10f;
     public float groundDrag;
@@ -62,9 +64,12 @@ public class PlayerMovement : MonoBehaviour
         freeze,
         walking,
         sprinting,
+        dashing,
         crouching,
         air
     }
+
+    public bool dashing;
 
     void Start()
     {
@@ -98,7 +103,8 @@ public class PlayerMovement : MonoBehaviour
         speedControl();
         StateHandler();
 
-        rb.drag = isGrounded && !activeGrapple ? groundDrag : airDrag;
+        rb.drag = (isGrounded && !activeGrapple && state != MovementState.dashing) ? groundDrag : airDrag;
+
     }
 
     private void MyInput()
@@ -125,36 +131,96 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    private float desiredMoveSpeed;
+    private float lastDesiredMoveSpeed;
+    private MovementState lastState;
+    private bool keepMomentum;
+
     private void StateHandler()
     {
 
-        if (freeze)
+        if (dashing){
+            state = MovementState.dashing;
+            desiredMoveSpeed = dashSpeed;
+            speedChangeFactor = dashSpeedChangeFactor;
+        }
+
+        else if (freeze)
         {
             state = MovementState.freeze;
-            moveSpeed = 0;
+            desiredMoveSpeed = 0;
             rb.velocity = Vector3.zero;
         }
         else if (isGrounded && Input.GetKey(sprintKey))
         {
             state = MovementState.sprinting;
-            moveSpeed = sprintSpeed;
+            desiredMoveSpeed = sprintSpeed;
         }
         else if (isGrounded)
         {
             state = MovementState.walking;
-            moveSpeed = walkSpeed;
+            desiredMoveSpeed = walkSpeed;
         }
 
         if (Input.GetKey(crouchKey))
         {
             state = MovementState.crouching;
-            moveSpeed = crouchSpeed;
+            desiredMoveSpeed = crouchSpeed;
         }
         else
         {
             state = MovementState.air;
+            if(desiredMoveSpeed < sprintSpeed)
+                desiredMoveSpeed = walkSpeed;
+            else
+                desiredMoveSpeed = sprintSpeed;
         }
+
+        bool desiredMoveSpeedHasChanged = desiredMoveSpeed != lastDesiredMoveSpeed;
+        if(lastState == MovementState.dashing)
+            keepMomentum = true;
+
+        if(desiredMoveSpeedHasChanged){
+            if(keepMomentum){
+                StopAllCoroutines();
+                StartCoroutine(SmoothlyLerpMoveSpeed());
+            } 
+            else {
+                StopAllCoroutines();
+                moveSpeed = desiredMoveSpeed;
+            }
+
+        }
+
+
+        lastDesiredMoveSpeed = desiredMoveSpeed;
+        lastState = state;
     }
+
+    private float speedChangeFactor;
+
+    private IEnumerator SmoothlyLerpMoveSpeed()
+    {
+        float time = 0;
+        float difference = Mathf.Abs(desiredMoveSpeed - moveSpeed);
+        float startValue = moveSpeed;
+
+        float boostFactor = speedChangeFactor;
+
+        while (time < difference)
+        {
+            moveSpeed = Mathf.Lerp(startValue, desiredMoveSpeed, time / difference);
+
+            time += Time.deltaTime * boostFactor;
+
+            yield return null;
+        }
+
+        moveSpeed = desiredMoveSpeed;
+        speedChangeFactor = 1f;
+        keepMomentum = false;
+    }
+
 
     private void MovePlayer()
     {
