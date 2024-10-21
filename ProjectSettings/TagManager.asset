@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - canPickUp
+  - Sword
+  - Enemy
   layers:
   - Default
   - TransparentFX
