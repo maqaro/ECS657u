@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028331, g: 0.2257133, b: 0.3069217, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -458,6 +458,7 @@ GameObject:
   - component: {fileID: 395429540}
   - component: {fileID: 395429542}
   - component: {fileID: 395429543}
+  - component: {fileID: 395429544}
   m_Layer: 9
   m_Name: FirstPerson
   m_TagString: Player
@@ -614,6 +615,20 @@ MonoBehaviour:
   dashDuration: 0.25
   dashCd: 1
   dashKey: 102
+--- !u!114 &395429544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 395429537}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4842dedcaa86a44a8305c2ba635ac7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  threshold: -5
+  enemyTag: enemy
 --- !u!1 &435614084
 GameObject:
   m_ObjectHideFlags: 0
@@ -1494,7 +1509,7 @@ GameObject:
   - component: {fileID: 1401591997}
   m_Layer: 0
   m_Name: Enemy
-  m_TagString: Untagged
+  m_TagString: enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
