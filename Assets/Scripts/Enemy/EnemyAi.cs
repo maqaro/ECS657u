@@ -22,9 +22,8 @@ public class EnemyAi : MonoBehaviour
     public bool isDead = false;
 
     //Attacking
-    // public float timeBetweenAttacks;
-    // bool alreadyAttacked;
-    // public GameObject projectile;
+    public float attackCooldown = 1.0f;
+    public bool canAttack = true;
 
     //States
     public float sightRange, attackRange;
@@ -79,29 +78,26 @@ public class EnemyAi : MonoBehaviour
         agent.SetDestination(player.position);
     }
 
-    // private void AttackPlayer()
-    // {
-    //     //Make sure enemy doesn't move
-    //     agent.SetDestination(transform.position);
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player") && canAttack)
+        {
+            PlayerHealth playerHealth = collision.gameObject.GetComponent<PlayerHealth>();
+            if (playerHealth != null)
+            {
+                print("Player hit");
+                playerHealth.TakeDamage(damage);
+                StartCoroutine(AttackCooldown());
+            }
+        }
+    }
 
-    //     transform.LookAt(player);
-
-    //     if (!alreadyAttacked)
-    //     {
-    //         ///Attack code here
-    //         Rigidbody rb = Instantiate(projectile, transform.position, Quaternion.identity).GetComponent<Rigidbody>();
-    //         rb.AddForce(transform.forward * 32f, ForceMode.Impulse);
-    //         rb.AddForce(transform.up * 8f, ForceMode.Impulse);
-    //         ///End of attack code
-
-    //         alreadyAttacked = true;
-    //         Invoke(nameof(ResetAttack), timeBetweenAttacks);
-    //     }
-    // }
-    // private void ResetAttack()
-    // {
-    //     alreadyAttacked = false;
-    // }
+     private IEnumerator AttackCooldown()
+    {
+        canAttack = false;
+        yield return new WaitForSeconds(attackCooldown);
+        canAttack = true;
+    }
 
     public void TakeDamage(int damage)
     {

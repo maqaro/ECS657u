@@ -583,6 +583,7 @@ GameObject:
   - component: {fileID: 395429542}
   - component: {fileID: 395429543}
   - component: {fileID: 395429544}
+  - component: {fileID: 395429545}
   m_Layer: 9
   m_Name: FirstPerson
   m_TagString: Player
@@ -753,6 +754,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   threshold: -5
   enemyTag: enemy
+--- !u!114 &395429545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 395429537}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3d2f60f3383b47f2aebfb9378e76479, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  currentHealth: 0
+  healthbar: {fileID: 1229616679}
 --- !u!1 &435614084
 GameObject:
   m_ObjectHideFlags: 0
@@ -1021,8 +1037,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slider: {fileID: 784880669}
   easeSlider: {fileID: 625907229}
-  maxHealth: 100
-  currentHealth: 100
 --- !u!1 &682868014
 GameObject:
   m_ObjectHideFlags: 0
@@ -1214,7 +1228,7 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
   m_Height: 2
@@ -1794,8 +1808,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slider: {fileID: 784880669}
   easeSlider: {fileID: 625907229}
-  maxHealth: 100
-  currentHealth: 100
 --- !u!1 &1229659000
 GameObject:
   m_ObjectHideFlags: 0
@@ -2709,8 +2721,10 @@ MonoBehaviour:
   walkPoint: {x: 0, y: 0, z: 0}
   walkPointRange: 5
   health: 20
-  damage: 0
+  damage: 5
   isDead: 0
+  attackCooldown: 1
+  canAttack: 1
   sightRange: 20
   attackRange: 0
   playerInSightRange: 0
