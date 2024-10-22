@@ -1769,7 +1769,7 @@ GameObject:
   - component: {fileID: 395429544}
   - component: {fileID: 395429545}
   m_Layer: 9
-  m_Name: FirstPerson
+  m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1920,8 +1920,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4842dedcaa86a44a8305c2ba635ac7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  threshold: -5
-  enemyTag: enemy
+  threshold: -10
+  respawnTag: RespawnPoint
 --- !u!114 &395429545
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2220,7 +2220,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh25570
+  m_Name: pb_Mesh28538
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -2435,7 +2435,7 @@ Transform:
   m_GameObject: {fileID: 569161789}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -19.467821, y: 0.09999996, z: 6}
+  m_LocalPosition: {x: -18.45, y: 0.33, z: 6}
   m_LocalScale: {x: 7.60462, y: 0.80533296, z: 4.3752713}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3257,7 +3257,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh25438
+  m_Name: pb_Mesh28402
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -5594,7 +5594,7 @@ GameObject:
   - component: {fileID: 1438611924}
   - component: {fileID: 1438611923}
   m_Layer: 6
-  m_Name: Plane
+  m_Name: StartingPlatform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5876,7 +5876,39 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 564394575}
+  - {fileID: 1440556224}
   m_Father: {fileID: 2130066514}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1440556223
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1440556224}
+  m_Layer: 0
+  m_Name: RespawnPoint1
+  m_TagString: RespawnPoint
+  m_Icon: {fileID: 2488908585195742037, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1440556224
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1440556223}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 21.18, y: 0.29, z: -13.97}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1438611928}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1559579712
 GameObject:
