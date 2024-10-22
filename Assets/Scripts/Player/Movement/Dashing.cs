@@ -15,8 +15,6 @@ public class Dashing : MonoBehaviour
     public float dashUpwardForce;
     public float dashDuration;
 
-
-
     [Header("Cooldown")]
     public float dashCd;
     private float dashCdTimer;
@@ -64,6 +62,4 @@ public class Dashing : MonoBehaviour
     private void ResetDash(){
         pm.dashing = false;
     }
-    
-
 }
