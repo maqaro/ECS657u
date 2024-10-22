@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class SwordSwing : MonoBehaviour
 {
@@ -10,9 +11,25 @@ public class SwordSwing : MonoBehaviour
     public float attackRange = 1.5f;
     public float damage = 10f;
 
-    void Update()
+    private InputAction swordSwingAction; // Declare the InputAction
+
+    void OnEnable()
     {
-        if (Input.GetMouseButtonDown(0) && canAttack) 
+        // Assuming you have an Input Action called "SwordSwing"
+        swordSwingAction = new InputAction(binding: "<Mouse>/leftButton"); // Bind it to left mouse button
+        swordSwingAction.performed += ctx => OnSwordSwing(); // Add a listener for when the action is performed
+        swordSwingAction.Enable(); // Enable the action
+    }
+
+    void OnDisable()
+    {
+        swordSwingAction.Disable(); // Disable when the object is disabled
+    }
+
+    // Method that triggers when the sword swing action is performed
+    private void OnSwordSwing()
+    {
+        if (canAttack)
         {
             Attack();
         }

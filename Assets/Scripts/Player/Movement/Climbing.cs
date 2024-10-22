@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Climbing : MonoBehaviour
 {
@@ -21,7 +22,6 @@ public class Climbing : MonoBehaviour
     public float climbJumpUpForce;
     public float climbJumpBackForce;
 
-    public KeyCode jumpKey = KeyCode.Space;
     public int climbJumps;
     private int climbJumpsLeft;
 
@@ -43,28 +43,50 @@ public class Climbing : MonoBehaviour
     public float exitWallTime;
     private float exitWallTimer;
 
+    [Header("Input Action Asset")]
+    public InputActionAsset inputActionAsset; // Reference to the InputActionAsset
+    private InputAction climbAction; // Climb input action (replaces Input.GetKey(KeyCode.W))
+    private InputAction jumpAction; // Jump input action (replaces Input.GetKeyDown(jumpKey))
+
+    private void Start()
+    {
+        // Initialize the input actions
+        var playerActionMap = inputActionAsset.FindActionMap("Player");
+        climbAction = playerActionMap.FindAction("Climb");
+        jumpAction = playerActionMap.FindAction("Jump");
+
+        // Enable the input actions
+        climbAction.Enable();
+        jumpAction.Enable();
+
+        // Optional: Subscribe to jumpAction.performed event to trigger ClimbJump
+        jumpAction.performed += ctx => ClimbJump();
+    }
+
     private void Update()
     {
         WallCheck();
         StateMachine();
 
-        if (climbing && !exitingWall) ClimbingMovement();
+        if (climbing && !exitingWall)
+        {
+            ClimbingMovement();
+        }
     }
 
     private void StateMachine()
     {
-        if (wallFront && Input.GetKey(KeyCode.W) && wallLookAngle < maxWallLookAngle && !exitingWall)
+        // Check if climbing action is being performed and the wall is climbable
+        if (wallFront && climbAction.ReadValue<float>() > 0 && wallLookAngle < maxWallLookAngle && !exitingWall)
         {
-            if (!climbing && climbTimer > 0) 
+            if (!climbing && climbTimer > 0)
             {
-
                 StartClimbing();
             }
 
             if (climbTimer > 0) climbTimer -= Time.deltaTime;
             if (climbTimer < 0) StopClimbing();
         }
-
         else if (exitingWall)
         {
             if (climbing) StopClimbing();
@@ -72,17 +94,19 @@ public class Climbing : MonoBehaviour
             if (exitWallTimer > 0) exitWallTimer -= Time.deltaTime;
             if (exitWallTimer < 0) exitingWall = false;
         }
-
         else
         {
-            if (climbing) 
+            if (climbing)
             {
-
                 StopClimbing();
             }
         }
 
-        if (wallFront && Input.GetKeyDown(jumpKey) && climbJumpsLeft > 0) ClimbJump();
+        // Trigger climb jump if conditions are met
+        if (wallFront && jumpAction.triggered && climbJumpsLeft > 0)
+        {
+            ClimbJump();
+        }
     }
 
     private void WallCheck()
@@ -120,6 +144,8 @@ public class Climbing : MonoBehaviour
 
     private void ClimbJump()
     {
+        if (exitingWall || climbJumpsLeft <= 0) return; // Ensure the player can still jump
+
         exitingWall = true;
         exitWallTimer = exitWallTime;
 

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Grapple : MonoBehaviour
 {
@@ -20,49 +21,62 @@ public class Grapple : MonoBehaviour
     [Header("Grapple Cooldown")]
     public float grappleCooldown;
     private float grapplingCDTimer;
-    
-    [Header("Grapple Keybind")]
-    public KeyCode grappleKey;
+
+    [Header("Input Action Asset")]
+    public InputActionAsset inputActionAsset; // Reference to the InputActionAsset
+    private InputAction grappleAction; // Define the grapple action
+
     private bool isGrappling;
 
     void Start()
     {
         pm = GetComponent<PlayerMovement>();
+
+        // Initialize the grapple input action from the InputActionAsset
+        var playerActionMap = inputActionAsset.FindActionMap("Player");
+        grappleAction = playerActionMap.FindAction("Grapple");
+
+        // Enable the grapple action and bind the StartGrapple method to its performed event
+        grappleAction.Enable();
+        grappleAction.performed += ctx => StartGrapple();
     }
 
-    private void LateUpdate() {
-        if (isGrappling){
+    private void LateUpdate()
+    {
+        if (isGrappling)
+        {
             lr.SetPosition(0, gunTip.position);
         }
     }
 
-    private void Update(){
-        if(Input.GetKeyDown(grappleKey) && !isGrappling){
-            StartGrapple();
-        }
-
-        if (grapplingCDTimer > 0){
+    private void Update()
+    {
+        // Handle the cooldown timer
+        if (grapplingCDTimer > 0)
+        {
             grapplingCDTimer -= Time.deltaTime;
         }
     }
 
-    private void StartGrapple(){
-        if (grapplingCDTimer > 0){
+    private void StartGrapple()
+    {
+        if (grapplingCDTimer > 0 || isGrappling)
+        {
             return;
         }
 
         isGrappling = true;
-
         pm.freeze = true;
 
         RaycastHit hit;
-        if(Physics.Raycast(cam.position, cam.forward, out hit, maxGrappleDistance, whatIsGrappleable)){
+        if (Physics.Raycast(cam.position, cam.forward, out hit, maxGrappleDistance, whatIsGrappleable))
+        {
             grapplePoint = hit.point;
-
             Invoke(nameof(ExecuteGrapple), grappleDelayTime);
-        } else {
+        }
+        else
+        {
             grapplePoint = cam.position + cam.forward * maxGrappleDistance;
-
             Invoke(nameof(StopGrapple), grappleDelayTime);
         }
 
@@ -75,7 +89,6 @@ public class Grapple : MonoBehaviour
         pm.freeze = false;
 
         Vector3 lowestPoint = new Vector3(transform.position.x, transform.position.y - 1f, transform.position.z);
-
         float grapplePointRelativeYPos = grapplePoint.y - lowestPoint.y;
         float highestPointOnArc = grapplePointRelativeYPos + overshootYAxis;
 
@@ -86,7 +99,8 @@ public class Grapple : MonoBehaviour
         Invoke(nameof(StopGrapple), 1f);
     }
 
-    public void StopGrapple(){
+    public void StopGrapple()
+    {
         pm.freeze = false;
         isGrappling = false;
         grapplingCDTimer = grappleCooldown;
