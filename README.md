@@ -28,15 +28,15 @@ TBC
 
 3. How to play:
     - Controls:
-        W - Forward
-        S - Backwards
-        A - Left
-        D - Right
-        L-CTRL - Crouch
-        Q - Grapple
-        F - Dash
-        E - Pick-up Throwables
-        Right-Click (M2) - Rotate picked up item
+        - W - Forward
+        - S - Backwards
+        - A - Left
+        - D - Right
+        - L-CTRL - Crouch
+        - Q - Grapple
+        - F - Dash
+        - E - Pick-up Throwables
+        - Right-Click (M2) - Rotate picked up item
 
 ### Creators
 - [Ade Shitta](https://github.com/ade-shitta)
