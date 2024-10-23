@@ -1,7 +1,7 @@
 # ECS657u Unity Project README
 
 ## Project Title
-[Your Project Title]
+Haruhiko's Revenge
 
 ## Description
 A group project made in unity for the module ECS657u. Project pathway 1.2.
