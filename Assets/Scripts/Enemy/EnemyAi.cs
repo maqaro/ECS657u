@@ -48,10 +48,13 @@ public class EnemyAi : MonoBehaviour
         if (health <= 0) DestroyEnemy();
     }
 
+    // Enemy Behaviour 
     private void Patroling()
     {
+        // if walkpoint is not set, search for one
         if (!walkPointSet) SearchWalkPoint();
 
+        // if walkpoint is set, move to it
         if (walkPointSet)
             agent.SetDestination(walkPoint);
 
@@ -61,6 +64,8 @@ public class EnemyAi : MonoBehaviour
         if (distanceToWalkPoint.magnitude < 1f)
             walkPointSet = false;
     }
+
+    // Enemy Behaviour
     private void SearchWalkPoint()
     {
         //Calculate random point in range
@@ -73,11 +78,13 @@ public class EnemyAi : MonoBehaviour
             walkPointSet = true;
     }
 
+    // Following the player
     private void ChasePlayer()
     {
         agent.SetDestination(player.position);
     }
 
+    // Attacking
     private void OnCollisionStay(Collision collision)
     {
         if (collision.gameObject.CompareTag("Player") && canAttack)
@@ -92,6 +99,7 @@ public class EnemyAi : MonoBehaviour
         }
     }
 
+    // Cooldown for attacking
      private IEnumerator AttackCooldown()
     {
         canAttack = false;
@@ -99,12 +107,15 @@ public class EnemyAi : MonoBehaviour
         canAttack = true;
     }
 
+    // Taking damage
     public void TakeDamage(int damage)
     {
         health -= damage;
 
         if (health <= 0) Invoke(nameof(DestroyEnemy), 0.5f);
     }
+
+    // Enemy death
     private void DestroyEnemy()
     {
         Rigidbody rb = GetComponent<Rigidbody>(); 
@@ -116,13 +127,5 @@ public class EnemyAi : MonoBehaviour
 
         Destroy(GetComponent<NavMeshAgent>());
         Destroy(GetComponent<EnemyAi>());
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, attackRange);
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, sightRange);
     }
 }

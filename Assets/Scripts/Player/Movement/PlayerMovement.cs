@@ -90,6 +90,7 @@ public class PlayerMovement : MonoBehaviour
 
 void Start()
     {
+        // Get the Rigidbody component
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
         readyToJump = true;
@@ -100,6 +101,7 @@ void Start()
 
         if (playerActionMap != null)
         {
+            // Find the actions
             moveAction = playerActionMap.FindAction("Move");
             jumpAction = playerActionMap.FindAction("Jump");
             crouchAction = playerActionMap.FindAction("Crouch");
@@ -125,22 +127,27 @@ void Start()
 
     void FixedUpdate()
     {
+        // Handle movement
         MovePlayer();
 
+        // Handle gravity
         if (state == MovementState.air || (state == MovementState.crouching && !grounded))
         {
+            // Apply gravity multiplier when falling
             rb.velocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.deltaTime;
         }
     }
 
     void Update()
     {
+        // Check if the player is grounded
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
 
         MyInput();
         speedControl();
         StateHandler();
 
+        // Handle the drag
         if (grounded && !activeGrapple)
         {
             rb.drag = groundDrag;
@@ -153,6 +160,7 @@ void Start()
 
     private void MyInput()
     {
+        // Read input values
         Vector2 inputVector = moveAction.ReadValue<Vector2>();
         moveInput = new Vector2(inputVector.x, inputVector.y);
 
@@ -161,8 +169,10 @@ void Start()
 
     private void OnJump()
     {
+        // Check if the player is ready to jump and grounded
         if (readyToJump && grounded)
         {
+            // Set the jump flag to false and jump
             readyToJump = false;
             Jump();
             Invoke(nameof(resetJump), jumpCooldown);
@@ -171,6 +181,7 @@ void Start()
 
     private void OnCrouchStart()
     {
+        // Set the crouch flag to true and crouch
         crouchInput = true;
         transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
         rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
@@ -178,89 +189,108 @@ void Start()
 
     private void OnCrouchEnd()
     {
+        // Set the crouch flag to false and uncrouch
         crouchInput = false;
         transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
     }
 
     private void StateHandler()
     {
+        // Handle the player's state
         if (freeze)
         {
+            // Freeze the player
             state = MovementState.freeze;
             moveSpeed = 0;
             rb.velocity = Vector3.zero;
         }
         else if (activeGrapple)
         {
+            // Set the player's state to grappling
             state = MovementState.grappling;
             moveSpeed = sprintSpeed;
         }
         else if (dashing)
         {
+            // Set the player's state to dashing
             state = MovementState.dashing;
             desiredMoveSpeed = dashSpeed;
             speedChangeFactor = dashSpeedChangeFactor;
         }
         else if (climbing)
         {
+            // Set the player's state to climbing
             state = MovementState.climbing;
             desiredMoveSpeed = climbSpeed;
         }
         else if (crouchInput)
         {
+            // Set the player's state to crouching
             state = MovementState.crouching;
             moveSpeed = crouchSpeed;
         }
         else if (grounded && sprintInput)
         {
+            // Set the player's state to sprinting
             state = MovementState.sprinting;
             moveSpeed = sprintSpeed;
         }
         else if (grounded)
         {
+            // Set the player's state to walking
             state = MovementState.walking;
             moveSpeed = walkSpeed;
         }
         else
         {
+            // Set the player's state to air
             state = MovementState.air;
         }
 
+        // Handle the player's movement speed
         bool desiredMoveSpeedHasChanged = desiredMoveSpeed != lastDesiredMoveSpeed;
         if (lastState == MovementState.dashing) keepMomentum = true;
 
+        // Smoothly lerp the player's movement speed
         if (desiredMoveSpeedHasChanged)
         {
             if (keepMomentum)
             {
+                // Stop all coroutines and start the SmoothlyLerpMoveSpeed coroutine
                 StopAllCoroutines();
                 StartCoroutine(SmoothlyLerpMoveSpeed());
             }
             else
             {
+                // Stop all coroutines and set the player's movement speed to the desired movement speed
                 StopAllCoroutines();
                 moveSpeed = desiredMoveSpeed;
             }
         }
 
+        // Update the last desired movement speed and state
         lastDesiredMoveSpeed = desiredMoveSpeed;
         lastState = state;
     }
 
     private IEnumerator SmoothlyLerpMoveSpeed() // reintroduced coroutine
     {
+        // Smoothly lerp the player's movement speed
         float time = 0;
         float difference = Mathf.Abs(desiredMoveSpeed - moveSpeed);
         float startValue = moveSpeed;
         float boostFactor = speedChangeFactor;
 
+        // Lerp the player's movement speed
         while (time < difference)
         {
+            // Lerp the player's movement speed
             moveSpeed = Mathf.Lerp(startValue, desiredMoveSpeed, time / difference);
             time += Time.deltaTime * boostFactor;
             yield return null;
         }
 
+        // Set the player's movement speed to the desired movement speed
         moveSpeed = desiredMoveSpeed;
         speedChangeFactor = 1f;
         keepMomentum = false;
@@ -268,15 +298,19 @@ void Start()
 
     private void MovePlayer()
     {
+        // Handle the player's movement
         if (activeGrapple || MovementState.dashing == state)
         {
             return;
         }
 
+        // Move the player
         moveDirection = orientation.forward * moveInput.y + orientation.right * moveInput.x; // reintroduced
 
+        // Handle the player's movement
         if (OnSlope() && !exitingSlope)
         {
+            // Move the player on the slope
             rb.AddForce(GetSlopeMoveDirection() * moveSpeed * 20f, ForceMode.Force);
 
             if (rb.velocity.y > 0)
@@ -286,14 +320,17 @@ void Start()
         }
         else if (grounded)
         {
+            // Move the player on the ground
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
         }
         else if (!grounded)
         {
+            // Move the player in the air
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
         }
         else
         {
+            // Stop the player
             rb.useGravity = !OnSlope();
         }
     }
@@ -302,16 +339,19 @@ void Start()
     {
         if (activeGrapple)
         {
+            // Set the player's movement speed to the swing speed
             return;
         }
 
         if (OnSlope() && !exitingSlope)
         {
+            // Set the player's movement speed to the climb speed
             if (rb.velocity.magnitude > moveSpeed)
                 rb.velocity = rb.velocity.normalized * moveSpeed;
         }
         else
         {
+            // Set the player's movement speed to the walk speed
             Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
             if (flatVel.magnitude > moveSpeed)
@@ -321,6 +361,7 @@ void Start()
             }
         }
 
+        // Limit the player's y velocity
         if (maxYSpeed != 0 && rb.velocity.y > maxYSpeed)
         {
             rb.velocity = new Vector3(rb.velocity.x, maxYSpeed, rb.velocity.z);
@@ -329,6 +370,7 @@ void Start()
 
     private void Jump()
     {
+        // Jump
         exitingSlope = true;
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
@@ -336,12 +378,14 @@ void Start()
 
     private void resetJump()
     {
+        // Reset the jump flag
         readyToJump = true;
         exitingSlope = false;
     }
 
     private bool OnSlope()
     {
+        // Check if the player is on a slope
         if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.3f))
         {
             float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
@@ -352,11 +396,14 @@ void Start()
 
     private Vector3 GetSlopeMoveDirection()
     {
+        // Get the slope move direction
         return Vector3.ProjectOnPlane(moveDirection, slopeHit.normal).normalized;
     }
 
+    // Jump to position
     public Vector3 CalculateJumpVelocity(Vector3 startPoint, Vector3 endPoint, float trajectoryHeight)
     {
+        // Calculate the jump velocity
         float gravity = Physics.gravity.y;
         float displacementY = endPoint.y - startPoint.y;
         Vector3 displacementXZ = new Vector3(endPoint.x - startPoint.x, 0f, endPoint.z - startPoint.z);
@@ -368,8 +415,10 @@ void Start()
         return velocityXZ + velocityY;
     }
 
+    // Grapple
     public void JumpToPosition(Vector3 targetPosition, float trajectoryHeight)
     {
+        // Jump to the target position
         activeGrapple = true;
 
         velocityToSet = CalculateJumpVelocity(transform.position, targetPosition, trajectoryHeight);
@@ -378,17 +427,20 @@ void Start()
         Invoke(nameof(ResetRestrictions), 3f);
     }
 
+    // Set the velocity
     private void SetVelocity()
     {
         enableMovementOnNextTouch = true;
         rb.velocity = velocityToSet;
     }
 
+    // Reset the restrictions 
     public void ResetRestrictions()
     {
         activeGrapple = false;
     }
 
+    // Stop the grapple
     private void OnCollisionEnter(Collision collision)
     {
         if (enableMovementOnNextTouch)

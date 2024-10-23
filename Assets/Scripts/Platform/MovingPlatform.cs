@@ -23,8 +23,10 @@ public class MovingPlatform : MonoBehaviour
         TargetNextWaypoint();
     }
 
+    // Update is called once per frame
     void FixedUpdate()
     {
+        // Move the platform towards the next waypoint
         _elapsedTime += Time.deltaTime;
 
         float elapsedPercentage = _elapsedTime / _timeToWaypoint;
@@ -32,20 +34,25 @@ public class MovingPlatform : MonoBehaviour
         transform.position = Vector3.Lerp(_previousWaypoint.position, _targetWaypoint.position, elapsedPercentage);
         transform.rotation = Quaternion.Lerp(_previousWaypoint.rotation, _targetWaypoint.rotation, elapsedPercentage);
 
+        // If the platform has reached the waypoint, target the next waypoint
         if (elapsedPercentage >= 1)
         {
             TargetNextWaypoint();
         }
     }
 
+    // Target the next waypoint in the path
     private void TargetNextWaypoint()
     {
+        // Get the next waypoint in the path
         _previousWaypoint = _waypointPath.GetWaypoint(_targetWaypointIndex);
         _targetWaypointIndex = _waypointPath.GetNextWaypointIndex(_targetWaypointIndex);
         _targetWaypoint = _waypointPath.GetWaypoint(_targetWaypointIndex);
 
+        // Calculate the time it will take to reach the waypoint
         _elapsedTime = 0;
 
+        // Calculate the time it will take to reach the waypoint
         float distanceToWaypoint = Vector3.Distance(_previousWaypoint.position, _targetWaypoint.position);
         _timeToWaypoint = distanceToWaypoint / _speed;
     }

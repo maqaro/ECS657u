@@ -74,8 +74,10 @@ public class PickUpScript : MonoBehaviour
 
             if (Physics.SphereCast(playerCamera.transform.position, sphereRadius, playerCamera.transform.forward, out hit, pickUpRange))
             {
+                // Check if the object can be picked up
                 if (hit.transform.gameObject.tag == "canPickUp")
                 {
+                    // Pick up the object
                     PickUpObject(hit.transform.gameObject);
                 }
             }
@@ -93,6 +95,7 @@ public class PickUpScript : MonoBehaviour
     // Handle the throw action
     private void HandleThrow()
     {
+        // Throw the object if currently holding one
         if (heldObj != null && canDrop)
         {
             StopClipping();
@@ -103,17 +106,21 @@ public class PickUpScript : MonoBehaviour
     // Pick up the object
     private void PickUpObject(GameObject pickUpObj)
     {
+        // Check if the object has a rigidbody
         if (pickUpObj.GetComponent<Rigidbody>()) 
         {
+            // Disable the sword animation and set the sword inactive
             swordAnimator.enabled = false;
             sword.SetActive(false);
             
+            // Pick up the object
             heldObj = pickUpObj; 
             heldObjRb = pickUpObj.GetComponent<Rigidbody>();
             heldObjRb.isKinematic = true;
             heldObjRb.transform.parent = holdPos.transform;
             heldObj.layer = LayerNumber; 
 
+            // Prevent the object from colliding with the player
             Physics.IgnoreCollision(heldObj.GetComponent<Collider>(), player.GetComponent<Collider>(), true);
         }
     }
@@ -121,6 +128,7 @@ public class PickUpScript : MonoBehaviour
     // Drop the object
     private void DropObject()
     {
+        // Enable the sword animation and set the sword active
         Physics.IgnoreCollision(heldObj.GetComponent<Collider>(), player.GetComponent<Collider>(), false);
         heldObj.layer = 0; 
         heldObjRb.isKinematic = false;
@@ -133,6 +141,7 @@ public class PickUpScript : MonoBehaviour
 
     private void MoveObject()
     {
+        // Move the object to the hold position
         heldObj.transform.position = holdPos.transform.position;
     }
 
@@ -154,6 +163,7 @@ public class PickUpScript : MonoBehaviour
     // Rotate the object
     private void RotateObject()
     {
+        // Rotate the object based on mouse input
         if (rotateAction.IsPressed())
         {
             float XaxisRotation = Mouse.current.delta.x.ReadValue() * rotationSensitivity;
@@ -184,6 +194,7 @@ public class PickUpScript : MonoBehaviour
     // Throw the object
     private void ThrowObject()
     {
+        // Throw the object 
         Physics.IgnoreCollision(heldObj.GetComponent<Collider>(), player.GetComponent<Collider>(), false);
         heldObj.layer = 0;
         heldObjRb.isKinematic = false;

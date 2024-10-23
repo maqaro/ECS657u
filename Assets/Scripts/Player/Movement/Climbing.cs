@@ -65,11 +65,13 @@ public class Climbing : MonoBehaviour
 
     private void Update()
     {
+        // Check if the player is climbing and update the state machine
         WallCheck();
         StateMachine();
 
         if (climbing && !exitingWall)
         {
+            //
             ClimbingMovement();
         }
     }
@@ -84,11 +86,13 @@ public class Climbing : MonoBehaviour
                 StartClimbing();
             }
 
+            // Reset the climb timer if the player is still climbing 
             if (climbTimer > 0) climbTimer -= Time.deltaTime;
             if (climbTimer < 0) StopClimbing();
         }
         else if (exitingWall)
         {
+            // Stop climbing if the player is exiting the wall
             if (climbing) StopClimbing();
 
             if (exitWallTimer > 0) exitWallTimer -= Time.deltaTime;
@@ -96,6 +100,7 @@ public class Climbing : MonoBehaviour
         }
         else
         {
+            // Stop climbing
             if (climbing)
             {
                 StopClimbing();
@@ -111,10 +116,12 @@ public class Climbing : MonoBehaviour
 
     private void WallCheck()
     {
+        // Perform a sphere cast to detect walls
         wallFront = Physics.SphereCast(transform.position, sphereCastRadius, orientation.forward, out frontWallHit, detectionLength, whatIsWall);
         wallLookAngle = Vector3.Angle(orientation.forward, -frontWallHit.normal);
         bool newWall = frontWallHit.transform != lastWall || Mathf.Abs(Vector3.Angle(lastWallNormal, frontWallHit.normal)) > minWallNormalAngleChange;
 
+        // Reset the climb timer if the player is grounded or the wall is new
         if ((wallFront && newWall) || pm.grounded)
         {
             climbTimer = maxClimbTime;
@@ -124,6 +131,7 @@ public class Climbing : MonoBehaviour
 
     private void StartClimbing()
     {
+        // Start climbing
         climbing = true;
         pm.climbing = true;
 
@@ -133,11 +141,13 @@ public class Climbing : MonoBehaviour
 
     private void ClimbingMovement()
     {
+        // Move the player up the wall
         rb.velocity = new Vector3(rb.velocity.x, climbSpeed, rb.velocity.z);
     }
 
     private void StopClimbing()
     {
+        // Stop climbing
         climbing = false;
         pm.climbing = false;
     }
@@ -146,11 +156,14 @@ public class Climbing : MonoBehaviour
     {
         if (exitingWall || climbJumpsLeft <= 0) return; // Ensure the player can still jump
 
+        // Perform a climb jump
         exitingWall = true;
         exitWallTimer = exitWallTime;
 
+        // Calculate the force to apply
         Vector3 forceToApply = transform.up * climbJumpUpForce + frontWallHit.normal * climbJumpBackForce;
 
+        // Apply the force
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
         rb.AddForce(forceToApply, ForceMode.Impulse);
 

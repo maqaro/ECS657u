@@ -16,6 +16,7 @@ public class Healthbar : MonoBehaviour
 
     void Update()
     {
+        // Update the ease slider's value to the current health
         if (slider.value != easeSlider.value)
         {
             easeSlider.value = Mathf.Lerp(easeSlider.value, slider.value, smoothSpeed);
@@ -24,6 +25,7 @@ public class Healthbar : MonoBehaviour
 
     public void SetMaxHealth(float health)
     {
+        // Set the slider's max value to the max health
         slider.maxValue = health;
         easeSlider.maxValue = health;
         slider.value = health;
@@ -32,6 +34,7 @@ public class Healthbar : MonoBehaviour
 
     public void SetHealth(float health)
     {
+        // Update the slider's value to the current health
         slider.value = health;
     }
 }

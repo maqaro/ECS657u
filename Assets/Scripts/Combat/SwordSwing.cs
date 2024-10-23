@@ -11,7 +11,7 @@ public class SwordSwing : MonoBehaviour
     public float attackRange = 1.5f;
     public float damage = 10f;
 
-    private InputAction swordSwingAction; // Declare the InputAction
+    private InputAction swordSwingAction; 
 
     void OnEnable()
     {
@@ -35,20 +35,25 @@ public class SwordSwing : MonoBehaviour
         }
     }
 
+    // Method that triggers when the sword swing action is performed
     public void Attack()
     {
         canAttack = false;
         Animator animator = Sword.GetComponent<Animator>();
         animator.SetTrigger("Attack");
 
+        // Check for enemies in the attack range
         Collider[] hitColliders = Physics.OverlapSphere(Sword.transform.position, attackRange);
         foreach (var hitCollider in hitColliders)
         {
+            // If the collider is an enemy, apply damage
             if (hitCollider.CompareTag("Enemy"))
             {
+                // Get the EnemyAi script and apply damage
                 EnemyAi enemyScript = hitCollider.GetComponent<EnemyAi>();
                 if (enemyScript != null)
                 {
+                    // Apply damage to the enemy
                     enemyScript.health -= damage;
                     if (enemyScript.health <= 0)
                     {
@@ -61,6 +66,7 @@ public class SwordSwing : MonoBehaviour
         StartCoroutine(ResetAttackCooldown());
     }
 
+    // Coroutine to reset the attack cooldown
     IEnumerator ResetAttackCooldown()
     {
         yield return new WaitForSeconds(Cooldown);

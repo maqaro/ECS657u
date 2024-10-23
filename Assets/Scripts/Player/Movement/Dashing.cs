@@ -27,6 +27,7 @@ public class Dashing : MonoBehaviour
 
     void Start()
     {
+        // Get the Rigidbody and PlayerMovement components
         rb = GetComponent<Rigidbody>();
         pm = GetComponent<PlayerMovement>();
 
