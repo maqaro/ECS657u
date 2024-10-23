@@ -27,7 +27,7 @@ TBC
     - Select the cloned project folder
 
 ### Creators
-- [Adewale Shitta](https://github.com/ade-shitta)
+- [Ade Shitta](https://github.com/ade-shitta)
 - [Amar Younis](https://github.com/amaryounis)
 - [Basil Nasr](https://github.com/maqaro)
 - [Robert Humolli](https://github.com/RobertHumolli)
