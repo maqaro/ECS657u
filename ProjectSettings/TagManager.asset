@@ -8,6 +8,7 @@ TagManager:
   - Sword
   - Enemy
   - RespawnPoint
+  - Checkpoint
   layers:
   - Default
   - TransparentFX
