@@ -194,7 +194,7 @@ void Start()
         transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
     }
 
-    private void StateHandler()
+    public void StateHandler()
     {
         // Handle the player's state
         if (freeze)
@@ -298,6 +298,9 @@ void Start()
 
     private void MovePlayer()
     {
+        if (state == MovementState.dashing)
+            return;
+
         // Handle the player's movement
         if (activeGrapple || MovementState.dashing == state)
         {
@@ -450,4 +453,5 @@ void Start()
             GetComponent<Grapple>().StopGrapple();
         }
     }
+
 }

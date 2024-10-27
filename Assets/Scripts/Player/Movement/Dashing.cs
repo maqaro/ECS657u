@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -16,6 +17,12 @@ public class Dashing : MonoBehaviour
     public float dashUpwardForce;
     public float dashDuration;
 
+    [Header("Settings")]
+    public bool useCameraForward = true;
+    public bool allowAllDirections = true;
+    public bool disableGravity = false;
+    public bool resetVal = true;
+
     [Header("Cooldown")]
     public float dashCd;
     private float dashCdTimer;
@@ -24,6 +31,8 @@ public class Dashing : MonoBehaviour
     public InputActionAsset inputActionAsset; // Reference to the InputActionAsset
 
     private InputAction dashAction; // Define the dash action
+    private InputAction moveAction; // Define the move action
+    private Vector2 moveInput;
 
     void Start()
     {
@@ -34,10 +43,13 @@ public class Dashing : MonoBehaviour
         // Initialize the dash input action from the InputActionAsset
         var playerActionMap = inputActionAsset.FindActionMap("Player");
         dashAction = playerActionMap.FindAction("Dash");
+        moveAction = playerActionMap.FindAction("Move");
 
         // Enable the dash action and bind the Dash method to its performed event
         dashAction.Enable();
         dashAction.performed += ctx => Dash();
+
+        moveAction.Enable();
     }
 
     void Update()
@@ -52,15 +64,27 @@ public class Dashing : MonoBehaviour
         // If dash is still on cooldown, return
         if (dashCdTimer > 0)
             return;
-
-        // Reset cooldown timer
-        dashCdTimer = dashCd;
+        else
+            dashCdTimer = dashCd;
 
         // Start dashing
         pm.dashing = true;
 
+        Transform forwardT;
+
+        if (useCameraForward)
+            forwardT = PlayerCam;
+        else
+            forwardT = orientation;
+
+        Vector3 direction = GetDirection(forwardT);
+
         // Calculate the force to apply during dash
-        Vector3 forceToApply = orientation.forward * dashForce + orientation.up * dashUpwardForce;
+        Vector3 forceToApply = direction * dashForce + orientation.up * dashUpwardForce;
+        
+        if (disableGravity)
+            rb.useGravity = false;
+        
         delayedForceToApply = forceToApply;
 
         // Apply the force with a slight delay
@@ -74,6 +98,10 @@ public class Dashing : MonoBehaviour
 
     private void DelayedDashForce()
     {
+
+        if (resetVal)
+            rb.velocity = Vector3.zero;
+
         // Apply the dash force to the Rigidbody
         rb.AddForce(delayedForceToApply, ForceMode.Impulse);
     }
@@ -82,5 +110,32 @@ public class Dashing : MonoBehaviour
     {
         // End the dashing state
         pm.dashing = false;
+
+        if (disableGravity)
+            rb.useGravity = true;
     }
+
+    private Vector3 GetDirection(Transform forwardT)
+    {
+        // Read the movement input from the new Input System
+        moveInput = moveAction.ReadValue<Vector2>();
+
+        float horizontalInput = moveInput.x;
+        float verticalInput = moveInput.y;
+
+        Vector3 direction = Vector3.zero;
+
+        if (allowAllDirections)
+            direction = forwardT.forward * verticalInput + forwardT.right * horizontalInput;
+        else
+            direction = forwardT.forward;
+
+        if (verticalInput == 0 && horizontalInput == 0)
+            direction = forwardT.forward;
+
+        return direction.normalized;
+    }
+
+
+
 }
