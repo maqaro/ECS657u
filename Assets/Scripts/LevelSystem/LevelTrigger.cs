@@ -8,7 +8,7 @@ public class LevelTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            FindObjectOfType<LevelLoader>().LoadNextLevel();
+            FindAnyObjectByType<LevelLoader>().LoadNextLevel();
         }
     }
 }
