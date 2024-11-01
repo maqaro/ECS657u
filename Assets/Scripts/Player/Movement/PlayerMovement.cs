@@ -298,9 +298,6 @@ void Start()
 
     private void MovePlayer()
     {
-        if (state == MovementState.dashing)
-            return;
-
         // Handle the player's movement
         if (activeGrapple || MovementState.dashing == state)
         {

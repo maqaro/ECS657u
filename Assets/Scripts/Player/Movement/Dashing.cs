@@ -28,24 +28,23 @@ public class Dashing : MonoBehaviour
     private float dashCdTimer;
 
     [Header("Input Action Asset")]
-    public InputActionAsset inputActionAsset; // Reference to the InputActionAsset
+    public InputActionAsset inputActionAsset;
 
-    private InputAction dashAction; // Define the dash action
-    private InputAction moveAction; // Define the move action
+    private InputAction dashAction;
+    private InputAction moveAction;
     private Vector2 moveInput;
+
+    private bool isAirDashing;
 
     void Start()
     {
-        // Get the Rigidbody and PlayerMovement components
         rb = GetComponent<Rigidbody>();
         pm = GetComponent<PlayerMovement>();
 
-        // Initialize the dash input action from the InputActionAsset
         var playerActionMap = inputActionAsset.FindActionMap("Player");
         dashAction = playerActionMap.FindAction("Dash");
         moveAction = playerActionMap.FindAction("Move");
 
-        // Enable the dash action and bind the Dash method to its performed event
         dashAction.Enable();
         dashAction.performed += ctx => Dash();
 
@@ -54,43 +53,33 @@ public class Dashing : MonoBehaviour
 
     void Update()
     {
-        // Handle the cooldown timer
         if (dashCdTimer > 0)
             dashCdTimer -= Time.deltaTime;
     }
 
     private void Dash()
     {
-        // If dash is still on cooldown, return
-        if (dashCdTimer > 0)
+        if (dashCdTimer > 0 || (isAirDashing && !pm.grounded))
             return;
-        else
-            dashCdTimer = dashCd;
 
-        // Start dashing
+        dashCdTimer = dashCd;
         pm.dashing = true;
+        isAirDashing = !pm.grounded;
 
-        Transform forwardT;
+        // Temporarily disable movement speed control
+        pm.enabled = false;
 
-        if (useCameraForward)
-            forwardT = PlayerCam;
-        else
-            forwardT = orientation;
-
+        Transform forwardT = useCameraForward ? PlayerCam : orientation;
         Vector3 direction = GetDirection(forwardT);
 
-        // Calculate the force to apply during dash
         Vector3 forceToApply = direction * dashForce + orientation.up * dashUpwardForce;
-        
+
         if (disableGravity)
             rb.useGravity = false;
-        
+
         delayedForceToApply = forceToApply;
 
-        // Apply the force with a slight delay
         Invoke(nameof(DelayedDashForce), 0.025f);
-
-        // Stop dashing after the dash duration
         Invoke(nameof(ResetDash), dashDuration);
     }
 
@@ -98,44 +87,39 @@ public class Dashing : MonoBehaviour
 
     private void DelayedDashForce()
     {
-
         if (resetVal)
             rb.velocity = Vector3.zero;
 
-        // Apply the dash force to the Rigidbody
         rb.AddForce(delayedForceToApply, ForceMode.Impulse);
     }
 
     private void ResetDash()
     {
-        // End the dashing state
         pm.dashing = false;
 
         if (disableGravity)
             rb.useGravity = true;
+
+        // Reset air dash state and restore `PlayerMovement`
+        isAirDashing = false;
+        rb.velocity = Vector3.zero;
+        pm.enabled = true; // Re-enable `PlayerMovement`
     }
 
     private Vector3 GetDirection(Transform forwardT)
     {
-        // Read the movement input from the new Input System
         moveInput = moveAction.ReadValue<Vector2>();
 
         float horizontalInput = moveInput.x;
         float verticalInput = moveInput.y;
 
-        Vector3 direction = Vector3.zero;
-
-        if (allowAllDirections)
-            direction = forwardT.forward * verticalInput + forwardT.right * horizontalInput;
-        else
-            direction = forwardT.forward;
+        Vector3 direction = allowAllDirections
+            ? forwardT.forward * verticalInput + forwardT.right * horizontalInput
+            : forwardT.forward;
 
         if (verticalInput == 0 && horizontalInput == 0)
             direction = forwardT.forward;
 
         return direction.normalized;
     }
-
-
-
 }
