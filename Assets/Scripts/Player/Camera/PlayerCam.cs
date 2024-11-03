@@ -14,11 +14,12 @@ public class PlayerCam : MonoBehaviour
 
     private float xRotation;
     private float yRotation;
+    public Transform Arms;
 
     [Header("Input Action Asset")]
-    public InputActionAsset inputActionAsset;  // Reference to the InputActionAsset
+    public InputActionAsset inputActionAsset;  
 
-    private InputAction lookAction;  // Action for mouse movement
+    private InputAction lookAction;
 
     private void Start()
     {
@@ -46,6 +47,8 @@ public class PlayerCam : MonoBehaviour
         xRotation -= mouseY;
 
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+
+        Arms.localRotation = Quaternion.Euler(xRotation, 0, 0);
 
         // Apply rotations
         transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
