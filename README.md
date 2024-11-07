@@ -8,8 +8,8 @@ A group project made in unity for the module ECS657u. Project pathway 1.2.
 The game concept is a First-Person 3D Movement-Platformer where the play has to navigate through a series of obstacles, utilising various movement mechanics, as well as fighting enemies to reach the end of the level. 
 
 ## Link to WebGL build
-[Build Repo](https://github.com/maqaro/ECS657u-Builds/)
-[Latest Build](https://maqaro.github.io/ECS657u-Builds/PrototypeBuild/index.html)
+- [Build Repo](https://github.com/maqaro/ECS657u-Builds/)
+- [Latest Build](https://maqaro.github.io/ECS657u-Builds/PrototypeBuild/index.html)
 
 ## Getting Started
 
