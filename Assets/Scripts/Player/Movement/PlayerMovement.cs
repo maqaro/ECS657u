@@ -88,8 +88,12 @@ public class PlayerMovement : MonoBehaviour
     private InputAction crouchAction;
     private InputAction sprintAction;
 
+    [Header("Animations")]
+    private Animator anim;
+
 void Start()
     {
+        anim = GetComponentInChildren<Animator>();
         // Get the Rigidbody component
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
@@ -116,8 +120,6 @@ void Start()
             jumpAction.performed += ctx => OnJump();
             crouchAction.performed += ctx => OnCrouchStart();
             crouchAction.canceled += ctx => OnCrouchEnd();
-
-            Debug.Log("Player Action Map found!");
         }
         else
         {
@@ -146,6 +148,7 @@ void Start()
         MyInput();
         speedControl();
         StateHandler();
+        handleAnimations();
 
         // Handle the drag
         if (grounded && !activeGrapple)
@@ -451,4 +454,20 @@ void Start()
         }
     }
 
+    private void handleAnimations()
+    {
+       // if player isnt moving
+        if (moveInput == Vector2.zero || state == MovementState.crouching)
+        {
+            anim.SetFloat("Blend", 0f, 0.2f, Time.deltaTime);
+        }
+        else if (state == MovementState.sprinting)
+        {
+            anim.SetFloat("Blend", 1f, 0.2f, Time.deltaTime);
+        }
+        else if (state == MovementState.walking)
+        {
+            anim.SetFloat("Blend", 0.5f, 0.2f, Time.deltaTime);
+        }
+    }
 }
