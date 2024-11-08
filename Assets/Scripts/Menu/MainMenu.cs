@@ -7,7 +7,14 @@ public class MainMenu : MonoBehaviour
 {
     public void PlayGame()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        // Reset time scale to normal
+        Time.timeScale = 1f;
+        
+        // Lock and hide cursor for gameplay
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        
+        LevelLoader.LoadNextLevel();
     }
 
     public void QuitGame()

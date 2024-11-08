@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class LevelTrigger : MonoBehaviour
@@ -8,7 +6,7 @@ public class LevelTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            FindAnyObjectByType<LevelLoader>().LoadNextLevel();
+            LevelLoader.LoadNextLevel();
         }
     }
 }

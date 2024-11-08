@@ -1,35 +1,42 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class LevelLoader : MonoBehaviour
+public static class LevelLoader
 {
-    private static LevelLoader instance;
-
-    private void Awake()
+    public static void LoadNextLevel()
     {
-        if (instance != null)
+        // Find and disable the player object before loading
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
         {
-            Destroy(gameObject);
-            return;
+            player.SetActive(false);
         }
-
-        instance = this;
-        DontDestroyOnLoad(gameObject);
-    }
-
-    public void LoadNextLevel()
-    {
+        
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         SceneManager.LoadScene(currentSceneIndex + 1);
     }
 
-    public void LoadSpecificLevel(int levelIndex)
+    public static void LoadSpecificLevel(int levelIndex)
     {
+        // Find and disable the player object before loading
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+        {
+            player.SetActive(false);
+        }
+        
         SceneManager.LoadScene(levelIndex);
     }
 
-    public void ReloadLevel()
+    public static void ReloadLevel()
     {
+        // Find and disable the player object before loading
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+        {
+            player.SetActive(false);
+        }
+        
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         SceneManager.LoadScene(currentSceneIndex);
     }
