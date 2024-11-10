@@ -1126,6 +1126,7 @@ MonoBehaviour:
   grounded: 0
   maxSlopeAngle: 80
   orientation: {fileID: 816258893}
+  cameraTransform: {fileID: 633749398}
   state: 0
   freeze: 0
   climbing: 0

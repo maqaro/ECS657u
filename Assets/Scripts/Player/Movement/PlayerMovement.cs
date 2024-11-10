@@ -24,8 +24,9 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Crouching")]
     public float crouchSpeed;
-    public float crouchYScale;
+    public float crouchYScale; // Adjusts camera height when crouching
     private float startYScale;
+    private float originalColliderHeight;
 
     [Header("Dashing")]
     public bool dashing;
@@ -35,7 +36,7 @@ public class PlayerMovement : MonoBehaviour
     private float lastDesiredMoveSpeed;
     private MovementState lastState;
     private bool keepMomentum;
-    private float speedChangeFactor; // reintroduced
+    private float speedChangeFactor;
 
     [Header("Ground Check")]
     public float playerHeight;
@@ -49,15 +50,17 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Camera")]
     public Transform orientation;
+    public Transform cameraTransform; // Reference for adjusting camera height
 
     private Vector2 moveInput;
     private bool jumpInput;
     private bool crouchInput;
     private bool sprintInput;
 
-    Vector3 moveDirection; // reintroduced
+    Vector3 moveDirection;
 
     Rigidbody rb;
+    private CapsuleCollider playerCollider;
 
     public MovementState state;
     public enum MovementState
@@ -91,14 +94,16 @@ public class PlayerMovement : MonoBehaviour
     [Header("Animations")]
     private Animator anim;
 
-void Start()
+    void Start()
     {
         anim = GetComponentInChildren<Animator>();
-        // Get the Rigidbody component
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
         readyToJump = true;
-        startYScale = transform.localScale.y;
+
+        playerCollider = GetComponent<CapsuleCollider>();
+        originalColliderHeight = playerCollider.height;
+        startYScale = cameraTransform.localPosition.y; // Store the starting camera height
 
         // Set up the input actions
         var playerActionMap = inputActionAsset.FindActionMap("Player");
@@ -184,17 +189,34 @@ void Start()
 
     private void OnCrouchStart()
     {
-        // Set the crouch flag to true and crouch
+        // Set the crouch flag to true
         crouchInput = true;
-        transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
-        rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
+
+        // Lower the camera position for crouching effect
+        cameraTransform.localPosition = new Vector3(cameraTransform.localPosition.x, crouchYScale, cameraTransform.localPosition.z);
+
+        // Adjust the collider height for crouching
+        playerCollider.height = originalColliderHeight * 0.5f;
+
+        // Move the player down to keep them grounded
+        transform.position = new Vector3(transform.position.x, transform.position.y - (originalColliderHeight * 0.25f), transform.position.z);
+
+        rb.AddForce(Vector3.down * 5f, ForceMode.Impulse); // Slight downward force
     }
 
     private void OnCrouchEnd()
     {
-        // Set the crouch flag to false and uncrouch
+        // Set the crouch flag to false
         crouchInput = false;
-        transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
+
+        // Reset the camera position
+        cameraTransform.localPosition = new Vector3(cameraTransform.localPosition.x, startYScale, cameraTransform.localPosition.z);
+
+        // Reset the collider height
+        playerCollider.height = originalColliderHeight;
+
+        // Move the player up to maintain correct position when standing
+        transform.position = new Vector3(transform.position.x, transform.position.y + (originalColliderHeight * 0.25f), transform.position.z);
     }
 
     public void StateHandler()
