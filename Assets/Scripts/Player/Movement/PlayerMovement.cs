@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -102,8 +103,8 @@ public class PlayerMovement : MonoBehaviour
         readyToJump = true;
 
         playerCollider = GetComponent<CapsuleCollider>();
-        originalColliderHeight = playerCollider.height;
-        startYScale = cameraTransform.localPosition.y; // Store the starting camera height
+        originalColliderHeight = playerCollider != null ? playerCollider.height : 0;
+        startYScale = cameraTransform != null ? cameraTransform.localPosition.y : 0;
 
         // Set up the input actions
         var playerActionMap = inputActionAsset.FindActionMap("Player");
@@ -130,6 +131,40 @@ public class PlayerMovement : MonoBehaviour
         {
             Debug.Log("Player Action Map not found!");
         }
+    }
+
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        if (jumpAction != null) jumpAction.performed -= ctx => OnJump();
+        if (crouchAction != null)
+        {
+            crouchAction.performed -= ctx => OnCrouchStart();
+            crouchAction.canceled -= ctx => OnCrouchEnd();
+        }
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // Re-assign playerCollider and cameraTransform in case of scene switch
+        if (playerCollider == null)
+            playerCollider = GetComponent<CapsuleCollider>();
+
+        if (cameraTransform == null)
+        {
+            Camera cam = GetComponentInChildren<Camera>();
+            if (cam != null)
+                cameraTransform = cam.transform;
+        }
+
+        // Set initial values based on newly assigned references
+        originalColliderHeight = playerCollider != null ? playerCollider.height : 0;
+        startYScale = cameraTransform != null ? cameraTransform.localPosition.y : 0;
     }
 
     void FixedUpdate()
@@ -177,6 +212,10 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnJump()
     {
+        if (cameraTransform == null || playerCollider == null)
+        {
+            return;
+        }
         // Check if the player is ready to jump and grounded
         if (readyToJump && grounded)
         {
@@ -189,33 +228,28 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnCrouchStart()
     {
-        // Set the crouch flag to true
+        if (cameraTransform == null || playerCollider == null)
+        {
+            return;
+        }
+
         crouchInput = true;
-
-        // Lower the camera position for crouching effect
         cameraTransform.localPosition = new Vector3(cameraTransform.localPosition.x, crouchYScale, cameraTransform.localPosition.z);
-
-        // Adjust the collider height for crouching
         playerCollider.height = originalColliderHeight * 0.5f;
-
-        // Move the player down to keep them grounded
         transform.position = new Vector3(transform.position.x, transform.position.y - (originalColliderHeight * 0.25f), transform.position.z);
-
         rb.AddForce(Vector3.down * 5f, ForceMode.Impulse); // Slight downward force
     }
 
     private void OnCrouchEnd()
     {
-        // Set the crouch flag to false
+        if (cameraTransform == null || playerCollider == null)
+        {
+            return;
+        }
+
         crouchInput = false;
-
-        // Reset the camera position
         cameraTransform.localPosition = new Vector3(cameraTransform.localPosition.x, startYScale, cameraTransform.localPosition.z);
-
-        // Reset the collider height
         playerCollider.height = originalColliderHeight;
-
-        // Move the player up to maintain correct position when standing
         transform.position = new Vector3(transform.position.x, transform.position.y + (originalColliderHeight * 0.25f), transform.position.z);
     }
 
@@ -298,7 +332,7 @@ public class PlayerMovement : MonoBehaviour
         lastState = state;
     }
 
-    private IEnumerator SmoothlyLerpMoveSpeed() // reintroduced coroutine
+    private IEnumerator SmoothlyLerpMoveSpeed()
     {
         // Smoothly lerp the player's movement speed
         float time = 0;
@@ -330,7 +364,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Move the player
-        moveDirection = orientation.forward * moveInput.y + orientation.right * moveInput.x; // reintroduced
+        moveDirection = orientation.forward * moveInput.y + orientation.right * moveInput.x;
 
         // Handle the player's movement
         if (OnSlope() && !exitingSlope)
@@ -492,4 +526,6 @@ public class PlayerMovement : MonoBehaviour
             anim.SetFloat("Blend", 0.5f, 0.2f, Time.deltaTime);
         }
     }
+
+   
 }

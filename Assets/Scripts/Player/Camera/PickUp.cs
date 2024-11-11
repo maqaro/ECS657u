@@ -33,27 +33,34 @@ public class PickUpScript : MonoBehaviour
     {
         LayerNumber = LayerMask.NameToLayer("HoldLayer"); 
         swordAnimator = sword.GetComponent<Animator>();
-        PlayerCamScript = playerCamera.GetComponent<PlayerCam>();
+        
+        // Ensure playerCamera is assigned and get the PlayerCamScript if available
+        if (playerCamera != null)
+        {
+            PlayerCamScript = playerCamera.GetComponent<PlayerCam>();
+        }
 
         // Find and assign actions from the Input Action Asset
         var gameplayActionMap = inputActionAsset.FindActionMap("Player");
 
-        pickUpAction = gameplayActionMap.FindAction("PickUp");
-        throwAction = gameplayActionMap.FindAction("Throw");
-        rotateAction = gameplayActionMap.FindAction("Rotate");
+        pickUpAction = gameplayActionMap?.FindAction("PickUp");
+        throwAction = gameplayActionMap?.FindAction("Throw");
+        rotateAction = gameplayActionMap?.FindAction("Rotate");
 
-        // Subscribe to action events
-        pickUpAction.performed += _ => HandlePickUpDrop();
-        throwAction.performed += _ => HandleThrow();
-        rotateAction.performed += _ => StartRotation();
-        rotateAction.canceled += _ => StopRotation();
+        // Subscribe to action events if actions are available
+        if (pickUpAction != null) pickUpAction.performed += HandlePickUpDrop;
+        if (throwAction != null) throwAction.performed += HandleThrow;
+        if (rotateAction != null)
+        {
+            rotateAction.performed += StartRotation;
+            rotateAction.canceled += StopRotation;
+        }
 
         // Enable actions
-        pickUpAction.Enable();
-        throwAction.Enable();
-        rotateAction.Enable();
+        pickUpAction?.Enable();
+        throwAction?.Enable();
+        rotateAction?.Enable();
     }
-
 
     void Update()
     {
@@ -64,38 +71,31 @@ public class PickUpScript : MonoBehaviour
         }
     }
 
-    // Handle the pick up and drop actions
-    private void HandlePickUpDrop()
+    private void HandlePickUpDrop(InputAction.CallbackContext context)
     {
         if (heldObj == null) // Attempt to pick up an object
         {
             RaycastHit hit;
             float sphereRadius = 0.5f;
 
-            if (Physics.SphereCast(playerCamera.transform.position, sphereRadius, playerCamera.transform.forward, out hit, pickUpRange))
+            // Check if playerCamera is available before performing SphereCast
+            if (playerCamera != null && Physics.SphereCast(playerCamera.transform.position, sphereRadius, playerCamera.transform.forward, out hit, pickUpRange))
             {
-                // Check if the object can be picked up
-                if (hit.transform.gameObject.tag == "canPickUp")
+                if (hit.transform.gameObject.CompareTag("canPickUp"))
                 {
-                    // Pick up the object
                     PickUpObject(hit.transform.gameObject);
                 }
             }
         }
-        else // Drop the object if currently holding one
+        else if (canDrop) // Drop the object if currently holding one
         {
-            if (canDrop)
-            {
-                StopClipping(); 
-                DropObject();
-            }
+            StopClipping(); 
+            DropObject();
         }
     }
 
-    // Handle the throw action
-    private void HandleThrow()
+    private void HandleThrow(InputAction.CallbackContext context)
     {
-        // Throw the object if currently holding one
         if (heldObj != null && canDrop)
         {
             StopClipping();
@@ -103,68 +103,66 @@ public class PickUpScript : MonoBehaviour
         }
     }
 
-    // Pick up the object
     private void PickUpObject(GameObject pickUpObj)
     {
-        // Check if the object has a rigidbody
         if (pickUpObj.GetComponent<Rigidbody>()) 
         {
-            // Disable the sword animation and set the sword inactive
             swordAnimator.enabled = false;
             sword.SetActive(false);
-            
-            // Pick up the object
+
             heldObj = pickUpObj; 
             heldObjRb = pickUpObj.GetComponent<Rigidbody>();
             heldObjRb.isKinematic = true;
             heldObjRb.transform.parent = holdPos.transform;
-            heldObj.layer = LayerNumber; 
+            heldObj.layer = LayerNumber;
 
-            // Prevent the object from colliding with the player
             Physics.IgnoreCollision(heldObj.GetComponent<Collider>(), player.GetComponent<Collider>(), true);
         }
     }
 
-    // Drop the object
     private void DropObject()
     {
-        // Enable the sword animation and set the sword active
-        Physics.IgnoreCollision(heldObj.GetComponent<Collider>(), player.GetComponent<Collider>(), false);
-        heldObj.layer = 0; 
-        heldObjRb.isKinematic = false;
-        heldObj.transform.parent = null; 
-        heldObj = null; 
+        if (heldObj != null && heldObjRb != null)
+        {
+            Physics.IgnoreCollision(heldObj.GetComponent<Collider>(), player.GetComponent<Collider>(), false);
+            heldObj.layer = 0;
+            heldObjRb.isKinematic = false;
+            heldObj.transform.parent = null;
+            heldObj = null;
 
-        sword.SetActive(true);
-        swordAnimator.enabled = true;
+            sword.SetActive(true);
+            swordAnimator.enabled = true;
+        }
     }
 
     private void MoveObject()
     {
-        // Move the object to the hold position
-        heldObj.transform.position = holdPos.transform.position;
+        if (heldObj != null)
+        {
+            heldObj.transform.position = holdPos.position;
+        }
     }
 
-    // Start rotating the object
-    private void StartRotation()
+    private void StartRotation(InputAction.CallbackContext context)
     {
-        canDrop = false; // Prevent the object from being dropped while rotating
+        canDrop = false;
 
-        if (originalSenX == 0 && originalSenY == 0) // Store the original camera sensitivity
+        if (PlayerCamScript != null && originalSenX == 0 && originalSenY == 0) 
         {
             originalSenX = PlayerCamScript.senX;
             originalSenY = PlayerCamScript.senY;
         }
 
-        PlayerCamScript.senX = 0f;
-        PlayerCamScript.senY = 0f;
+        if (PlayerCamScript != null)
+        {
+            PlayerCamScript.senX = 0f;
+            PlayerCamScript.senY = 0f;
+        }
     }
 
-    // Rotate the object
     private void RotateObject()
     {
-        // Rotate the object based on mouse input
-        if (rotateAction.IsPressed())
+        if (rotateAction != null && rotateAction.IsPressed() && heldObj != null)
         {
             float XaxisRotation = Mouse.current.delta.x.ReadValue() * rotationSensitivity;
             float YaxisRotation = Mouse.current.delta.y.ReadValue() * rotationSensitivity;
@@ -174,11 +172,9 @@ public class PickUpScript : MonoBehaviour
         }
     }
 
-    // Stop rotating the object
-    private void StopRotation()
+    private void StopRotation(InputAction.CallbackContext context)
     {
-        // Reset the camera sensitivity to its original value
-        if (originalSenX != 0 && originalSenY != 0)
+        if (PlayerCamScript != null && originalSenX != 0 && originalSenY != 0)
         {
             PlayerCamScript.senX = originalSenX;
             PlayerCamScript.senY = originalSenY;
@@ -187,36 +183,47 @@ public class PickUpScript : MonoBehaviour
             originalSenY = 0;
         }
 
-        // Allow the object to be dropped
         canDrop = true;
     }
 
-    // Throw the object
     private void ThrowObject()
     {
-        // Throw the object 
-        Physics.IgnoreCollision(heldObj.GetComponent<Collider>(), player.GetComponent<Collider>(), false);
-        heldObj.layer = 0;
-        heldObjRb.isKinematic = false;
-        heldObj.transform.parent = null;
-        heldObjRb.AddForce(transform.forward * throwForce);
-        heldObj = null;
+        if (heldObj != null && heldObjRb != null)
+        {
+            Physics.IgnoreCollision(heldObj.GetComponent<Collider>(), player.GetComponent<Collider>(), false);
+            heldObj.layer = 0;
+            heldObjRb.isKinematic = false;
+            heldObj.transform.parent = null;
+            heldObjRb.AddForce(transform.forward * throwForce);
+            heldObj = null;
 
-        sword.SetActive(true);
-        swordAnimator.enabled = true;
+            sword.SetActive(true);
+            swordAnimator.enabled = true;
+        }
     }
 
-    // Prevent the object from clipping through walls
     private void StopClipping()
     {
-        var clipRange = Vector3.Distance(heldObj.transform.position, transform.position);
+        if (heldObj == null) return;
 
-        RaycastHit[] hits;
-        hits = Physics.RaycastAll(transform.position, transform.TransformDirection(Vector3.forward), clipRange);
+        var clipRange = Vector3.Distance(heldObj.transform.position, transform.position);
+        RaycastHit[] hits = Physics.RaycastAll(transform.position, transform.TransformDirection(Vector3.forward), clipRange);
        
         if (hits.Length > 1)
         {
             heldObj.transform.position = transform.position + new Vector3(0f, -0.5f, 0f); 
+        }
+    }
+
+    private void OnDisable()
+    {
+        // Unsubscribe from actions to prevent errors
+        if (pickUpAction != null) pickUpAction.performed -= HandlePickUpDrop;
+        if (throwAction != null) throwAction.performed -= HandleThrow;
+        if (rotateAction != null)
+        {
+            rotateAction.performed -= StartRotation;
+            rotateAction.canceled -= StopRotation;
         }
     }
 }

@@ -59,19 +59,19 @@ public class Grapple : MonoBehaviour
         }
     }
 
+    void OnDisable()
+    {
+        if (grappleAction != null) grappleAction.performed -= ctx => StartGrapple();
+    }
+
     private void StartGrapple()
     {
-        // If grapple is still on cooldown or player is already grappling, return
-        if (grapplingCDTimer > 0 || isGrappling)
-        {
+        if (grapplingCDTimer > 0 || isGrappling || pm == null || cam == null || lr == null || gunTip == null)
             return;
-        }
 
-        // Start the grapple
         isGrappling = true;
         pm.freeze = true;
 
-        // Check if the player is looking at a grappleable object
         RaycastHit hit;
         if (Physics.Raycast(cam.position, cam.forward, out hit, maxGrappleDistance, whatIsGrappleable))
         {
@@ -84,10 +84,10 @@ public class Grapple : MonoBehaviour
             Invoke(nameof(StopGrapple), grappleDelayTime);
         }
 
-        // Enable the line renderer and set the first position to the gun tip
         lr.enabled = true;
         lr.SetPosition(1, grapplePoint);
     }
+
 
     private void ExecuteGrapple()
     {
