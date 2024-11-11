@@ -239,7 +239,7 @@ public partial class @Contols: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""43f5fe58-96ee-41b1-ac7f-d8134251f019"",
-                    ""path"": ""<Keyboard>/leftCtrl"",
+                    ""path"": ""<Keyboard>/c"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Player"",
