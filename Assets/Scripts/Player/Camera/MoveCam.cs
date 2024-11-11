@@ -8,6 +8,7 @@ public class MoveCam : MonoBehaviour
 
     void Update()
     {
+        // Move the camera to the player's position
         transform.position = cameraPosition.position;
     }
 }

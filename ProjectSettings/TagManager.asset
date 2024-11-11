@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 2
   tags:
   - canPickUp
+  - Sword
+  - Enemy
+  - RespawnPoint
+  - Checkpoint
   layers:
   - Default
   - TransparentFX
@@ -15,7 +19,7 @@ TagManager:
   - whatIsGround
   - whatIsWall
   - HoldLayer
-  - 
+  - whatIsPlayer
   - 
   - 
   - 
