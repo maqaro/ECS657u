@@ -57,16 +57,20 @@ public class Dashing : MonoBehaviour
             dashCdTimer -= Time.deltaTime;
     }
 
+    void OnDisable()
+    {
+        if (dashAction != null) dashAction.performed -= ctx => Dash();
+    }
+
     private void Dash()
     {
-        if (dashCdTimer > 0 || (isAirDashing && !pm.grounded))
+        if (dashCdTimer > 0 || (isAirDashing && !pm.grounded) || pm == null || rb == null || orientation == null || PlayerCam == null)
             return;
 
         dashCdTimer = dashCd;
         pm.dashing = true;
         isAirDashing = !pm.grounded;
 
-        // Temporarily disable movement speed control
         pm.enabled = false;
 
         Transform forwardT = useCameraForward ? PlayerCam : orientation;
@@ -82,6 +86,7 @@ public class Dashing : MonoBehaviour
         Invoke(nameof(DelayedDashForce), 0.025f);
         Invoke(nameof(ResetDash), dashDuration);
     }
+
 
     private Vector3 delayedForceToApply;
 
