@@ -9,7 +9,7 @@ public class GameOverScreen : MonoBehaviour
 
     private void Start()
     {
-        playerRespawn = FindObjectOfType<PlayerRespawn>();
+        playerRespawn = Object.FindFirstObjectByType<PlayerRespawn>();
         gameOverUI.SetActive(false);
         // Make sure cursor is hidden and locked at start
         Cursor.lockState = CursorLockMode.Locked;
