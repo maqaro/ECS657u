@@ -6,21 +6,21 @@ using UnityEngine.InputSystem;
 public class WallRunning : MonoBehaviour
 {
     [Header("Wallrunning")]
-    public float wallRunSpeed;
-    public float wallRunDuration;
-    public float wallRunJumpForce;
+    public float wallRunSpeed = 10f;
+    public float wallRunJumpForce = 8f;
+    public float wallGravityForce = 20f;
 
     [Header("Detection")]
-    public float wallCheckDistance;
-    public float maxWallRunAngle;
+    public float wallCheckDistance = 1f;
+    public float maxWallRunAngle = 60f;
     public LayerMask wallLayer;
-    
+
     private Rigidbody rb;
     private PlayerMovement pm;
     private bool isWallRunning;
-    private float wallRunTimer;
     private RaycastHit wallHit;
-    
+
+    private InputAction moveAction;
     private InputAction jumpAction;
 
     void Start()
@@ -28,12 +28,14 @@ public class WallRunning : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         pm = GetComponent<PlayerMovement>();
 
-        // Get Jump action from PlayerMovement's input action asset
+        // Get Jump and Move actions from PlayerMovement's input action asset
         var playerActionMap = pm.inputActionAsset.FindActionMap("Player");
         if (playerActionMap != null)
         {
             jumpAction = playerActionMap.FindAction("Jump");
+            moveAction = playerActionMap.FindAction("Move");
             jumpAction.Enable();
+            moveAction.Enable();
         }
         else
         {
@@ -51,26 +53,23 @@ public class WallRunning : MonoBehaviour
     {
         bool wallDetected = false;
 
+        // Cast to the right
         if (Physics.Raycast(transform.position, pm.orientation.right, out wallHit, wallCheckDistance, wallLayer))
         {
-            Debug.Log("Wall detected RIGHT");
-            if (Vector3.Angle(Vector3.up, wallHit.normal) < maxWallRunAngle)
-            {
-                wallDetected = true;
-                StartWallRun();
-            }
+            Debug.Log("Wall detected on the RIGHT");
+            wallDetected = true;
+            StartWallRun();
         }
+        // Cast to the left
         else if (Physics.Raycast(transform.position, -pm.orientation.right, out wallHit, wallCheckDistance, wallLayer))
         {
-            Debug.Log("Wall detected LEFT");
-            if (Vector3.Angle(Vector3.up, wallHit.normal) < maxWallRunAngle)
-            {
-                wallDetected = true;
-                StartWallRun();
-            }
+            Debug.Log("Wall detected on the LEFT");
+            wallDetected = true;
+            StartWallRun();
         }
 
-        if (!wallDetected)
+        // Stop wallrunning if no wall detected
+        if (!wallDetected && isWallRunning)
         {
             StopWallRun();
         }
@@ -80,16 +79,26 @@ public class WallRunning : MonoBehaviour
     {
         if (isWallRunning)
         {
-            wallRunTimer -= Time.deltaTime;
-            if (wallRunTimer <= 0)
+            Vector3 wallDirection = Vector3.Cross(wallHit.normal, Vector3.up).normalized;
+
+            // Apply forward movement along the wall direction
+            rb.velocity = wallDirection * wallRunSpeed;
+
+            // Pull the player towards the wall with a gravity force perpendicular to the wall
+            Vector3 wallGravity = -wallHit.normal * wallGravityForce;
+            rb.AddForce(wallGravity, ForceMode.Acceleration);
+
+            Debug.Log("Wallrunning with velocity: " + rb.velocity);
+
+            // Stop wallrunning if the player presses the opposite direction
+            Vector2 moveInput = moveAction.ReadValue<Vector2>();
+            if ((wallHit.normal == pm.orientation.right && moveInput.x < 0) || 
+                (wallHit.normal == -pm.orientation.right && moveInput.x > 0))
             {
                 StopWallRun();
             }
 
-            Vector3 wallDirection = Vector3.Cross(wallHit.normal, Vector3.up);
-            rb.velocity = wallDirection * wallRunSpeed;
-            
-            // Use the Jump action from the new Input System for wall jumping
+            // Trigger wall jump if Jump action is triggered
             if (jumpAction.triggered)
             {
                 WallJump();
@@ -99,12 +108,18 @@ public class WallRunning : MonoBehaviour
 
     private void StartWallRun()
     {
-        if (!isWallRunning)
+        if (!isWallRunning && pm.state == PlayerMovement.MovementState.air && pm.grounded == false)
         {
             isWallRunning = true;
-            wallRunTimer = wallRunDuration;
             pm.state = PlayerMovement.MovementState.wallrunning;
-            rb.useGravity = false;
+
+            // Apply an initial strong force towards the wall to "stick" the player
+            rb.AddForce(-wallHit.normal * wallGravityForce * 2, ForceMode.Impulse);
+
+            // Reset any vertical velocity for smooth wall-running
+            rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+
+            Debug.Log("Started wall run");
         }
     }
 
@@ -114,15 +129,19 @@ public class WallRunning : MonoBehaviour
         {
             isWallRunning = false;
             pm.state = PlayerMovement.MovementState.air;
-            rb.useGravity = true;
+
+            Debug.Log("Stopped wall run");
         }
     }
 
     private void WallJump()
     {
-        Vector3 jumpDirection = wallHit.normal + Vector3.up;
+        Vector3 jumpDirection = (wallHit.normal + Vector3.up).normalized;
         rb.velocity = Vector3.zero;
         rb.AddForce(jumpDirection * wallRunJumpForce, ForceMode.Impulse);
+
+        Debug.Log("Wall jump executed");
+
         StopWallRun();
     }
 
