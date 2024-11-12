@@ -95,6 +95,11 @@ public class WallRunning : MonoBehaviour
             }
             else
             {
+                // Apply custom gravity perpendicular to the wall if not moving forward
+                rb.useGravity = false; // Disable regular gravity
+                Vector3 wallGravity = -wallHit.normal * wallGravityForce;
+                rb.AddForce(wallGravity, ForceMode.Acceleration);
+
                 // Start countdown to stop wallrun if no forward input
                 wallRunPauseTimer -= Time.deltaTime;
                 if (wallRunPauseTimer <= 0)
@@ -113,11 +118,6 @@ public class WallRunning : MonoBehaviour
 
                 rb.velocity += verticalMovement * wallRunSpeed * 0.3f;  // Smooth up/down control
             }
-
-            // Apply custom gravity perpendicular to the wall
-            rb.useGravity = false;  // Disable regular gravity
-            Vector3 wallGravity = -wallHit.normal * wallGravityForce;
-            rb.AddForce(wallGravity, ForceMode.Acceleration);
 
             // Trigger wall jump if jump action is pressed
             if (jumpAction.triggered)
@@ -156,8 +156,10 @@ public class WallRunning : MonoBehaviour
 
     private void WallJump()
     {
+        // Reset gravity and apply bouncy jump force when jumping off the wall
+        rb.useGravity = true;
         Vector3 jumpDirection = (wallHit.normal + Vector3.up).normalized;
-        rb.velocity = Vector3.zero;
+        rb.velocity = Vector3.zero;  // Reset velocity to ensure smooth jump
         rb.AddForce(jumpDirection * wallRunJumpForce, ForceMode.Impulse);
 
         Debug.Log("Wall jump executed");
