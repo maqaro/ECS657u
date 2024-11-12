@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class WallRunning : MonoBehaviour
 {
@@ -20,10 +21,24 @@ public class WallRunning : MonoBehaviour
     private float wallRunTimer;
     private RaycastHit wallHit;
     
+    private InputAction jumpAction;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         pm = GetComponent<PlayerMovement>();
+
+        // Get Jump action from PlayerMovement's input action asset
+        var playerActionMap = pm.inputActionAsset.FindActionMap("Player");
+        if (playerActionMap != null)
+        {
+            jumpAction = playerActionMap.FindAction("Jump");
+            jumpAction.Enable();
+        }
+        else
+        {
+            Debug.LogError("Player Action Map not found!");
+        }
     }
 
     void Update()
@@ -38,6 +53,7 @@ public class WallRunning : MonoBehaviour
 
         if (Physics.Raycast(transform.position, pm.orientation.right, out wallHit, wallCheckDistance, wallLayer))
         {
+            Debug.Log("Wall detected RIGHT");
             if (Vector3.Angle(Vector3.up, wallHit.normal) < maxWallRunAngle)
             {
                 wallDetected = true;
@@ -46,6 +62,7 @@ public class WallRunning : MonoBehaviour
         }
         else if (Physics.Raycast(transform.position, -pm.orientation.right, out wallHit, wallCheckDistance, wallLayer))
         {
+            Debug.Log("Wall detected LEFT");
             if (Vector3.Angle(Vector3.up, wallHit.normal) < maxWallRunAngle)
             {
                 wallDetected = true;
@@ -72,7 +89,8 @@ public class WallRunning : MonoBehaviour
             Vector3 wallDirection = Vector3.Cross(wallHit.normal, Vector3.up);
             rb.velocity = wallDirection * wallRunSpeed;
             
-            if (Input.GetButtonDown("Jump"))
+            // Use the Jump action from the new Input System for wall jumping
+            if (jumpAction.triggered)
             {
                 WallJump();
             }
@@ -83,7 +101,6 @@ public class WallRunning : MonoBehaviour
     {
         if (!isWallRunning)
         {
-            Debug.Log("Starting wall run.");
             isWallRunning = true;
             wallRunTimer = wallRunDuration;
             pm.state = PlayerMovement.MovementState.wallrunning;
@@ -95,7 +112,6 @@ public class WallRunning : MonoBehaviour
     {
         if (isWallRunning)
         {
-            Debug.Log("Stopping wall run.");
             isWallRunning = false;
             pm.state = PlayerMovement.MovementState.air;
             rb.useGravity = true;
