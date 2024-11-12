@@ -83,11 +83,11 @@ public class WallRunning : MonoBehaviour
         {
             Vector2 moveInput = moveAction.ReadValue<Vector2>();
 
-            // Calculate forward movement along the wall based on the player's facing direction
+            // Set wallrun direction based on wall side and forward input
             Vector3 wallForward = Vector3.Cross(wallHit.normal, Vector3.up).normalized;
-            Vector3 forwardDirection = (Vector3.Dot(transform.forward, wallForward) > 0) ? wallForward : -wallForward;
+            Vector3 forwardDirection = wallOnRight ? -wallForward : wallForward;
 
-            // Apply movement forward along the wall if forward input is pressed
+            // Apply movement along the wall if forward input is pressed
             if (moveInput.y > 0)
             {
                 rb.velocity = forwardDirection * wallRunSpeed;
@@ -104,18 +104,18 @@ public class WallRunning : MonoBehaviour
                 }
             }
 
-            // Adjust up/down movement based on horizontal input (left/right)
+            // Apply vertical movement if horizontal input is given (left/right)
             if (moveInput.x != 0)
             {
                 Vector3 verticalMovement = wallOnRight
                     ? (moveInput.x > 0 ? Vector3.up : Vector3.down)
                     : (moveInput.x < 0 ? Vector3.up : Vector3.down);
 
-                rb.velocity += verticalMovement * wallRunSpeed * 0.3f; // Adjusted for smooth control
+                rb.velocity += verticalMovement * wallRunSpeed * 0.3f;  // Smooth up/down control
             }
 
             // Apply custom gravity perpendicular to the wall
-            rb.useGravity = false; // Disable regular gravity
+            rb.useGravity = false;  // Disable regular gravity
             Vector3 wallGravity = -wallHit.normal * wallGravityForce;
             rb.AddForce(wallGravity, ForceMode.Acceleration);
 
@@ -135,7 +135,7 @@ public class WallRunning : MonoBehaviour
             pm.state = PlayerMovement.MovementState.wallrunning;
             wallRunPauseTimer = wallRunTimeout;
 
-            // Reset any vertical velocity for smooth wall-running
+            // Clear vertical velocity to prevent abrupt drops
             rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
 
             Debug.Log("Started wall run");
