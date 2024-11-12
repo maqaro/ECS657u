@@ -36,6 +36,7 @@ public class WallRunning : MonoBehaviour
     {
         if (Physics.Raycast(transform.position, pm.orientation.right, out wallHit, wallCheckDistance, wallLayer))
         {
+            Debug.Log("Wall detected on the right.");
             if (Vector3.Angle(Vector3.up, wallHit.normal) < maxWallRunAngle)
             {
                 StartWallRun();
@@ -43,6 +44,7 @@ public class WallRunning : MonoBehaviour
         }
         else if (Physics.Raycast(transform.position, -pm.orientation.right, out wallHit, wallCheckDistance, wallLayer))
         {
+            Debug.Log("Wall detected on the left.");
             if (Vector3.Angle(Vector3.up, wallHit.normal) < maxWallRunAngle)
             {
                 StartWallRun();
@@ -64,11 +66,10 @@ public class WallRunning : MonoBehaviour
                 StopWallRun();
             }
 
-            // Adjust player's gravity to push toward the wall
             Vector3 wallDirection = Vector3.Cross(wallHit.normal, Vector3.up);
             rb.velocity = wallDirection * wallRunSpeed;
             
-            if (Input.GetButtonDown("Jump")) // Assuming Jump is mapped in Input
+            if (Input.GetButtonDown("Jump"))
             {
                 WallJump();
             }
@@ -79,9 +80,10 @@ public class WallRunning : MonoBehaviour
     {
         if (!isWallRunning)
         {
+            Debug.Log("Starting wall run.");
             isWallRunning = true;
             wallRunTimer = wallRunDuration;
-            pm.state = PlayerMovement.MovementState.walking; // You can define a Wallrunning state if needed
+            pm.state = PlayerMovement.MovementState.wallrunning;
             rb.useGravity = false;
         }
     }
@@ -90,6 +92,7 @@ public class WallRunning : MonoBehaviour
     {
         if (isWallRunning)
         {
+            Debug.Log("Stopping wall run.");
             isWallRunning = false;
             pm.state = PlayerMovement.MovementState.air;
             rb.useGravity = true;
@@ -102,5 +105,10 @@ public class WallRunning : MonoBehaviour
         rb.velocity = Vector3.zero;
         rb.AddForce(jumpDirection * wallRunJumpForce, ForceMode.Impulse);
         StopWallRun();
+    }
+
+    public bool IsWallRunning()
+    {
+        return isWallRunning;
     }
 }
