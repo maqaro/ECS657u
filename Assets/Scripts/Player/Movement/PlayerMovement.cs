@@ -510,8 +510,6 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    // test
-
     private void handleAnimations()
     {
        // if player isnt moving
