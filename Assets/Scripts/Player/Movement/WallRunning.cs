@@ -34,23 +34,26 @@ public class WallRunning : MonoBehaviour
 
     private void WallCheck()
     {
+        bool wallDetected = false;
+
         if (Physics.Raycast(transform.position, pm.orientation.right, out wallHit, wallCheckDistance, wallLayer))
         {
-            Debug.Log("Wall detected on the right.");
             if (Vector3.Angle(Vector3.up, wallHit.normal) < maxWallRunAngle)
             {
+                wallDetected = true;
                 StartWallRun();
             }
         }
         else if (Physics.Raycast(transform.position, -pm.orientation.right, out wallHit, wallCheckDistance, wallLayer))
         {
-            Debug.Log("Wall detected on the left.");
             if (Vector3.Angle(Vector3.up, wallHit.normal) < maxWallRunAngle)
             {
+                wallDetected = true;
                 StartWallRun();
             }
         }
-        else
+
+        if (!wallDetected)
         {
             StopWallRun();
         }
