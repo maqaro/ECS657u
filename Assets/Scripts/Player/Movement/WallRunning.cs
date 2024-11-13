@@ -22,6 +22,7 @@ public class WallRunning : MonoBehaviour
     private RaycastHit wallHit;
     private float wallRunPauseTimer;
     private bool wallOnRight;
+    private bool timeoutExpired;  // New flag to handle timeout cooldown
 
     private InputAction moveAction;
     private InputAction jumpAction;
@@ -61,17 +62,25 @@ public class WallRunning : MonoBehaviour
         {
             wallDetected = true;
             wallOnRight = true;
-            StartWallRun();
         }
         else if (Physics.Raycast(transform.position, -pm.orientation.right, out wallHit, wallCheckDistance, wallLayer))
         {
             wallDetected = true;
             wallOnRight = false;
-            StartWallRun();
         }
 
-        // Stop wallrunning if no wall is detected
-        if (!wallDetected && isWallRunning)
+        // If the wall was detected but the timeout expired, wait for the player to leave the wall before re-enabling wallrun
+        if (timeoutExpired && !wallDetected)
+        {
+            timeoutExpired = false;  // Reset the timeout flag, allowing wallrun again after the player leaves the wall
+        }
+
+        // Start wallrun only if the wall is detected and the timeout flag is not active
+        if (wallDetected && !isWallRunning && !timeoutExpired)
+        {
+            StartWallRun();
+        }
+        else if (!wallDetected && isWallRunning)
         {
             StopWallRun();
         }
@@ -104,6 +113,7 @@ public class WallRunning : MonoBehaviour
                 wallRunPauseTimer -= Time.deltaTime;
                 if (wallRunPauseTimer <= 0)
                 {
+                    timeoutExpired = true;  // Set timeout flag to prevent instant re-wallrun
                     StopWallRun();
                     return;
                 }
