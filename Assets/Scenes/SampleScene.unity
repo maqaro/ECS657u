@@ -1308,7 +1308,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wallRunSpeed: 10
   wallRunJumpForce: 100
-  wallGravityForce: 0
+  wallGravityForce: 4
   wallRunTimeout: 1.5
   wallCheckDistance: 1
   maxWallRunAngle: 90
