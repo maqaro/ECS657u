@@ -12,6 +12,8 @@ public class MovingDoor : MonoBehaviour
     private Vector3 leftDoorEnd;
     private Vector3 rightDoorEnd;
     public bool isOpen = false;
+    private Coroutine leftDoorCoroutine;
+    private Coroutine rightDoorCoroutine;
 
     private void Start()
     {
@@ -31,8 +33,12 @@ public class MovingDoor : MonoBehaviour
     {
         if (!isOpen)
         {
-            StartCoroutine(MoveDoor(leftDoor, leftDoorEnd));
-            StartCoroutine(MoveDoor(rightDoor, rightDoorEnd));
+            // Stop any existing coroutines first
+            if (leftDoorCoroutine != null) StopCoroutine(leftDoorCoroutine);
+            if (rightDoorCoroutine != null) StopCoroutine(rightDoorCoroutine);
+            
+            leftDoorCoroutine = StartCoroutine(MoveDoor(leftDoor, leftDoorEnd));
+            rightDoorCoroutine = StartCoroutine(MoveDoor(rightDoor, rightDoorEnd));
             isOpen = true;
         }
     }
@@ -41,8 +47,12 @@ public class MovingDoor : MonoBehaviour
     {
         if (isOpen)
         {
-            StartCoroutine(MoveDoor(leftDoor, leftDoorStart));
-            StartCoroutine(MoveDoor(rightDoor, rightDoorStart));
+            // Stop any existing coroutines first
+            if (leftDoorCoroutine != null) StopCoroutine(leftDoorCoroutine);
+            if (rightDoorCoroutine != null) StopCoroutine(rightDoorCoroutine);
+            
+            leftDoorCoroutine = StartCoroutine(MoveDoor(leftDoor, leftDoorStart));
+            rightDoorCoroutine = StartCoroutine(MoveDoor(rightDoor, rightDoorStart));
             isOpen = false;
         }
     }
@@ -54,5 +64,6 @@ public class MovingDoor : MonoBehaviour
             door.transform.position = Vector3.MoveTowards(door.transform.position, target, speed * Time.deltaTime);
             yield return null;
         }
+        door.transform.position = target; // Ensure door reaches exact position
     }
 }
