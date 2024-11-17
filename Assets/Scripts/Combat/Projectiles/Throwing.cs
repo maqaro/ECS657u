@@ -86,7 +86,7 @@ public class Throwing : MonoBehaviour
 
 
         projectileRb.AddForce(forceToAdd, ForceMode.Impulse);
-
+        Destroy(projectile, 5f);
         totalThrows--; // Reduce the number of remaining throws
 
         // Reset throw cooldown
