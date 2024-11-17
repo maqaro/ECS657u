@@ -21,6 +21,7 @@ public class Throwing : MonoBehaviour
     // New Input System
     private Contols playerControls;
     private InputAction throwAction;
+    public GameObject pickUpHolder;
 
     private void Awake()
     {
@@ -50,13 +51,13 @@ public class Throwing : MonoBehaviour
 
     private void Update()
     {
-        // This remains empty for now, but you can add functionality here if needed later.
+        
     }
 
     private void HandleThrow(InputAction.CallbackContext context)
     {
         // Trigger the throw if the player is ready and has remaining throws
-        if (readyToThrow && totalThrows > 0)
+        if (readyToThrow && totalThrows > 0 && pickUpHolder.transform.childCount == 0)
         {
             Throw();
         }
