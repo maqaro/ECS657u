@@ -25,8 +25,8 @@ public class MovingDoor : MonoBehaviour
 
         leftDoorStart = leftDoor.transform.position;
         rightDoorStart = rightDoor.transform.position;
-        leftDoorEnd = leftDoorStart + Vector3.forward * 5.0f;
-        rightDoorEnd = rightDoorStart + Vector3.back * 5.0f;
+        leftDoorEnd = leftDoorStart + Vector3.forward * 2.0f;
+        rightDoorEnd = rightDoorStart + Vector3.back * 2.0f;
     }
 
     public void OpenDoor()
