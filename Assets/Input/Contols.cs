@@ -134,6 +134,15 @@ public partial class @Contols: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""ThrowKnife"",
+                    ""type"": ""Button"",
+                    ""id"": ""86aba0d4-691f-4014-b7ee-7ccfe48c9003"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -312,6 +321,17 @@ public partial class @Contols: IInputActionCollection2, IDisposable
                     ""action"": ""Look"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ba6e39aa-0198-4336-9409-537feb575b52"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ThrowKnife"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -377,6 +397,7 @@ public partial class @Contols: IInputActionCollection2, IDisposable
         m_Player_Grapple = m_Player.FindAction("Grapple", throwIfNotFound: true);
         m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
+        m_Player_ThrowKnife = m_Player.FindAction("ThrowKnife", throwIfNotFound: true);
         // Menu
         m_Menu = asset.FindActionMap("Menu", throwIfNotFound: true);
         m_Menu_Escape = m_Menu.FindAction("Escape", throwIfNotFound: true);
@@ -453,6 +474,7 @@ public partial class @Contols: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Grapple;
     private readonly InputAction m_Player_Dash;
     private readonly InputAction m_Player_Look;
+    private readonly InputAction m_Player_ThrowKnife;
     public struct PlayerActions
     {
         private @Contols m_Wrapper;
@@ -469,6 +491,7 @@ public partial class @Contols: IInputActionCollection2, IDisposable
         public InputAction @Grapple => m_Wrapper.m_Player_Grapple;
         public InputAction @Dash => m_Wrapper.m_Player_Dash;
         public InputAction @Look => m_Wrapper.m_Player_Look;
+        public InputAction @ThrowKnife => m_Wrapper.m_Player_ThrowKnife;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -514,6 +537,9 @@ public partial class @Contols: IInputActionCollection2, IDisposable
             @Look.started += instance.OnLook;
             @Look.performed += instance.OnLook;
             @Look.canceled += instance.OnLook;
+            @ThrowKnife.started += instance.OnThrowKnife;
+            @ThrowKnife.performed += instance.OnThrowKnife;
+            @ThrowKnife.canceled += instance.OnThrowKnife;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -554,6 +580,9 @@ public partial class @Contols: IInputActionCollection2, IDisposable
             @Look.started -= instance.OnLook;
             @Look.performed -= instance.OnLook;
             @Look.canceled -= instance.OnLook;
+            @ThrowKnife.started -= instance.OnThrowKnife;
+            @ThrowKnife.performed -= instance.OnThrowKnife;
+            @ThrowKnife.canceled -= instance.OnThrowKnife;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -640,6 +669,7 @@ public partial class @Contols: IInputActionCollection2, IDisposable
         void OnGrapple(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
+        void OnThrowKnife(InputAction.CallbackContext context);
     }
     public interface IMenuActions
     {
