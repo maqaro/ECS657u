@@ -34,9 +34,5 @@ public class Projectile : MonoBehaviour
             Destroy(gameObject);
 
         }
-
-        rb.isKinematic = true;
-
-        transform.SetParent(collision.transform);
     }
 }
