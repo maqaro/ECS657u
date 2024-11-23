@@ -34,5 +34,24 @@ public class Projectile : MonoBehaviour
             Destroy(gameObject);
 
         }
+
+        ExtendablePlatform platform = collision.gameObject.GetComponent<ExtendablePlatform>();
+        if (platform != null)
+        {
+            platform.ExtendPlatform();
+        }
+
+        PlatformTrigger trigger = collision.gameObject.GetComponent<PlatformTrigger>();
+        if (trigger != null)
+        {
+            foreach (var plat in trigger.platforms)
+            {
+                var extendable = plat.GetComponent<ExtendablePlatform>();
+                if (extendable != null)
+                {
+                    extendable.TogglePlatform();
+                }
+            }
+        }
     }
 }
