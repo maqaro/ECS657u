@@ -51,6 +51,18 @@ public class ExtendablePlatform : MonoBehaviour
         }
     }
 
+    public void TogglePlatform()
+    {
+        if (isOpen)
+        {
+            RetractPlatform();
+        }
+        else
+        {
+            ExtendPlatform();
+        }
+    }
+
     private IEnumerator MovePlatform(GameObject platform, Vector3 target)
     {
         while (Vector3.Distance(platform.transform.position, target) > 0.01f)
