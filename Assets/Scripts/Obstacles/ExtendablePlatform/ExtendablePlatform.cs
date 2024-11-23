@@ -27,6 +27,7 @@ public class ExtendablePlatform : MonoBehaviour
         extendablePlatformEnd = extendablePlatformStart + direction.normalized * distance;
     }
 
+    // Extend the platform to the end position
     public void ExtendPlatform()
     {
         if (!isOpen)
@@ -39,6 +40,7 @@ public class ExtendablePlatform : MonoBehaviour
         }
     }
 
+    // Retract the platform to the start position
     public void RetractPlatform()
     {
         if (isOpen)
@@ -51,6 +53,7 @@ public class ExtendablePlatform : MonoBehaviour
         }
     }
 
+    // Toggle the platform between extended and retracted states
     public void TogglePlatform()
     {
         if (isOpen)
@@ -63,6 +66,7 @@ public class ExtendablePlatform : MonoBehaviour
         }
     }
 
+    // Coroutine to move the platform to the target position
     private IEnumerator MovePlatform(GameObject platform, Vector3 target)
     {
         while (Vector3.Distance(platform.transform.position, target) > 0.01f)
