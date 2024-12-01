@@ -265,105 +265,124 @@ public class PlayerMovement : MonoBehaviour
     // handling the movement state
     public void StateHandler()
     {
+        // Freeze state stops all movement
         if (freeze)
         {
-            // freeze state for when grappling
             state = MovementState.freeze;
             moveSpeed = 0;
             rb.velocity = Vector3.zero;
+            return;
         }
-        else if (activeGrapple)
+
+        // Handle grappling
+        if (activeGrapple)
         {
-            // grappling state
             state = MovementState.grappling;
-            moveSpeed = sprintSpeed;
+            moveSpeed = sprintSpeed; // Maintain sprint speed during grapple
+            return;
         }
-        else if (dashing)
+
+        // Handle dashing
+        if (dashing)
         {
-            // dashing state
             state = MovementState.dashing;
-            desiredMoveSpeed = dashSpeed;
-            speedChangeFactor = dashSpeedChangeFactor;
+            SmoothSpeedChange(dashSpeed, 0.1f); // Smooth transition to dash speed
+            return;
         }
-        else if (wallRunningScript != null && wallRunningScript.IsWallRunning())
+
+        // Handle wall running
+        if (wallRunningScript != null && wallRunningScript.IsWallRunning())
         {
-            // wall running state
             state = MovementState.wallrunning;
             moveSpeed = wallRunningScript.wallRunSpeed;
+            return;
         }
-        else if (climbing)
+
+        // Handle climbing
+        if (climbing)
         {
-            // climbing state
             state = MovementState.climbing;
-            desiredMoveSpeed = climbSpeed;
+            SmoothSpeedChange(climbSpeed, 0.3f); // Smooth transition to climb speed
+            return;
         }
-        else if (crouchInput)
+
+        // Handle crouching
+        if (crouchInput)
         {
-            // crouching
             state = MovementState.crouching;
-            moveSpeed = crouchSpeed;
+            SmoothSpeedChange(crouchSpeed, 0.3f); // Smooth transition to crouch speed
+            return;
         }
-        else if (grounded && sprintInput)
+
+        // Handle sprinting
+        if (grounded && sprintInput)
         {
-            // sprinting
             state = MovementState.sprinting;
-            moveSpeed = sprintSpeed;
-        }
-        else if (grounded)
-        {
-            // player is not jumping
-            state = MovementState.walking;
-            moveSpeed = walkSpeed;
-        }
-        else
-        {
-            // otherwise, player is the air
-            state = MovementState.air;
-        }
 
-        // handle moving
-        bool desiredMoveSpeedHasChanged = desiredMoveSpeed != lastDesiredMoveSpeed;
-        if (lastState == MovementState.dashing) keepMomentum = true;
-
-        // lerp speed upon speed change
-        if (desiredMoveSpeedHasChanged)
-        {
-            if (keepMomentum)
+            // Set speed immediately to avoid slow acceleration
+            if (lastState != MovementState.sprinting)
             {
-                StopAllCoroutines();
-                StartCoroutine(SmoothlyLerpMoveSpeed());
+                moveSpeed = sprintSpeed;
             }
             else
             {
-                StopAllCoroutines();
-                moveSpeed = desiredMoveSpeed;
+                SmoothSpeedChange(sprintSpeed, 0.2f); // Smooth transition if already sprinting
             }
+            return;
         }
 
-        // update the last desored movespeed and set the state
+        // Handle walking
+        if (grounded)
+        {
+            state = MovementState.walking;
+
+            // Set speed immediately to avoid slow acceleration
+            if (lastState != MovementState.walking)
+            {
+                moveSpeed = walkSpeed;
+            }
+            else
+            {
+                SmoothSpeedChange(walkSpeed, 0.2f); // Smooth transition if already walking
+            }
+            return;
+        }
+
+        // Handle air movement
+        state = MovementState.air;
+
+        // Maintain walk speed in air without smoothing
+        if (lastState != MovementState.air)
+        {
+            moveSpeed = walkSpeed;
+        }
+
+        // Update the last desired move speed and state
         lastDesiredMoveSpeed = desiredMoveSpeed;
         lastState = state;
     }
 
-    private IEnumerator SmoothlyLerpMoveSpeed()
-    {
+
+
+    //private IEnumerator SmoothlyLerpMoveSpeed()
+    //{
         // smoothly lerp the players speed
-        float time = 0;
-        float difference = Mathf.Abs(desiredMoveSpeed - moveSpeed);
-        float startValue = moveSpeed;
-        float boostFactor = speedChangeFactor;
+        //float time = 0;
+       // float difference = Mathf.Abs(desiredMoveSpeed - moveSpeed);
+       // float startValue = moveSpeed;
+      //  float boostFactor = speedChangeFactor;
 
-        while (time < difference)
-        {
-            moveSpeed = Mathf.Lerp(startValue, desiredMoveSpeed, time / difference);
-            time += Time.deltaTime * boostFactor;
-            yield return null;
-        }
+      //  while (time < difference)
+      //  {
+      //      moveSpeed = Mathf.Lerp(startValue, desiredMoveSpeed, time / difference);
+           // time += Time.deltaTime * boostFactor;
+          //  yield return null;
+       // }
 
-        moveSpeed = desiredMoveSpeed;
-        speedChangeFactor = 1f;
-        keepMomentum = false;
-    }
+      //  moveSpeed = desiredMoveSpeed;
+      //  speedChangeFactor = 1f;
+     //   keepMomentum = false;
+  //  }
 
     //handle players movement
     private void MovePlayer()
