@@ -60,10 +60,7 @@ public class Projectile : MonoBehaviour
         foreach (var plat in trigger.platforms)
         {
             var extendable = plat.GetComponent<ExtendablePlatform>();
-            if (platform != null)
-            {
-                platform.ExtendPlatform();
-            }
+            extendable?.TogglePlatform();
         }
     }
 }
