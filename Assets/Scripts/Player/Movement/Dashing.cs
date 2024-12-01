@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using DG.Tweening;
 
 public class Dashing : MonoBehaviour
 {
@@ -36,6 +37,7 @@ public class Dashing : MonoBehaviour
 
     private bool isAirDashing;
 
+    // Initializes references and sets up input bindings
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -51,17 +53,20 @@ public class Dashing : MonoBehaviour
         moveAction.Enable();
     }
 
+    // Handles cooldown for dashing
     void Update()
     {
         if (dashCdTimer > 0)
             dashCdTimer -= Time.deltaTime;
     }
 
+    // Cleans up input bindings when the script is disabled
     void OnDisable()
     {
         if (dashAction != null) dashAction.performed -= ctx => Dash();
     }
 
+    // Executes the dash action when triggered
     private void Dash()
     {
         if (dashCdTimer > 0 || (isAirDashing && !pm.grounded) || pm == null || rb == null || orientation == null || PlayerCam == null)
@@ -87,9 +92,9 @@ public class Dashing : MonoBehaviour
         Invoke(nameof(ResetDash), dashDuration);
     }
 
-
     private Vector3 delayedForceToApply;
 
+    // Applies the dash force after a slight delay
     private void DelayedDashForce()
     {
         if (resetVal)
@@ -98,6 +103,7 @@ public class Dashing : MonoBehaviour
         rb.AddForce(delayedForceToApply, ForceMode.Impulse);
     }
 
+    // Resets the dash state and smoothly reduces velocity
     private void ResetDash()
     {
         pm.dashing = false;
@@ -105,12 +111,20 @@ public class Dashing : MonoBehaviour
         if (disableGravity)
             rb.useGravity = true;
 
-        // Reset air dash state and restore `PlayerMovement`
+        // Smoothly reduce velocity to avoid abrupt stopping
+        Vector3 currentVelocity = rb.velocity;
+        DOTween.To(() => currentVelocity, x => currentVelocity = x, Vector3.zero, 0.3f)
+            .OnUpdate(() =>
+            {
+                rb.velocity = currentVelocity; // Apply the tweened velocity
+            });
+
+        // Reset air dash state and restore PlayerMovement
         isAirDashing = false;
-        rb.velocity = Vector3.zero;
-        pm.enabled = true; // Re-enable `PlayerMovement`
+        pm.enabled = true; // Re-enable PlayerMovement
     }
 
+    // Calculates the direction for the dash based on input
     private Vector3 GetDirection(Transform forwardT)
     {
         moveInput = moveAction.ReadValue<Vector2>();
