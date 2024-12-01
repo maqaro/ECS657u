@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    public int damage;
+    // How much damage this projectile deals to enemies
+    public int damage = 10;
 
+    // Component references
     private Rigidbody rb;
-
     private bool targetHit;
 
     // Start is called before the first frame update
@@ -16,52 +17,52 @@ public class Projectile : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
+    // Called when this projectile collides with another collider
     private void OnCollisionEnter(Collision collision)
     {
-        if (targetHit)
-        {
-            return;
-        }
-        else
-        {
-            targetHit = true;
-        }
+        // Prevent multiple collision responses
+        if (targetHit) return;
+        targetHit = true;
 
-        //This will stop the projectiles movemtent once it hits something
-        if (rb != null)
-        {
-            rb.velocity = Vector3.zero;
-            rb.isKinematic = true;
-        }
+        // Stop the projectile's movement
+        // StopProjectile();
 
-        // Make the projectile a child of the object it hit
-        transform.SetParent(collision.transform);
-        // this will set the position of the projectile to the exact point of contact with the collider
-        transform.position = collision.contacts[0].point;
+        // Handle different types of collisions
+        HandleEnemyHit(collision);
+        HandleTriggerHit(collision);
+    }
 
-        // Check if the projectile hit an enemy
-        if (collision.gameObject.GetComponent<TargetEnemy>() != null)
+    // Stops the projectile's movement and physics
+    // private void StopProjectile()
+    // {
+    //     if (rb == null) return;
+        
+    //     rb.velocity = Vector3.zero;
+    //     rb.isKinematic = true;
+    // }
+
+    // Handles collision with enemy targets
+    private void HandleEnemyHit(Collision collision)
+    {
+        TargetEnemy enemy = collision.gameObject.GetComponent<TargetEnemy>();
+        if (enemy != null)
         {
-            TargetEnemy enemy = collision.gameObject.GetComponent<TargetEnemy>();
             enemy.TakeDamage(damage);
-
         }
+    }
 
-        // Check if the projectile hit an extendable platform
-        ExtendablePlatform platform = collision.gameObject.GetComponent<ExtendablePlatform>();
-        platform?.ExtendPlatform();
-
-        // Check if the projectile hit a platform trigger
+    // Handles collision with platform triggers
+    private void HandleTriggerHit(Collision collision)
+    {
         PlatformTrigger trigger = collision.gameObject.GetComponent<PlatformTrigger>();
-        if (trigger != null)
+        if (trigger == null) return;
+
+        foreach (var plat in trigger.platforms)
         {
-            foreach (var plat in trigger.platforms)
+            var extendable = plat.GetComponent<ExtendablePlatform>();
+            if (platform != null)
             {
-                var extendable = plat.GetComponent<ExtendablePlatform>();
-                if (extendable != null)
-                {
-                    extendable.TogglePlatform();
-                }
+                platform.ExtendPlatform();
             }
         }
     }
