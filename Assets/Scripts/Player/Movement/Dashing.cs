@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using DG.Tweening;
 
 public class Dashing : MonoBehaviour
 {
@@ -105,9 +106,16 @@ public class Dashing : MonoBehaviour
         if (disableGravity)
             rb.useGravity = true;
 
+        // Smoothly reduce velocity to avoid abrupt stopping
+        Vector3 currentVelocity = rb.velocity;
+        DOTween.To(() => currentVelocity, x => currentVelocity = x, Vector3.zero, 0.3f)
+            .OnUpdate(() =>
+            {
+                rb.velocity = currentVelocity; // Apply the tweened velocity
+            });
+
         // Reset air dash state and restore `PlayerMovement`
         isAirDashing = false;
-        rb.velocity = Vector3.zero;
         pm.enabled = true; // Re-enable `PlayerMovement`
     }
 
