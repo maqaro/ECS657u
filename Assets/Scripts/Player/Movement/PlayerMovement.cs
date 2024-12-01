@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using DG.Tweening;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -230,6 +231,10 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    private void SmoothSpeedChange(float targetSpeed, float duration){
+        DOTween.To(() => moveSpeed, x => moveSpeed = x, targetSpeed, duration).SetEase(Ease.InOutQuad);
+    }
+
     // crouching
     private void OnCrouchStart()
     {
@@ -239,9 +244,8 @@ public class PlayerMovement : MonoBehaviour
         }
 
         crouchInput = true;
-        cameraTransform.localPosition = new Vector3(cameraTransform.localPosition.x, crouchYScale, cameraTransform.localPosition.z);
+        cameraTransform.DOLocalMoveY(crouchYScale, 0.3f); // Smoothly lower the camera
         playerCollider.height = originalColliderHeight * 0.5f;
-        transform.position = new Vector3(transform.position.x, transform.position.y - (originalColliderHeight * 0.25f), transform.position.z);
         rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
     }
 
@@ -254,9 +258,8 @@ public class PlayerMovement : MonoBehaviour
         }
 
         crouchInput = false;
-        cameraTransform.localPosition = new Vector3(cameraTransform.localPosition.x, startYScale, cameraTransform.localPosition.z);
+        cameraTransform.DOLocalMoveY(startYScale, 0.3f); // Smoothly raise the camera
         playerCollider.height = originalColliderHeight;
-        transform.position = new Vector3(transform.position.x, transform.position.y + (originalColliderHeight * 0.25f), transform.position.z);
     }
 
     // handling the movement state
