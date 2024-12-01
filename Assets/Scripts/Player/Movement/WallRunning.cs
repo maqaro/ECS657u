@@ -27,6 +27,7 @@ public class WallRunning : MonoBehaviour
     private InputAction moveAction;
     private InputAction jumpAction;
 
+    // Initializes references and sets up input bindings
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -46,12 +47,14 @@ public class WallRunning : MonoBehaviour
         }
     }
 
+    // Continuously checks for walls and handles wallrunning
     void Update()
     {
         WallCheck();
         WallRunningHandler();
     }
 
+    // Detects nearby walls and determines whether wallrunning should start or stop
     private void WallCheck()
     {
         bool wallDetected = false;
@@ -67,13 +70,13 @@ public class WallRunning : MonoBehaviour
             wallOnRight = false;
         }
 
-        // If the wall was detected but the timeout expired, wait for the player to leave the wall before re-enabling wallrun
+        // Reset timeout if the player leaves the wall
         if (timeoutExpired && !wallDetected)
         {
-            timeoutExpired = false; 
+            timeoutExpired = false;
         }
 
-        // Start wallrun only if the wall is detected and the timeout flag is not active
+        // Start or stop wallrunning based on wall detection and timeout
         if (wallDetected && !isWallRunning && !timeoutExpired)
         {
             StartWallRun();
@@ -84,16 +87,18 @@ public class WallRunning : MonoBehaviour
         }
     }
 
+    // Handles the movement and gravity logic while wallrunning
     private void WallRunningHandler()
     {
         if (isWallRunning)
         {
             Vector2 moveInput = moveAction.ReadValue<Vector2>();
 
-            // Set wallrun direction based on wall side and forward input
+            // Determine wallrun direction based on wall side and forward input
             Vector3 wallForward = Vector3.Cross(wallHit.normal, Vector3.up).normalized;
             Vector3 forwardDirection = wallOnRight ? -wallForward : wallForward;
 
+            // Apply forward velocity if the player holds forward
             if (moveInput.y > 0)
             {
                 rb.velocity = forwardDirection * wallRunSpeed;
@@ -101,11 +106,12 @@ public class WallRunning : MonoBehaviour
             }
             else
             {
+                // Apply simulated gravity when no forward input
                 rb.useGravity = false;
                 Vector3 wallGravity = -wallHit.normal * wallGravityForce;
                 rb.AddForce(wallGravity, ForceMode.Acceleration);
 
-                // Start countdown to stop wallrun if no forward input
+                // Stop wallrunning if no forward input for too long
                 wallRunPauseTimer -= Time.deltaTime;
                 if (wallRunPauseTimer <= 0)
                 {
@@ -115,7 +121,7 @@ public class WallRunning : MonoBehaviour
                 }
             }
 
-            // Apply vertical movement if horizontal input is given (left/right)
+            // Apply vertical movement based on horizontal input (left/right)
             if (moveInput.x != 0)
             {
                 Vector3 verticalMovement = wallOnRight
@@ -125,6 +131,7 @@ public class WallRunning : MonoBehaviour
                 rb.velocity += verticalMovement * wallRunSpeed * 0.3f;
             }
 
+            // Perform a wall jump if the jump button is pressed
             if (jumpAction.triggered)
             {
                 WallJump();
@@ -132,6 +139,7 @@ public class WallRunning : MonoBehaviour
         }
     }
 
+    // Starts the wallrunning state
     private void StartWallRun()
     {
         if (!isWallRunning && pm.state == PlayerMovement.MovementState.air && pm.grounded == false)
@@ -140,12 +148,12 @@ public class WallRunning : MonoBehaviour
             pm.state = PlayerMovement.MovementState.wallrunning;
             wallRunPauseTimer = wallRunTimeout;
 
-            // Clear vertical velocity to prevent abrupt drops
+            // Reset vertical velocity to avoid abrupt drops
             rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-
         }
     }
 
+    // Stops the wallrunning state
     private void StopWallRun()
     {
         if (isWallRunning)
@@ -153,20 +161,21 @@ public class WallRunning : MonoBehaviour
             isWallRunning = false;
             pm.state = PlayerMovement.MovementState.air;
             rb.useGravity = true;
-
         }
     }
 
+    // Handles the wall jump logic
     private void WallJump()
     {
         rb.useGravity = true;
         Vector3 jumpDirection = (wallHit.normal + Vector3.up).normalized;
-        rb.velocity = Vector3.zero;  // Reset velocity to ensure smooth jump
+        rb.velocity = Vector3.zero; // Reset velocity to ensure smooth jump
         rb.AddForce(jumpDirection * wallRunJumpForce, ForceMode.Impulse);
 
         StopWallRun();
     }
 
+    // Returns whether the player is currently wallrunning
     public bool IsWallRunning()
     {
         return isWallRunning;
