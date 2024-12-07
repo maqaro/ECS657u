@@ -25,7 +25,7 @@ public class EnemyAi : MonoBehaviour
     public float attackCooldown = 1.0f;
     public bool canAttack = true;
 
-    //States
+    //Different Enemy states
     public float sightRange, attackRange;
     public bool playerInSightRange, playerInAttackRange;
 
@@ -33,6 +33,8 @@ public class EnemyAi : MonoBehaviour
     {
         player = GameObject.Find("PlayerObj").transform;
         agent = GetComponent<NavMeshAgent>();
+
+        //Stopping distance to make it stop right before the user
         agent.stoppingDistance = 1f;
     }
 
@@ -84,7 +86,7 @@ public class EnemyAi : MonoBehaviour
         agent.SetDestination(player.position);
     }
 
-    // Attacking
+    // Attacking script
     private void OnCollisionStay(Collision collision)
     {
         if (collision.gameObject.CompareTag("Player") && canAttack)
@@ -92,6 +94,7 @@ public class EnemyAi : MonoBehaviour
             PlayerHealth playerHealth = collision.gameObject.GetComponent<PlayerHealth>();
             if (playerHealth != null)
             {
+                //This is for debugging can be removed once final enemy script is done
                 print("Player hit");
                 playerHealth.TakeDamage(damage);
                 StartCoroutine(AttackCooldown());
@@ -100,6 +103,7 @@ public class EnemyAi : MonoBehaviour
     }
 
     // Cooldown for attacking
+    // Cooldown changed based on enemy type and damage
      private IEnumerator AttackCooldown()
     {
         canAttack = false;
