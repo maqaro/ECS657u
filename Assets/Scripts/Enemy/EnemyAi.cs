@@ -33,6 +33,7 @@ public class EnemyAi : MonoBehaviour
     {
         player = GameObject.Find("PlayerObj").transform;
         agent = GetComponent<NavMeshAgent>();
+        agent.stoppingDistance = 1f;
     }
 
     private void Update()
@@ -54,7 +55,6 @@ public class EnemyAi : MonoBehaviour
         // if walkpoint is not set, search for one
         if (!walkPointSet) SearchWalkPoint();
 
-        // if walkpoint is set, move to it
         if (walkPointSet)
             agent.SetDestination(walkPoint);
 
