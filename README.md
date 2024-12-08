@@ -33,7 +33,7 @@ The game concept is a First-Person 3D Movement-Platformer where the play has to 
         - S - Backwards
         - A - Left
         - D - Right
-        - L-CTRL - Crouch
+        - C - Crouch
         - Q - Grapple
         - F - Dash
         - E - Pick-up Throwables
