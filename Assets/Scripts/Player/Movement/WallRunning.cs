@@ -40,6 +40,7 @@ public class WallRunning : MonoBehaviour
             moveAction = playerActionMap.FindAction("Move");
             jumpAction.Enable();
             moveAction.Enable();
+            Debug.Log("Player input actions enabled successfully.");
         }
         else
         {
@@ -63,26 +64,31 @@ public class WallRunning : MonoBehaviour
         {
             wallDetected = true;
             wallOnRight = true;
+            Debug.Log("Wall detected on the right side.");
         }
         else if (Physics.Raycast(transform.position, -pm.orientation.right, out wallHit, wallCheckDistance, wallLayer))
         {
             wallDetected = true;
             wallOnRight = false;
+            Debug.Log("Wall detected on the left side.");
         }
 
         // Reset timeout if the player leaves the wall
         if (timeoutExpired && !wallDetected)
         {
             timeoutExpired = false;
+            Debug.Log("Timeout expired and reset as no wall is detected.");
         }
 
         // Start or stop wallrunning based on wall detection and timeout
         if (wallDetected && !isWallRunning && !timeoutExpired)
         {
+            Debug.Log("Conditions met. Starting wallrunning.");
             StartWallRun();
         }
         else if (!wallDetected && isWallRunning)
         {
+            Debug.Log("Wall not detected. Stopping wallrunning.");
             StopWallRun();
         }
     }
@@ -116,6 +122,7 @@ public class WallRunning : MonoBehaviour
                 if (wallRunPauseTimer <= 0)
                 {
                     timeoutExpired = true;
+                    Debug.Log("Wallrun timeout expired due to no forward input.");
                     StopWallRun();
                     return;
                 }
@@ -129,11 +136,13 @@ public class WallRunning : MonoBehaviour
                     : (moveInput.x < 0 ? Vector3.up : Vector3.down);
 
                 rb.velocity += verticalMovement * wallRunSpeed * 0.3f;
+            
             }
 
             // Perform a wall jump if the jump button is pressed
             if (jumpAction.triggered)
             {
+                Debug.Log("Wall jump triggered.");
                 WallJump();
             }
         }
@@ -150,6 +159,7 @@ public class WallRunning : MonoBehaviour
 
             // Reset vertical velocity to avoid abrupt drops
             rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+            Debug.Log("Wallrunning started.");
         }
     }
 
@@ -161,6 +171,7 @@ public class WallRunning : MonoBehaviour
             isWallRunning = false;
             pm.state = PlayerMovement.MovementState.air;
             rb.useGravity = true;
+            Debug.Log("Wallrunning stopped.");
         }
     }
 
@@ -172,12 +183,14 @@ public class WallRunning : MonoBehaviour
         rb.velocity = Vector3.zero; // Reset velocity to ensure smooth jump
         rb.AddForce(jumpDirection * wallRunJumpForce, ForceMode.Impulse);
 
+        Debug.Log("Walljump performed.");
         StopWallRun();
     }
 
     // Returns whether the player is currently wallrunning
     public bool IsWallRunning()
     {
+        Debug.Log($"Checking if wallrunning: {isWallRunning}");
         return isWallRunning;
     }
 }
