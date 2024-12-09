@@ -25,7 +25,7 @@ public class Projectile : MonoBehaviour
         targetHit = true;
 
         // Stop the projectile's movement
-        // StopProjectile();
+        StopProjectile();
 
         // Handle different types of collisions
         HandleEnemyHit(collision);
@@ -33,13 +33,12 @@ public class Projectile : MonoBehaviour
     }
 
     // Stops the projectile's movement and physics
-    // private void StopProjectile()
-    // {
-    //     if (rb == null) return;
-        
-    //     rb.velocity = Vector3.zero;
-    //     rb.isKinematic = true;
-    // }
+    private void StopProjectile()
+    {
+        if (rb == null) return;
+
+        rb.velocity = Vector3.zero;
+    }
 
     // Handles collision with enemy targets
     private void HandleEnemyHit(Collision collision)
