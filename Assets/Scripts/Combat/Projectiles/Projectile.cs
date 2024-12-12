@@ -5,7 +5,7 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     // How much damage this projectile deals to enemies
-    public int damage = 10;
+    public int damage;
 
     // Component references
     private Rigidbody rb;
@@ -24,20 +24,18 @@ public class Projectile : MonoBehaviour
         if (targetHit) return;
         targetHit = true;
 
-        // Stop the projectile's movement
-        StopProjectile();
-
         // Handle different types of collisions
         HandleEnemyHit(collision);
         HandleTriggerHit(collision);
     }
 
     // Stops the projectile's movement and physics
-    private void StopProjectile()
+    private void StopProjectile(Collision collision)
     {
         if (rb == null) return;
 
-        rb.velocity = Vector3.zero;
+        rb.isKinematic = true;
+        transform.SetParent(collision.transform);
     }
 
     // Handles collision with enemy targets
@@ -47,6 +45,7 @@ public class Projectile : MonoBehaviour
         if (enemy != null)
         {
             enemy.TakeDamage(damage);
+            Destroy(gameObject);
         }
     }
 
@@ -54,7 +53,9 @@ public class Projectile : MonoBehaviour
     private void HandleTriggerHit(Collision collision)
     {
         PlatformTrigger trigger = collision.gameObject.GetComponent<PlatformTrigger>();
+        
         if (trigger == null) return;
+        StopProjectile(collision);
 
         foreach (var plat in trigger.platforms)
         {
