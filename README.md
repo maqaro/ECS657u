@@ -38,6 +38,10 @@ The game concept is a First-Person 3D Movement-Platformer where the play has to 
         - F - Dash
         - E - Pick-up Throwables
         - Right-Click (M2) - Rotate picked up item
+        - Right-Click (M2) - Throw Kunai (Main throwable)
+     
+ 4. Assets:
+    - All current assets have been made by a member of the group
 
 ### Creators
 - [Ade Shitta](https://github.com/ade-shitta)
