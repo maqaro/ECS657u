@@ -100,4 +100,10 @@ public class Throwing : MonoBehaviour
     {
         readyToThrow = true;
     }
+
+    public void AddThrows(int amount)
+    {
+        totalThrows += amount;
+        Debug.Log($"Kunai picked up! Total throws: {totalThrows}");
+    }
 }
