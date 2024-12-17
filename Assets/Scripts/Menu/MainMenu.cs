@@ -17,6 +17,22 @@ public class MainMenu : MonoBehaviour
         LevelLoader.LoadNextLevel();
     }
 
+    public void LoadGame()
+    {
+        Time.timeScale = 1f;
+        
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        
+        SaveManager.Instance.Load();
+        LevelLoader.LoadSpecificLevel(SaveManager.Instance.currentLevel);
+    }
+
+    public void SaveGame()
+    {
+        SaveManager.Instance.Save();
+    }
+
     public void QuitGame()
     {
         Debug.Log("QUIT FUNCTION WORKED");

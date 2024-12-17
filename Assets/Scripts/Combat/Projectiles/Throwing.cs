@@ -69,7 +69,7 @@ public class Throwing : MonoBehaviour
             return;
         }
 
-        // Trigger the throw if the player is ready and has remaining throws
+        // Trigger the throw if the player is ready and still has remaining throws
         if (readyToThrow && totalThrows > 0 && pickUpHolder.transform.childCount == 0)
         {
             Throw();
@@ -83,6 +83,8 @@ public class Throwing : MonoBehaviour
 
         // Instantiate the object to throw
         GameObject projectile = Instantiate(objectToThrow, attackPoint.position, cam.rotation);
+        
+        // Add force to the projectile
         Rigidbody projectileRb = projectile.GetComponent<Rigidbody>();
 
         Vector3 forceDirection = cam.transform.forward;
@@ -97,7 +99,7 @@ public class Throwing : MonoBehaviour
 
         projectileRb.AddForce(forceToAdd, ForceMode.Impulse);
         Destroy(projectile, 5f);
-        totalThrows--;
+        totalThrows--; // Reduce the number of remaining throws
 
         // Reset throw cooldown
         Invoke(nameof(ResetThrow), throwCooldown);
@@ -114,3 +116,4 @@ public class Throwing : MonoBehaviour
         Debug.Log($"Kunai picked up! Total throws: {totalThrows}");
     }
 }
+
