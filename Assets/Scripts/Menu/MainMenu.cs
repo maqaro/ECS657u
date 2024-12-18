@@ -15,7 +15,7 @@ public class MainMenu : MonoBehaviour
         Cursor.visible = false;
         
         LevelLoader.LoadNextLevel();
-        DataPersistenceManager.instance.LoadGame();
+        DataPersistenceManager.instance.NewGame();
     }
 
     public void OnLoadGameClicked()
