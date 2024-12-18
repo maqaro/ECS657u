@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem; // For the new Input System
 
-public class Throwing : MonoBehaviour
+public class Throwing : MonoBehaviour, IDataPersistence
 {
     // References for throwing logic
     public Transform cam;
@@ -30,6 +30,16 @@ public class Throwing : MonoBehaviour
     {
         // Initialize the new Input System controls
         playerControls = new Contols();
+    }
+
+    public void LoadData(GameData data)
+    {
+        this.totalThrows = data.kunaiCount;
+    }
+
+    public void SaveData(ref GameData data)
+    {
+        data.kunaiCount = this.totalThrows;
     }
 
     private void OnEnable()

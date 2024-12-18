@@ -6,9 +6,11 @@ using UnityEngine;
 public class GameData
 {
     public float health;
+    public int kunaiCount;
 
     public GameData()
     {
         this.health = 100;
+        this.kunaiCount = 100;
     }
 }

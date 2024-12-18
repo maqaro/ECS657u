@@ -58,6 +58,7 @@ public class DataPersistenceManager : MonoBehaviour
         }
 
         Debug.Log("Loaded player Health: " + gameData.health);
+        Debug.Log("Loaded player Kunai Count: " + gameData.kunaiCount);
     }
 
     public void SaveGame()
@@ -69,6 +70,7 @@ public class DataPersistenceManager : MonoBehaviour
         }
 
         Debug.Log("Saved player Health: " + gameData.health);
+        Debug.Log("Saved player Kunai Count: " + gameData.kunaiCount);
 
         // save data to file using data handler
         dataHandler.Save(gameData);
@@ -82,7 +84,7 @@ public class DataPersistenceManager : MonoBehaviour
     private List<IDataPersistence> FindAllDataPersistenceObjects() 
     {
         // FindObjectsofType takes in an optional boolean to include inactive gameobjects
-        IEnumerable<IDataPersistence> dataPersistenceObjects = FindObjectsOfType<MonoBehaviour>(true)
+        IEnumerable<IDataPersistence> dataPersistenceObjects = FindObjectsOfType<MonoBehaviour>()
             .OfType<IDataPersistence>();
 
         return new List<IDataPersistence>(dataPersistenceObjects);
