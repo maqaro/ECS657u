@@ -5,11 +5,11 @@ using UnityEngine.SceneManagement;
 public class GameOverScreen : MonoBehaviour
 {
     public GameObject gameOverUI;
-    private PlayerRespawn playerRespawn;
+    private PlayerSpawnManager playerRespawn;
 
     private void Start()
     {
-        playerRespawn = Object.FindFirstObjectByType<PlayerRespawn>();
+        playerRespawn = Object.FindFirstObjectByType<PlayerSpawnManager>();
         gameOverUI.SetActive(false);
         // Make sure cursor is hidden and locked at start
         Cursor.lockState = CursorLockMode.Locked;

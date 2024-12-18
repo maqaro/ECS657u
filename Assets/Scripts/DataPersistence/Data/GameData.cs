@@ -8,6 +8,8 @@ public class GameData
     public float health;
     public int kunaiCount;
     public Vector3 spawnPoint;
+    public bool hasReachedCheckpoint;
+    public Vector3 checkpointPosition;
 
 
     //Values in this contructor will be default values the game will start with when there's no data to load
@@ -15,6 +17,8 @@ public class GameData
     {
         this.health = 100;
         this.kunaiCount = 100;
-        this.spawnPoint = new Vector3(-10.51f, 1f, 0);
+        this.spawnPoint = Vector3.zero;
+        hasReachedCheckpoint = false;
+        checkpointPosition = Vector3.zero;
     }
 }

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerRespawn : MonoBehaviour, IDataPersistence
+public class PlayerSpawnManager : MonoBehaviour, IDataPersistence
 {
     public float threshold;
     [SerializeField] private string spawnTag = "SpawnPoint";
@@ -8,6 +8,8 @@ public class PlayerRespawn : MonoBehaviour, IDataPersistence
     private PlayerHealth playerHealth;
     public GameOverScreen gameOverScreen;
     private Rigidbody rb;
+    private Vector3 lastCheckpointPosition;
+    private bool hasReachedCheckpoint = false;
 
     void Start()
     {
@@ -15,6 +17,7 @@ public class PlayerRespawn : MonoBehaviour, IDataPersistence
         if (spawnObj != null)
         {
             spawnPoint = spawnObj.transform;
+            lastCheckpointPosition = spawnPoint.position;
         }
         playerHealth = GetComponent<PlayerHealth>();
         rb = GetComponent<Rigidbody>();
@@ -24,19 +27,24 @@ public class PlayerRespawn : MonoBehaviour, IDataPersistence
     {
         if (rb != null)
         {
-            rb.position = data.spawnPoint;
+            hasReachedCheckpoint = data.hasReachedCheckpoint;
+            Vector3 loadPosition = hasReachedCheckpoint ? data.checkpointPosition : spawnPoint.position;
+            rb.position = loadPosition;
+            lastCheckpointPosition = loadPosition;
             rb.velocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
         }
         else
         {
-            transform.position = data.spawnPoint;
+            transform.position = hasReachedCheckpoint ? data.checkpointPosition : data.spawnPoint;
         }
     }
 
     public void SaveData(ref GameData data)
     {
-        data.spawnPoint = transform.position;
+        data.hasReachedCheckpoint = hasReachedCheckpoint;
+        data.checkpointPosition = lastCheckpointPosition;
+        data.spawnPoint = spawnPoint != null ? spawnPoint.position : Vector3.zero;
     }
 
     void Update()
@@ -73,9 +81,19 @@ public class PlayerRespawn : MonoBehaviour, IDataPersistence
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Checkpoint"))
+        if (other.CompareTag("SpawnPoint"))
         {
+            hasReachedCheckpoint = true;
             spawnPoint = other.transform;
+            lastCheckpointPosition = spawnPoint.position;
+            Debug.Log("Reached spawn point");
+            
+        }
+        else if (other.CompareTag("Checkpoint"))
+        {
+            hasReachedCheckpoint = true;
+            spawnPoint = other.transform;
+            lastCheckpointPosition = spawnPoint.position;
 
             Renderer checkpointRenderer = other.GetComponent<Renderer>();
             Collider checkpointCollider = other.GetComponent<Collider>();
@@ -91,5 +109,4 @@ public class PlayerRespawn : MonoBehaviour, IDataPersistence
             }
         }
     }
-
 }
