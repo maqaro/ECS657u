@@ -315,7 +315,7 @@ GameObject:
   - component: {fileID: 291309797}
   - component: {fileID: 291309796}
   m_Layer: 5
-  m_Name: PlayButton
+  m_Name: NewGame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -338,8 +338,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -394, y: 94}
-  m_SizeDelta: {x: 272.2977, y: 60.9592}
+  m_AnchoredPosition: {x: -432.99994, y: 91}
+  m_SizeDelta: {x: 376.5469, y: 60.9592}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &291309796
 MonoBehaviour:
@@ -387,7 +387,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1416643259}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: PlayGame
+        m_MethodName: OnNewGameClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -447,7 +447,7 @@ GameObject:
   - component: {fileID: 300114204}
   - component: {fileID: 300114203}
   m_Layer: 5
-  m_Name: LoadSave
+  m_Name: LoadGame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1095,7 +1095,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -390, y: -134}
+  m_AnchoredPosition: {x: -434, y: -123}
   m_SizeDelta: {x: 272.2977, y: 60.9592}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &653005321
@@ -1296,7 +1296,7 @@ GameObject:
   - component: {fileID: 983806566}
   - component: {fileID: 983806565}
   m_Layer: 5
-  m_Name: Play
+  m_Name: NewGame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1341,7 +1341,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: PLAY
+  m_text: NEW GAME
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1431,7 +1431,7 @@ GameObject:
   - component: {fileID: 1066701621}
   - component: {fileID: 1066701620}
   m_Layer: 5
-  m_Name: LoadSave
+  m_Name: LoadGame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1454,7 +1454,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -393, y: 13}
+  m_AnchoredPosition: {x: -429, y: 23}
   m_SizeDelta: {x: 395.526, y: 69.0398}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1066701620
@@ -1503,7 +1503,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1416643259}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: LoadGame
+        m_MethodName: OnLoadGameClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1765,7 +1765,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -390, y: -63}
+  m_AnchoredPosition: {x: -435, y: -48}
   m_SizeDelta: {x: 272.2977, y: 60.9592}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1242821793
@@ -2086,7 +2086,7 @@ GameObject:
   - component: {fileID: 1983950119}
   - component: {fileID: 1983950118}
   m_Layer: 0
-  m_Name: SaveManager
+  m_Name: DataPersistenceManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2104,9 +2104,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9502cf8d2170c0249986930788efc9ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentLevel: 0
   currentHealth: 0
   currentPosition: {x: 0, y: 0, z: 0}
+  currentSceneIndex: 0
 --- !u!4 &1983950119
 Transform:
   m_ObjectHideFlags: 0
