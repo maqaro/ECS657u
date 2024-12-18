@@ -1909,7 +1909,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   threshold: -10
-  respawnTag: RespawnPoint
+  spawnTag: SpawnPoint
   gameOverScreen: {fileID: 1091651765}
 --- !u!114 &137395374
 MonoBehaviour:
@@ -18899,7 +18899,7 @@ GameObject:
   - component: {fileID: 1636475287}
   m_Layer: 0
   m_Name: SpawnPoint
-  m_TagString: RespawnPoint
+  m_TagString: SpawnPoint
   m_Icon: {fileID: -5487077368411116049, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

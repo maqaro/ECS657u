@@ -1,21 +1,42 @@
 using UnityEngine;
 
-public class PlayerRespawn : MonoBehaviour
+public class PlayerRespawn : MonoBehaviour, IDataPersistence
 {
     public float threshold;
-    [SerializeField] private string respawnTag = "SpawnPoint";
+    [SerializeField] private string spawnTag = "SpawnPoint";
     private Transform spawnPoint;
     private PlayerHealth playerHealth;
     public GameOverScreen gameOverScreen;
+    private Rigidbody rb;
 
     void Start()
     {
-        GameObject respawnObj = GameObject.FindGameObjectWithTag(respawnTag);
-        if (respawnObj != null)
+        GameObject spawnObj = GameObject.FindGameObjectWithTag(spawnTag);
+        if (spawnObj != null)
         {
-            spawnPoint = respawnObj.transform;
+            spawnPoint = spawnObj.transform;
         }
         playerHealth = GetComponent<PlayerHealth>();
+        rb = GetComponent<Rigidbody>();
+    }
+
+    public void LoadData(GameData data)
+    {
+        if (rb != null)
+        {
+            rb.position = data.spawnPoint;
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
+        else
+        {
+            transform.position = data.spawnPoint;
+        }
+    }
+
+    public void SaveData(ref GameData data)
+    {
+        data.spawnPoint = transform.position;
     }
 
     void Update()
@@ -41,7 +62,7 @@ public class PlayerRespawn : MonoBehaviour
                 playerHealth.healthbar.SetHealth(playerHealth.currentHealth);
             }
 
-            Rigidbody rb = GetComponent<Rigidbody>();
+
             if (rb != null)
             {
                 rb.velocity = Vector3.zero;

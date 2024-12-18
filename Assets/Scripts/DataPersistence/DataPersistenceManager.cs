@@ -59,6 +59,7 @@ public class DataPersistenceManager : MonoBehaviour
 
         Debug.Log("Loaded player Health: " + gameData.health);
         Debug.Log("Loaded player Kunai Count: " + gameData.kunaiCount);
+        Debug.Log("Loaded player Position: " + gameData.spawnPoint);
     }
 
     public void SaveGame()
@@ -71,6 +72,7 @@ public class DataPersistenceManager : MonoBehaviour
 
         Debug.Log("Saved player Health: " + gameData.health);
         Debug.Log("Saved player Kunai Count: " + gameData.kunaiCount);
+        Debug.Log("Saved player Position: " + gameData.spawnPoint);
 
         // save data to file using data handler
         dataHandler.Save(gameData);
