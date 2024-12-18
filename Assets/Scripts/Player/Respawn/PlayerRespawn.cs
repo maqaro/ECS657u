@@ -3,8 +3,8 @@ using UnityEngine;
 public class PlayerRespawn : MonoBehaviour
 {
     public float threshold;
-    [SerializeField] private string respawnTag = "RespawnPoint";
-    private Transform respawnPoint;
+    [SerializeField] private string respawnTag = "SpawnPoint";
+    private Transform spawnPoint;
     private PlayerHealth playerHealth;
     public GameOverScreen gameOverScreen;
 
@@ -13,7 +13,7 @@ public class PlayerRespawn : MonoBehaviour
         GameObject respawnObj = GameObject.FindGameObjectWithTag(respawnTag);
         if (respawnObj != null)
         {
-            respawnPoint = respawnObj.transform;
+            spawnPoint = respawnObj.transform;
         }
         playerHealth = GetComponent<PlayerHealth>();
     }
@@ -28,9 +28,9 @@ public class PlayerRespawn : MonoBehaviour
 
     public void RespawnPlayer()
     {
-        if (respawnPoint != null)
+        if (spawnPoint != null)
         {
-            Vector3 adjustedRespawnPosition = respawnPoint.position;
+            Vector3 adjustedRespawnPosition = spawnPoint.position;
             adjustedRespawnPosition.y += 1.0f;
 
             transform.position = adjustedRespawnPosition;
@@ -54,7 +54,7 @@ public class PlayerRespawn : MonoBehaviour
     {
         if (other.CompareTag("Checkpoint"))
         {
-            respawnPoint = other.transform;
+            spawnPoint = other.transform;
 
             Renderer checkpointRenderer = other.GetComponent<Renderer>();
             Collider checkpointCollider = other.GetComponent<Collider>();
@@ -70,4 +70,5 @@ public class PlayerRespawn : MonoBehaviour
             }
         }
     }
+
 }
