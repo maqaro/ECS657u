@@ -3,19 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem; // For the new Input System
 
-public class Throwing : MonoBehaviour
+public class Throwing : MonoBehaviour, IDataPersistence
 {
     // References for throwing logic
     public Transform cam;
     public Transform attackPoint;
     public GameObject objectToThrow;
 
+    // References for throwing logic
     public int totalThrows;
-    public float throwCooldown;
-
-    public float throwForce;
-    public float throwUpwardForce;
-
+    public float throwCooldown = 1f;
+    public float throwForce = 20f;
+    public float throwUpwardForce = 2f;
+    public bool showCooldownDebug = true;
+    
+    // Show amount of time left before you can throw another kunai
+    private float nextThrowTime = 0f;
     private bool readyToThrow = true;
 
     // New Input System
@@ -27,6 +30,16 @@ public class Throwing : MonoBehaviour
     {
         // Initialize the new Input System controls
         playerControls = new Contols();
+    }
+
+    public void LoadData(GameData data)
+    {
+        this.totalThrows = data.kunaiCount;
+    }
+
+    public void SaveData(ref GameData data)
+    {
+        data.kunaiCount = this.totalThrows;
     }
 
     private void OnEnable()
@@ -56,10 +69,21 @@ public class Throwing : MonoBehaviour
 
     private void HandleThrow(InputAction.CallbackContext context)
     {
+        // Check if enough time has passed since last throw
+        if (Time.time < nextThrowTime) 
+        {
+            if (showCooldownDebug)
+            {
+                Debug.Log($"Throw on cooldown. Ready in {nextThrowTime - Time.time:F1} seconds");
+            }
+            return;
+        }
+
         // Trigger the throw if the player is ready and has remaining throws
         if (readyToThrow && totalThrows > 0 && pickUpHolder.transform.childCount == 0)
         {
             Throw();
+            nextThrowTime = Time.time + throwCooldown;
         }
     }
 
@@ -67,33 +91,28 @@ public class Throwing : MonoBehaviour
     {
         readyToThrow = false;
 
-        // Instantiate the object to throw at the attack point with the camera's rotation
+        // Instantiate the object to throw at attack point with the camera's rotation
         GameObject projectile = Instantiate(objectToThrow, attackPoint.position, cam.rotation);
-
+        
         // Add force to the projectile
         Rigidbody projectileRb = projectile.GetComponent<Rigidbody>();
 
         Vector3 forceDirection = cam.transform.forward;
 
         RaycastHit hit;
-
         if(Physics.Raycast(cam.position, cam.forward, out hit, 500f))
         {
             forceDirection = (hit.point - attackPoint.position).normalized;
         }
 
-
         Vector3 forceToAdd = forceDirection * throwForce + Vector3.up * throwUpwardForce;
-
 
         projectileRb.AddForce(forceToAdd, ForceMode.Impulse);
         Destroy(projectile, 5f);
-        totalThrows--; // Reduce the number of remaining throws
+        totalThrows--;
 
         // Reset throw cooldown
         Invoke(nameof(ResetThrow), throwCooldown);
-
-        Debug.Log("Throwing action triggered!");
     }
 
     private void ResetThrow()

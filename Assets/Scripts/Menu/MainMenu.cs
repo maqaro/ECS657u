@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    public void PlayGame()
+    public void OnNewGameClicked()
     {
         // Reset time scale to normal
         Time.timeScale = 1f;
@@ -15,6 +15,17 @@ public class MainMenu : MonoBehaviour
         Cursor.visible = false;
         
         LevelLoader.LoadNextLevel();
+        DataPersistenceManager.instance.NewGame();
+    }
+
+    public void OnLoadGameClicked()
+    {
+        DataPersistenceManager.instance.LoadGame();
+    }
+
+    public void OnSaveGameClicked()
+    {
+        DataPersistenceManager.instance.SaveGame();
     }
 
     public void QuitGame()
