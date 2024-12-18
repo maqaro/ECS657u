@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerHealth : MonoBehaviour
+public class PlayerHealth : MonoBehaviour, IDataPersistence
 {
     public float maxHealth = 100f;
     public float currentHealth;
@@ -13,6 +13,18 @@ public class PlayerHealth : MonoBehaviour
         // Set the player's current health to the max health
         currentHealth = maxHealth;
         healthbar.SetMaxHealth(maxHealth);
+    }
+
+    public void LoadData(GameData data)
+    {
+        // Load the player's health from the saved data
+        this.currentHealth = data.health;
+    }
+
+    public void SaveData(ref GameData data)
+    {
+        // Save the player's health to the data
+        data.health = this.currentHealth;
     }
 
     public void TakeDamage(float damage)
