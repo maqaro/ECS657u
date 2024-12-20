@@ -6,7 +6,7 @@
             "id": "f7f82d3d-e6a1-4e4d-a888-978d7a71c9e1",
             "actions": [
                 {
-                    "name": "PickUp",
+                    "name": "Interact",
                     "type": "Button",
                     "id": "cd34854b-fea6-4cca-81fa-278dc796c335",
                     "expectedControlType": "Button",
@@ -131,7 +131,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Player",
-                    "action": "PickUp",
+                    "action": "Interact",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
