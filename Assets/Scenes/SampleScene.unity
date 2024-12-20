@@ -10658,6 +10658,7 @@ GameObject:
   - component: {fileID: 879709071}
   - component: {fileID: 879709072}
   - component: {fileID: 879709073}
+  - component: {fileID: 879709074}
   m_Layer: 5
   m_Name: DialogueBox
   m_TagString: Untagged
@@ -10715,6 +10716,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   typewriterSpeed: 15
+--- !u!114 &879709074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 879709070}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adc2e2aec0381dc4e8b714c5b096f8a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  responseBox: {fileID: 2128807886}
+  responseButtonTemplate: {fileID: 818329850}
+  responseContainer: {fileID: 1331543226}
 --- !u!1001 &883622803
 PrefabInstance:
   m_ObjectHideFlags: 0
