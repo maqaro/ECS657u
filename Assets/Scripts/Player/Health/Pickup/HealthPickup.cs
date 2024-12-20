@@ -34,11 +34,14 @@ public class HealthPickup : MonoBehaviour, IDataPersistence
 
     public void SaveData(ref GameData data)
     {
-        if (data.healthPickupsCollected.ContainsKey(id))
+        if(collected)
         {
-            data.healthPickupsCollected.Remove(id);
+            if (data.healthPickupsCollected.ContainsKey(id))
+            {
+                data.healthPickupsCollected.Remove(id);
+            }
+            data.healthPickupsCollected.Add(id, collected);
         }
-        data.healthPickupsCollected.Add(id, collected);
     }
 
     private void OnTriggerEnter(Collider other)
