@@ -43,7 +43,7 @@ public class PickUpScript : MonoBehaviour
         // Find and assign actions from the Input Action Asset
         var gameplayActionMap = inputActionAsset.FindActionMap("Player");
 
-        pickUpAction = gameplayActionMap?.FindAction("PickUp");
+        pickUpAction = gameplayActionMap?.FindAction("Interact");
         throwAction = gameplayActionMap?.FindAction("Throw");
         rotateAction = gameplayActionMap?.FindAction("Rotate");
 
