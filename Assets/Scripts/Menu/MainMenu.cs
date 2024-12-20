@@ -15,6 +15,12 @@ public class MainMenu : MonoBehaviour
     [Header("Confirmation")]
     [SerializeField] private GameObject confirmationPrompt = null;
 
+    [Header("Gameplay Settings")]
+    [SerializeField] private TMP_Text SensitivityTextValue = null;
+    [SerializeField] private Slider SensSlider = null;
+    [SerializeField] private int defaultSen = 1;
+    public int mainSensitivity = 1;
+
 
     public void OnNewGameClicked()
     {
@@ -58,6 +64,19 @@ public class MainMenu : MonoBehaviour
         Debug.Log($"Volume Changed to: {AudioListener.volume.ToString("0.0")}");
     }
 
+    public void SetSensitivity(float sensitivity)
+    {
+        mainSensitivity = Mathf.RoundToInt(sensitivity);
+        SensitivityTextValue.text = sensitivity.ToString("0");
+        Debug.Log($"Sensitivity set to: {mainSensitivity}");
+    }
+
+    public void GameplayApply()
+    {
+        PlayerPrefs.SetFloat("masterSen", mainSensitivity);
+        //StartCoroutine(ConfirmationBox());
+    }
+
     //Resets the value of the Volume
     public void ResetButton(string MenuType)
     {
@@ -67,6 +86,14 @@ public class MainMenu : MonoBehaviour
             volumeSlider.value = defaultVolume;
             volumeTextValue.text = defaultVolume.ToString("0.0");
             VolumeApply();
+        }
+
+        if(MenuType == "Gameplay")
+        {
+            SensitivityTextValue.text = defaultSen.ToString("0");
+            SensSlider.value = defaultSen;
+            mainSensitivity = defaultSen;
+            GameplayApply();
         }
     }
 
