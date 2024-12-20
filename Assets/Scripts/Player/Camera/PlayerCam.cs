@@ -37,7 +37,6 @@ public class PlayerCam : MonoBehaviour
 
     private void Update()
     {
-        if (lookAction.enabled){
         // Get mouse delta values from the new input system
         Vector2 mouseDelta = lookAction.ReadValue<Vector2>();
 
@@ -54,18 +53,5 @@ public class PlayerCam : MonoBehaviour
         // Apply rotations
         transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
         orientation.rotation = Quaternion.Euler(0, yRotation, 0);
-        }
-        
-    
     }
-
-    public void EnableCameraMovement(){ //Enable camera movement
-            lookAction.Enable();
-        }
-
-    public void DisableCameraMovement(){ //Disable camera movement (for dialogue)
-        lookAction.Disable();
-    }
-
-
 }
