@@ -10731,6 +10731,7 @@ MonoBehaviour:
   responseBox: {fileID: 2128807886}
   responseButtonTemplate: {fileID: 818329850}
   responseContainer: {fileID: 1331543226}
+  playerCam: {fileID: 2110341025}
 --- !u!1001 &883622803
 PrefabInstance:
   m_ObjectHideFlags: 0
