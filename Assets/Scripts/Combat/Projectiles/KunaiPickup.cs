@@ -37,11 +37,14 @@ public class KunaiPickup : MonoBehaviour, IDataPersistence
 
     public void SaveData(ref GameData data)
     {
-        if (data.kunaiPickupsCollected.ContainsKey(id))
+        if(collected)
         {
-            data.kunaiPickupsCollected.Remove(id);
+            if (data.kunaiPickupsCollected.ContainsKey(id))
+            {
+                data.kunaiPickupsCollected.Remove(id);
+            }
+            data.kunaiPickupsCollected.Add(id, collected);
         }
-        data.kunaiPickupsCollected.Add(id, collected);
     }
 
     private void OnTriggerEnter(Collider other)
