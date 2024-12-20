@@ -10,6 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bba3c12bd6123344fbf3800e779a51ff, type: 3}
-  m_Name: No
+  m_Name: test
   m_EditorClassIdentifier: 
-  dialogue: []
+  dialogue:
+  - "My dialogue\t"
+  - second dialogue
+  responses:
+  - responseText: Yes
+    dialogueObject: {fileID: 11400000, guid: e35cb4c9ec7bc574094d4ef34b054c68, type: 2}
+  - responseText: No
+    dialogueObject: {fileID: 11400000, guid: dbb1343513f1230448c48d23bfb4e77b, type: 2}

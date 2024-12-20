@@ -2,17 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Response : MonoBehaviour
+[System.Serializable]
+public class Response
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private string responseText;
+    [SerializeField] private DialogueObject dialogueObject;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public string ResponseText => responseText;
+    public DialogueObject DialogueObject => dialogueObject;
 }
