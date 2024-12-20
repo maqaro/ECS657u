@@ -28,7 +28,7 @@ public partial class @Contols: IInputActionCollection2, IDisposable
             ""id"": ""f7f82d3d-e6a1-4e4d-a888-978d7a71c9e1"",
             ""actions"": [
                 {
-                    ""name"": ""PickUp"",
+                    ""name"": ""Interact"",
                     ""type"": ""Button"",
                     ""id"": ""cd34854b-fea6-4cca-81fa-278dc796c335"",
                     ""expectedControlType"": ""Button"",
@@ -153,7 +153,7 @@ public partial class @Contols: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Player"",
-                    ""action"": ""PickUp"",
+                    ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -385,7 +385,7 @@ public partial class @Contols: IInputActionCollection2, IDisposable
 }");
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
-        m_Player_PickUp = m_Player.FindAction("PickUp", throwIfNotFound: true);
+        m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
         m_Player_Throw = m_Player.FindAction("Throw", throwIfNotFound: true);
         m_Player_Rotate = m_Player.FindAction("Rotate", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
@@ -462,7 +462,7 @@ public partial class @Contols: IInputActionCollection2, IDisposable
     // Player
     private readonly InputActionMap m_Player;
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
-    private readonly InputAction m_Player_PickUp;
+    private readonly InputAction m_Player_Interact;
     private readonly InputAction m_Player_Throw;
     private readonly InputAction m_Player_Rotate;
     private readonly InputAction m_Player_Move;
@@ -479,7 +479,7 @@ public partial class @Contols: IInputActionCollection2, IDisposable
     {
         private @Contols m_Wrapper;
         public PlayerActions(@Contols wrapper) { m_Wrapper = wrapper; }
-        public InputAction @PickUp => m_Wrapper.m_Player_PickUp;
+        public InputAction @Interact => m_Wrapper.m_Player_Interact;
         public InputAction @Throw => m_Wrapper.m_Player_Throw;
         public InputAction @Rotate => m_Wrapper.m_Player_Rotate;
         public InputAction @Move => m_Wrapper.m_Player_Move;
@@ -501,9 +501,9 @@ public partial class @Contols: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_PlayerActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_PlayerActionsCallbackInterfaces.Add(instance);
-            @PickUp.started += instance.OnPickUp;
-            @PickUp.performed += instance.OnPickUp;
-            @PickUp.canceled += instance.OnPickUp;
+            @Interact.started += instance.OnInteract;
+            @Interact.performed += instance.OnInteract;
+            @Interact.canceled += instance.OnInteract;
             @Throw.started += instance.OnThrow;
             @Throw.performed += instance.OnThrow;
             @Throw.canceled += instance.OnThrow;
@@ -544,9 +544,9 @@ public partial class @Contols: IInputActionCollection2, IDisposable
 
         private void UnregisterCallbacks(IPlayerActions instance)
         {
-            @PickUp.started -= instance.OnPickUp;
-            @PickUp.performed -= instance.OnPickUp;
-            @PickUp.canceled -= instance.OnPickUp;
+            @Interact.started -= instance.OnInteract;
+            @Interact.performed -= instance.OnInteract;
+            @Interact.canceled -= instance.OnInteract;
             @Throw.started -= instance.OnThrow;
             @Throw.performed -= instance.OnThrow;
             @Throw.canceled -= instance.OnThrow;
@@ -657,7 +657,7 @@ public partial class @Contols: IInputActionCollection2, IDisposable
     }
     public interface IPlayerActions
     {
-        void OnPickUp(InputAction.CallbackContext context);
+        void OnInteract(InputAction.CallbackContext context);
         void OnThrow(InputAction.CallbackContext context);
         void OnRotate(InputAction.CallbackContext context);
         void OnMove(InputAction.CallbackContext context);
