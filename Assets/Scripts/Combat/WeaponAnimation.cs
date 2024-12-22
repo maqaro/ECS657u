@@ -7,25 +7,27 @@ public class WeaponAnimation : MonoBehaviour
 {
     private Animator animator;
     private PlayerMovement pm;
+    private PickUpScript pu;
     public InputActionAsset inputActionAsset;
     private InputAction MoveAction;
     private InputAction SprintAction;
     
 
     private void Start() {
-        
         GetReferences();
-        
     }
 
     private void Update() {
         UpdateSpeed();
+        heldObject();
+        Debug.Log($"WeaponUp: {animator.GetBool("WeaponUp")}, Up: {animator.GetFloat("Up")}");
     }
 
     private void GetReferences() 
     {
         animator = GetComponentInChildren<Animator>();
         pm = GetComponent<PlayerMovement>();
+        pu = GetComponent<PickUpScript>();
         var gameplayActionMap = inputActionAsset.FindActionMap("Player");
 
         if (gameplayActionMap != null)
@@ -40,6 +42,20 @@ public class WeaponAnimation : MonoBehaviour
 
         }
         
+    }
+
+    private void heldObject()
+    {
+        if (pu.isHolding)
+        {
+            animator.SetBool("WeaponUp", false);
+            animator.SetFloat("Up", 0f);
+        }
+        else
+        {
+            animator.SetBool("WeaponUp", true);
+            animator.SetFloat("Up", 1f);
+        }
     }
 
     private void UpdateSpeed()

@@ -6,10 +6,9 @@ using UnityEngine.InputSystem; // Import the new Input System namespace
 public class PickUpScript : MonoBehaviour
 {
     public GameObject player;
-    public GameObject sword;
     public Transform holdPos;
     public Camera playerCamera;
-    private Animator swordAnimator;
+    public bool isHolding;
     private float originalSenX = 0f;
     private float originalSenY = 0f;
 
@@ -32,7 +31,6 @@ public class PickUpScript : MonoBehaviour
     void Start()
     {
         LayerNumber = LayerMask.NameToLayer("HoldLayer"); 
-        swordAnimator = sword.GetComponent<Animator>();
         
         // Ensure playerCamera is assigned and get the PlayerCamScript if available
         if (playerCamera != null)
@@ -66,8 +64,13 @@ public class PickUpScript : MonoBehaviour
     {
         if (heldObj != null)
         {
+            isHolding = true;
             MoveObject();
             RotateObject(); // Will only rotate if rotation key is held
+        }
+        else
+        {
+            isHolding = false;
         }
     }
 
@@ -107,8 +110,7 @@ public class PickUpScript : MonoBehaviour
     {
         if (pickUpObj.GetComponent<Rigidbody>()) 
         {
-            swordAnimator.enabled = false;
-            sword.SetActive(false);
+
 
             heldObj = pickUpObj; 
             heldObjRb = pickUpObj.GetComponent<Rigidbody>();
@@ -130,8 +132,7 @@ public class PickUpScript : MonoBehaviour
             heldObj.transform.parent = null;
             heldObj = null;
 
-            sword.SetActive(true);
-            swordAnimator.enabled = true;
+
         }
     }
 
@@ -196,9 +197,6 @@ public class PickUpScript : MonoBehaviour
             heldObj.transform.parent = null;
             heldObjRb.AddForce(transform.forward * throwForce);
             heldObj = null;
-
-            sword.SetActive(true);
-            swordAnimator.enabled = true;
         }
     }
 

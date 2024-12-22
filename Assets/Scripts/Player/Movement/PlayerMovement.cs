@@ -60,7 +60,6 @@ public class PlayerMovement : MonoBehaviour
     public Transform cameraTransform;
 
     public Vector2 moveInput;
-    private bool jumpInput;
     private bool crouchInput;
     private bool sprintInput;
 
@@ -317,7 +316,6 @@ public class PlayerMovement : MonoBehaviour
         {
             moveInput = Vector2.zero;
             sprintInput = false;
-            jumpInput = false;
             return;
         }
 
