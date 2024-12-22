@@ -97,7 +97,7 @@ public class DialogueUI : MonoBehaviour
     }
 
     // Closes the dialogue box and resets its state
-    private void CloseDialogueBox()
+    public void CloseDialogueBox()
     {
         IsDialogueActive = false;
         dialogueBox.SetActive(false);

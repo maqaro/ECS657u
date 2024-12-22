@@ -75,8 +75,15 @@ public class ResponseHandler : MonoBehaviour
             responseEvents[responseIndex].OnPickedResponse?.Invoke();
         }
 
+        responseEvents = null;
+
         // Show the next part of the dialogue based on the selected response
-        dialogueUI.ShowDialogue(response.DialogueObject);
+        if (response.DialogueObject){
+            dialogueUI.ShowDialogue(response.DialogueObject);
+        } else {
+            dialogueUI.CloseDialogueBox();
+        }
+        
 
         // Lock the cursor and make it invisible again
         Cursor.lockState = CursorLockMode.Locked;
