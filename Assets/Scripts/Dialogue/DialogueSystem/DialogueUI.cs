@@ -47,7 +47,7 @@ public class DialogueUI : MonoBehaviour
         if (dialogueObject.HasResponses){
             responseHandler.ShowResponses(dialogueObject.Responses);
         } else {
-        CloseDialogueBox();
+            CloseDialogueBox();
         }
         
     }

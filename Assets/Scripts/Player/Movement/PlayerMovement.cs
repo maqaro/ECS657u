@@ -219,6 +219,15 @@ public class PlayerMovement : MonoBehaviour
 
     private void MyInput()
     {
+        if (state == MovementState.interacting)
+        {
+            moveInput = Vector2.zero;
+            sprintInput = false;
+            jumpInput = false;
+            return;
+        }
+
+
         // Read input values
         Vector2 inputVector = moveAction.ReadValue<Vector2>();
         moveInput = new Vector2(inputVector.x, inputVector.y);
@@ -242,15 +251,19 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    // Interacting
     private void OnInteract()
-{
-    if (Interactable != null)
     {
-        state = MovementState.interacting;
-        moveSpeed = 0;
-        Interactable.Interact(player: this);
+        if (dialogueUI.IsDialogueActive) return;
+
+        if (Interactable != null)
+        {
+            state = MovementState.interacting;
+            rb.velocity = Vector3.zero;
+            Interactable.Interact(player: this);
+        }
     }
-}
+
 
     private void SmoothSpeedChange(float targetSpeed, float duration){
         DOTween.To(() => moveSpeed, x => moveSpeed = x, targetSpeed, duration).SetEase(Ease.InOutQuad);
@@ -369,12 +382,6 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-        // Handle interaction state
-        if (state == MovementState.interacting)
-        {
-            moveSpeed = 0;
-            return;
-        }
 
         // Handle air movement
         state = MovementState.air;
@@ -416,9 +423,9 @@ public class PlayerMovement : MonoBehaviour
     private void MovePlayer()
     {
         // if player is grappling or dashing, return to prevent movement
-        if (activeGrapple || MovementState.dashing == state || MovementState.interacting == state)
+        if (state == MovementState.interacting || activeGrapple || state == MovementState.dashing)
         {
-            return;
+            return; // Skip movement logic
         }
 
         // move the player
@@ -458,6 +465,7 @@ public class PlayerMovement : MonoBehaviour
         {
             return;
         }
+
 
         // climbing speed
         if (OnSlope() && !exitingSlope)
