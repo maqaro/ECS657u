@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Test
   m_EditorClassIdentifier: 
   dialogue:
-  - "My dialogue\t"
-  - second dialogue
+  - My dialogue, testing punctuation delay!!
+  - second dialogue. test
   responses:
   - responseText: Yes
     dialogueObject: {fileID: 11400000, guid: e35cb4c9ec7bc574094d4ef34b054c68, type: 2}

@@ -14,55 +14,96 @@ public class DialogueUI : MonoBehaviour
     private ResponseHandler responseHandler;
     private TypewriterEffect typewriterEffect;
     private InputAction interactAction;
+    private InputAction skipAction;
 
-    public void Start(){
+    // Initializes the dialogue system, sets up input actions, and ensures the dialogue box is hidden at start
+    public void Start()
+    {
         var playerActionMap = new InputActionMap("Player");
+
+        // Define input actions for interacting and skipping dialogue
         interactAction = playerActionMap.AddAction("Interact", binding: "<Keyboard>/e");
+        skipAction = playerActionMap.AddAction("Skip", binding: "<Keyboard>/space");
+
+        // Enable input actions
         interactAction.Enable();
+        skipAction.Enable();
 
         typewriterEffect = GetComponent<TypewriterEffect>();
         responseHandler = GetComponent<ResponseHandler>();
         CloseDialogueBox();
     }
 
-    public void ShowDialogue(DialogueObject dialogueObject){
+    // Activates the dialogue box and starts the dialogue display process
+    public void ShowDialogue(DialogueObject dialogueObject)
+    {
         IsDialogueActive = true;
         dialogueBox.SetActive(true);
         StartCoroutine(StepThroughDialogue(dialogueObject));
     }
 
-    private IEnumerator StepThroughDialogue(DialogueObject dialogueObject){
-    
-        for (int i = 0; i < dialogueObject.Dialogue.Length; i++){
+    // Steps through the dialogue lines one by one and waits for player input to proceed
+    private IEnumerator StepThroughDialogue(DialogueObject dialogueObject)
+    {
+        for (int i = 0; i < dialogueObject.Dialogue.Length; i++)
+        {
             string dialogue = dialogueObject.Dialogue[i];
-            yield return typewriterEffect.Run(dialogue, text_label);
 
+            // Run typing effect with optional skipping
+            yield return RunTypingEffect(dialogue);
+
+            text_label.text = dialogue;
+
+            // If this is the last dialogue line with responses, break to show responses
             if (i == dialogueObject.Dialogue.Length - 1 && dialogueObject.HasResponses) break;
-        
 
+            yield return null;
             yield return new WaitUntil(() => interactAction.triggered);
             interactAction.Reset();
         }
 
-        if (dialogueObject.HasResponses){
+        // Show response options or close the dialogue box if none are present
+        if (dialogueObject.HasResponses)
+        {
             responseHandler.ShowResponses(dialogueObject.Responses);
-        } else {
+        }
+        else
+        {
             CloseDialogueBox();
         }
-        
     }
 
-    private void CloseDialogueBox(){
+    // Runs the typewriter effect for displaying dialogue and allows skipping
+    private IEnumerator RunTypingEffect(string dialogue)
+    {
+        bool isSkipping = false;
+        typewriterEffect.Run(dialogue, text_label);
+
+        // Wait until the typewriter effect finishes or is skipped
+        while (typewriterEffect.IsRunning)
+        {
+            yield return null;
+            if (skipAction.triggered && !isSkipping)
+            {
+                isSkipping = true;
+                typewriterEffect.Stop();
+                text_label.text = dialogue;
+            }
+        }
+    }
+
+    // Closes the dialogue box and resets its state
+    private void CloseDialogueBox()
+    {
         IsDialogueActive = false;
         dialogueBox.SetActive(false);
         text_label.text = string.Empty;
 
+        // Notify the PlayerMovement script that the interaction has ended
         PlayerMovement playerMovement = FindObjectOfType<PlayerMovement>();
         if (playerMovement != null)
         {
             playerMovement.EndInteraction();
         }
     }
-
-
 }
