@@ -2144,7 +2144,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7213aba546883114cb6a8bdb2a0e0b73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputActionAsset: {fileID: -944628639613478452, guid: 920be4ea1916cce4ea4d6e25233a37e5, type: 3}
 --- !u!114 &137395377
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2176,21 +2175,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 516385588de328e488f50ba2796e427d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Sword: {fileID: 2023955068}
-  canAttack: 1
-  Cooldown: 1
-  attackRange: 1.5
-  damage: 10
-  inputActionAsset: {fileID: -944628639613478452, guid: 920be4ea1916cce4ea4d6e25233a37e5, type: 3}
-  swordSwingAction:
-    m_Name: Sword Swing
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 56725a17-39c2-4100-a119-107f8a89b2a6
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
 --- !u!1001 &143495273
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6506,6 +6490,10 @@ MonoBehaviour:
             m_BoolArgument: 0
           m_CallState: 2
   - name: No
+    onPickedResponse:
+      m_PersistentCalls:
+        m_Calls: []
+  - name: test option
     onPickedResponse:
       m_PersistentCalls:
         m_Calls: []
@@ -11250,7 +11238,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 885, y: -24.599915}
+  m_AnchoredPosition: {x: 885, y: -24.599854}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &898016014
@@ -23414,11 +23402,6 @@ MonoBehaviour:
   limit: 40
   randomStart: 0
   knockbackForce: 500
---- !u!1 &2023955068 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 063a34602ef52de4ca4db801b13ef697, type: 3}
-  m_PrefabInstance: {fileID: 1699336123}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2035164914
 GameObject:
   m_ObjectHideFlags: 0
