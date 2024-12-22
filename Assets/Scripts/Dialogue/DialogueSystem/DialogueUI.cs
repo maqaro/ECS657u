@@ -14,12 +14,18 @@ public class DialogueUI : MonoBehaviour
     private ResponseHandler responseHandler;
     private TypewriterEffect typewriterEffect;
     private InputAction interactAction;
+    private InputAction skipAction;
 
 
     public void Start(){
         var playerActionMap = new InputActionMap("Player");
         interactAction = playerActionMap.AddAction("Interact", binding: "<Keyboard>/e");
+        skipAction = playerActionMap.AddAction("Skip", binding: "<Keyboard>/space");
+        
         interactAction.Enable();
+        skipAction.Enable();
+        
+        
 
         typewriterEffect = GetComponent<TypewriterEffect>();
         responseHandler = GetComponent<ResponseHandler>();
@@ -62,7 +68,12 @@ public class DialogueUI : MonoBehaviour
         
         while (typewriterEffect.IsRunning){
             yield return null;
-
+            if (skipAction.triggered && !isSkipping)
+            {
+                isSkipping = true;
+                typewriterEffect.Stop();
+                text_label.text = dialogue;
+            }
         
         }
         
