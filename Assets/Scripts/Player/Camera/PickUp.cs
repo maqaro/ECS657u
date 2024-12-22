@@ -11,6 +11,7 @@ public class PickUpScript : MonoBehaviour
     public bool isHolding;
     private float originalSenX = 0f;
     private float originalSenY = 0f;
+    private float smoothSpeed = 10f;
 
     public float throwForce = 500f; 
     public float pickUpRange = 50f; 
@@ -111,7 +112,6 @@ public class PickUpScript : MonoBehaviour
         if (pickUpObj.GetComponent<Rigidbody>()) 
         {
 
-
             heldObj = pickUpObj; 
             heldObjRb = pickUpObj.GetComponent<Rigidbody>();
             heldObjRb.isKinematic = true;
@@ -140,7 +140,7 @@ public class PickUpScript : MonoBehaviour
     {
         if (heldObj != null)
         {
-            heldObj.transform.position = holdPos.position;
+            heldObj.transform.position = Vector3.Lerp(heldObj.transform.position, holdPos.position, Time.deltaTime * smoothSpeed);
         }
     }
 
