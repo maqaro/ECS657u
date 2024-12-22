@@ -5,6 +5,10 @@ public class DialogueActivator : MonoBehaviour, IInteractable
 {
     [SerializeField] private DialogueObject dialogueObject; // The dialogue object to display when this activator is interacted with
 
+    public void UpdateDialogueObject(DialogueObject dialogueObject){
+        this.dialogueObject = dialogueObject;
+    }
+
     // Called when another collider enters the trigger zone
     private void OnTriggerEnter(Collider other)
     {
