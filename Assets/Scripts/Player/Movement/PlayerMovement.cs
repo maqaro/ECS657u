@@ -257,6 +257,7 @@ public class PlayerMovement : MonoBehaviour
         {
             state = MovementState.walking; 
             MovePlayer();
+            jumpAction.Enable();
         }
     }
 
@@ -316,6 +317,7 @@ public class PlayerMovement : MonoBehaviour
         {
             moveInput = Vector2.zero;
             sprintInput = false;
+            jumpAction.Disable();
             return;
         }
 

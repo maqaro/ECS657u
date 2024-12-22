@@ -15,12 +15,11 @@ public class DialogueUI : MonoBehaviour
     private TypewriterEffect typewriterEffect;
     private InputAction interactAction;
 
+
     public void Start(){
         var playerActionMap = new InputActionMap("Player");
         interactAction = playerActionMap.AddAction("Interact", binding: "<Keyboard>/e");
         interactAction.Enable();
-
-        
 
         typewriterEffect = GetComponent<TypewriterEffect>();
         responseHandler = GetComponent<ResponseHandler>();
@@ -58,12 +57,13 @@ public class DialogueUI : MonoBehaviour
     }
 
     private IEnumerator RunTypingEffect(string dialogue){
+        bool isSkipping = false;
         typewriterEffect.Run(dialogue, text_label);
         
         while (typewriterEffect.IsRunning){
             yield return null;
 
-            
+        
         }
         
     }
