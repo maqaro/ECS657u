@@ -7,6 +7,11 @@ using DG.Tweening;
 
 public class PlayerMovement : MonoBehaviour
 {
+
+    [SerializeField] private DialogueUI dialogueUI;
+    public DialogueUI DialogueUI => dialogueUI;
+    public IInteractable Interactable { get; set; }
+
     [Header("Movement")]
     private float moveSpeed;
     public float walkSpeed;
@@ -75,7 +80,8 @@ public class PlayerMovement : MonoBehaviour
         sprinting,
         crouching,
         air,
-        wallrunning
+        wallrunning,
+        interacting
     }
 
     public bool freeze;
@@ -95,6 +101,7 @@ public class PlayerMovement : MonoBehaviour
     private InputAction jumpAction;
     private InputAction crouchAction;
     private InputAction sprintAction;
+    private Inputaction interactAction;
 
     [Header("Animations")]
     private Animator anim;
@@ -122,15 +129,18 @@ public class PlayerMovement : MonoBehaviour
             jumpAction = playerActionMap.FindAction("Jump");
             crouchAction = playerActionMap.FindAction("Crouch");
             sprintAction = playerActionMap.FindAction("Sprint");
+            interactAction = playerActionMap.FindAction("Interact");
 
             moveAction?.Enable();
             jumpAction?.Enable();
             crouchAction?.Enable();
             sprintAction?.Enable();
+            interactAction?.Enable();
 
             // Bind jump and crouch input actions
             jumpAction.performed += ctx => OnJump();
             crouchAction.performed += ctx => OnCrouchStart();
+            interactAction.performed += ctx => OnInteract();
             crouchAction.canceled += ctx => OnCrouchEnd();
         }
         else
@@ -149,6 +159,7 @@ public class PlayerMovement : MonoBehaviour
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
         if (jumpAction != null) jumpAction.performed -= ctx => OnJump();
+        if (interactAction != null) interactAction.performed -= ctx => OnInteract();
         if (crouchAction != null)
         {
             crouchAction.performed -= ctx => OnCrouchStart();
@@ -230,6 +241,16 @@ public class PlayerMovement : MonoBehaviour
             Invoke(nameof(resetJump), jumpCooldown);
         }
     }
+
+    private void OnInteract()
+{
+    if (Interactable != null)
+    {
+        state = MovementState.interacting;
+        moveSpeed = 0;
+        Interactable.Interact(player: this);
+    }
+}
 
     private void SmoothSpeedChange(float targetSpeed, float duration){
         DOTween.To(() => moveSpeed, x => moveSpeed = x, targetSpeed, duration).SetEase(Ease.InOutQuad);
@@ -348,6 +369,13 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
+        // Handle interaction state
+        if (state == MovementState.interacting)
+        {
+            moveSpeed = 0;
+            return;
+        }
+
         // Handle air movement
         state = MovementState.air;
 
@@ -388,7 +416,7 @@ public class PlayerMovement : MonoBehaviour
     private void MovePlayer()
     {
         // if player is grappling or dashing, return to prevent movement
-        if (activeGrapple || MovementState.dashing == state)
+        if (activeGrapple || MovementState.dashing == state || MovementState.interacting == state)
         {
             return;
         }
