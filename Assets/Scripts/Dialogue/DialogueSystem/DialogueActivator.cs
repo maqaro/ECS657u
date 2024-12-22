@@ -37,8 +37,13 @@ public class DialogueActivator : MonoBehaviour, IInteractable
     // Called when the player interacts with this activator
     public void Interact(PlayerMovement player)
     {
-        if (TryGetComponent(out DialogueResponseEvents responseEvents) && responseEvents.DialogueObject == dialogueObject){
-            player.DialogueUI.AddResponseEvents(responseEvents.Events);
+        foreach (DialogueResponseEvents responseEvents in GetComponents<DialogueResponseEvents>())
+        {
+            if (responseEvents.DialogueObject == dialogueObject)
+            {
+                player.DialogueUI.AddResponseEvents(responseEvents.Events);
+                break;
+            }
         }
 
         // Display the associated dialogue object in the DialogueUI
