@@ -101,7 +101,7 @@ public class PlayerMovement : MonoBehaviour
     private InputAction jumpAction;
     private InputAction crouchAction;
     private InputAction sprintAction;
-    private Inputaction interactAction;
+    private InputAction interactAction;
 
     [Header("Animations")]
     private Animator anim;
