@@ -8,8 +8,9 @@ public class DialogueUI : MonoBehaviour
 {
     [SerializeField] private GameObject dialogueBox;
     [SerializeField] private TMP_Text text_label;
-    [SerializeField] private DialogueObject testDialogue;
 
+    public bool IsDialogueActive { get; private set; }
+    
     private ResponseHandler responseHandler;
     private TypewriterEffect typewriterEffect;
     private InputAction interactAction;
@@ -18,13 +19,14 @@ public class DialogueUI : MonoBehaviour
         var playerActionMap = new InputActionMap("Player");
         interactAction = playerActionMap.AddAction("Interact", binding: "<Keyboard>/e");
         interactAction.Enable();
+
         typewriterEffect = GetComponent<TypewriterEffect>();
         responseHandler = GetComponent<ResponseHandler>();
         CloseDialogueBox();
-        ShowDialogue(testDialogue);
     }
 
     public void ShowDialogue(DialogueObject dialogueObject){
+        IsDialogueActive = true;
         dialogueBox.SetActive(true);
         StartCoroutine(StepThroughDialogue(dialogueObject));
     }
@@ -45,14 +47,21 @@ public class DialogueUI : MonoBehaviour
         if (dialogueObject.HasResponses){
             responseHandler.ShowResponses(dialogueObject.Responses);
         } else {
-        CloseDialogueBox();
+            CloseDialogueBox();
         }
         
     }
 
     private void CloseDialogueBox(){
+        IsDialogueActive = false;
         dialogueBox.SetActive(false);
         text_label.text = string.Empty;
+
+        PlayerMovement playerMovement = FindObjectOfType<PlayerMovement>();
+        if (playerMovement != null)
+        {
+            playerMovement.EndInteraction();
+        }
     }
 
 
