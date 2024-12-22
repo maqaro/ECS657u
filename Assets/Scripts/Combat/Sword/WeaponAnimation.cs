@@ -8,9 +8,11 @@ public class WeaponAnimation : MonoBehaviour
     private Animator animator;
     private PlayerMovement pm;
     private PickUpScript pu;
+    private SwordSwing ss;
     public InputActionAsset inputActionAsset;
     private InputAction MoveAction;
     private InputAction SprintAction;
+    private InputAction SwingAction;
     
 
     private void Start() {
@@ -20,7 +22,6 @@ public class WeaponAnimation : MonoBehaviour
     private void Update() {
         UpdateSpeed();
         heldObject();
-        Debug.Log($"WeaponUp: {animator.GetBool("WeaponUp")}, Up: {animator.GetFloat("Up")}");
     }
 
     private void GetReferences() 
@@ -42,6 +43,14 @@ public class WeaponAnimation : MonoBehaviour
 
         }
         
+    }
+
+    public void SwingAnimation()
+    {
+        if (animator.GetBool("WeaponUp"))
+        {
+            animator.SetTrigger("Swing");
+        }
     }
 
     private void heldObject()

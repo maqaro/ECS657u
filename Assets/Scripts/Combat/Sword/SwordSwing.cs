@@ -11,14 +11,22 @@ public class SwordSwing : MonoBehaviour
     public float attackRange = 1.5f;
     public float damage = 10f;
 
-    private InputAction swordSwingAction; 
+    public InputActionAsset inputActionAsset;
+    public InputAction swordSwingAction;
+
+    private WeaponAnimation wa;
+    private Animator animator;
 
     void OnEnable()
     {
         // Assuming you have an Input Action called "SwordSwing"
-        swordSwingAction = new InputAction(binding: "<Mouse>/leftButton"); // Bind it to left mouse button
+        var gameplayActionMap = inputActionAsset.FindActionMap("Player");
+        swordSwingAction = gameplayActionMap.FindAction("SwordSwing");
         swordSwingAction.performed += ctx => OnSwordSwing(); // Add a listener for when the action is performed
-        swordSwingAction.Enable(); // Enable the action
+        swordSwingAction.Enable(); 
+        wa = GetComponent<WeaponAnimation>();
+        animator = GetComponentInChildren<Animator>();
+
     }
 
     void OnDisable()
@@ -29,9 +37,10 @@ public class SwordSwing : MonoBehaviour
     // Method that triggers when the sword swing action is performed
     private void OnSwordSwing()
     {
-        if (canAttack)
+        if (canAttack && animator.GetBool("WeaponUp"))
         {
             Attack();
+            wa.SwingAnimation();
         }
     }
 
@@ -39,8 +48,7 @@ public class SwordSwing : MonoBehaviour
     public void Attack()
     {
         canAttack = false;
-        Animator animator = Sword.GetComponent<Animator>();
-        animator.SetTrigger("Attack");
+
 
         // Check for enemies in the attack range
         Collider[] hitColliders = Physics.OverlapSphere(Sword.transform.position, attackRange);
