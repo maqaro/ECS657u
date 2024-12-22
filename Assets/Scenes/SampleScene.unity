@@ -6366,6 +6366,7 @@ GameObject:
   - component: {fileID: 480917499}
   - component: {fileID: 480917498}
   - component: {fileID: 480917502}
+  - component: {fileID: 480917503}
   m_Layer: 0
   m_Name: Capsule
   m_TagString: Untagged
@@ -6474,6 +6475,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogueObject: {fileID: 11400000, guid: 219238b3e3211ef428c215af798cd39e, type: 2}
+--- !u!114 &480917503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 480917497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca7f491ca54361046aaf5c9f222ce014, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogueObject: {fileID: 11400000, guid: 219238b3e3211ef428c215af798cd39e, type: 2}
+  events:
+  - name: Yes
+    onPickedResponse:
+      m_PersistentCalls:
+        m_Calls: []
+  - name: No
+    onPickedResponse:
+      m_PersistentCalls:
+        m_Calls: []
 --- !u!1 &486349159
 GameObject:
   m_ObjectHideFlags: 0
