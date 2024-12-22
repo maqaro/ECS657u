@@ -59,7 +59,7 @@ public class PlayerMovement : MonoBehaviour
     public Transform orientation;
     public Transform cameraTransform;
 
-    private Vector2 moveInput;
+    public Vector2 moveInput;
     private bool jumpInput;
     private bool crouchInput;
     private bool sprintInput;
@@ -97,19 +97,17 @@ public class PlayerMovement : MonoBehaviour
     public WallRunning wallRunningScript;
 
     public InputActionAsset inputActionAsset;
-    private InputAction moveAction;
+    public InputAction moveAction;
     private InputAction jumpAction;
     private InputAction crouchAction;
     private InputAction sprintAction;
     private InputAction interactAction;
 
-    [Header("Animations")]
-    private Animator anim;
+
 
     void Start()
     {
-        // gets animation and rigidbody components
-        anim = GetComponentInChildren<Animator>();
+        // gets  rigidbody components
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
         readyToJump = true;
@@ -204,7 +202,6 @@ public class PlayerMovement : MonoBehaviour
         MyInput();
         speedControl();
         StateHandler();
-        handleAnimations();
 
         // handle gravity and drag
         if (grounded && !activeGrapple)
@@ -581,20 +578,4 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    // animtions for the player arms if idle walking or running
-    private void handleAnimations()
-    {
-        if (moveInput == Vector2.zero || state == MovementState.crouching)
-        {
-            anim.SetFloat("Blend", 0f, 0.2f, Time.deltaTime);
-        }
-        else if (state == MovementState.sprinting)
-        {
-            anim.SetFloat("Blend", 1f, 0.2f, Time.deltaTime);
-        }
-        else if (state == MovementState.walking)
-        {
-            anim.SetFloat("Blend", 0.5f, 0.2f, Time.deltaTime);
-        }
-    }
 }
