@@ -10,11 +10,10 @@ public class TypewriterEffect : MonoBehaviour
 
     public bool IsRunning { get; private set; } // Indicates whether the typewriter effect is currently running
 
-    // Dictionary to store punctuation marks and their respective wait times for pauses
-    private readonly Dictionary<HashSet<char>, float> punctuations = new Dictionary<HashSet<char>, float>()
+    private readonly List<Punctuation> punctuations = new List<Punctuation>()
     {
-        {new HashSet<char>{'.', '!', '?'}, 0.6f}, // Longer pause for sentence-ending punctuations
-        {new HashSet<char>{',', ';', ':'}, 0.3f}, // Shorter pause for mid-sentence punctuations
+        new Punctuation(new HashSet<char>{'.', '!', '?'}, 0.6f),
+        new Punctuation(new HashSet<char>{',', ';', ':'}, 0.3f),
     };
 
     private Coroutine typingCoroutine; // Reference to the current typing coroutine
@@ -73,16 +72,27 @@ public class TypewriterEffect : MonoBehaviour
     // Checks if a character is a punctuation mark and returns its associated wait time
     private bool IsPunctuation(char character, out float waitTime)
     {
-        foreach (KeyValuePair<HashSet<char>, float> punctuationCategory in punctuations)
+        foreach (Punctuation punctuationCategory in punctuations)
         {
-            if (punctuationCategory.Key.Contains(character))
+            if (punctuationCategory.Punctuations.Contains(character))
             {
-                waitTime = punctuationCategory.Value;
+                waitTime = punctuationCategory.WaitTime;
                 return true;
             }
         }
 
         waitTime = default;
         return false;
+    }
+
+    private readonly struct Punctuation{
+        public readonly HashSet<char> Punctuations;
+        public readonly float WaitTime;
+
+        public Punctuation(HashSet<char> punctuations, float waitTime)
+        {
+            Punctuations = punctuations;
+            WaitTime = waitTime;
+        }
     }
 }
