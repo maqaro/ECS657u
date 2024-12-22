@@ -5,13 +5,13 @@ public class DialogueActivator : MonoBehaviour, IInteractable
 {
     [SerializeField] private DialogueObject dialogueObject;
 
-    private void OnTriggerEnter3D(Collider other){
+    private void OnTriggerEnter(Collider other){
         if (other.CompareTag("Player") && other.TryGetComponent(out PlayerMovement player)){
             player.Interactable = this;
         }
     }
 
-    private void OnTriggerExit3D(Collider other){
+    private void OnTriggerExit(Collider other){
         if (other.CompareTag("Player") && other.TryGetComponent(out PlayerMovement player)){
             if (player.Interactable is DialogueActivator dialogueActivator && dialogueActivator == this){
                 player.Interactable = null;
