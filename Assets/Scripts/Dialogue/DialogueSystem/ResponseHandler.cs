@@ -13,6 +13,7 @@ public class ResponseHandler : MonoBehaviour
     public PlayerCam playerCam; // Reference to the player's camera script for enabling/disabling camera movement
 
     private DialogueUI dialogueUI; // Reference to the DialogueUI script
+    private ResponseEvent[] responseEvents; 
     private List<GameObject> tempResponseButtons = new List<GameObject>(); // List to keep track of dynamically created response buttons
 
     // Initialise references to other components
@@ -21,24 +22,31 @@ public class ResponseHandler : MonoBehaviour
         dialogueUI = GetComponent<DialogueUI>();
     }
 
+    public void AddResponseEvents(ResponseEvent[] responseEvents){
+        this.responseEvents = responseEvents;
+    }
+
     // Displays a list of responses as buttons in the UI
     public void ShowResponses(Response[] responses)
     {
         float responseBoxHeight = 0;
 
         // Create a button for each response
-        foreach (Response response in responses)
+        for (int i = 0; i < responses.Length; i++)
         {
+            Response response = responses[i];
+            int responseIndex = i;
+
             GameObject responseButton = Instantiate(responseButtonTemplate.gameObject, responseContainer); // Create a new response button
             responseButton.gameObject.SetActive(true); // Ensure the button is visible
             responseButton.GetComponent<TMP_Text>().text = response.ResponseText; // Set the button text
-            responseButton.GetComponent<Button>().onClick.AddListener(() => OnPickedResponse(response)); // Add a click listener to handle the response
+            responseButton.GetComponent<Button>().onClick.AddListener(() => OnPickedResponse(response, responseIndex)); // Add a click listener to handle the response
 
             tempResponseButtons.Add(responseButton); // Add the button to the list of temporary buttons
 
             responseBoxHeight += responseButtonTemplate.sizeDelta.y; // Adjust the response box height
         }
-
+        
         // Resize the response box to fit the buttons
         responseBox.sizeDelta = new Vector2(responseBox.sizeDelta.x, responseBoxHeight);
         responseBox.gameObject.SetActive(true); // Show the response box
@@ -52,7 +60,7 @@ public class ResponseHandler : MonoBehaviour
     }
 
     // Handles the logic when a response is selected
-    private void OnPickedResponse(Response response)
+    private void OnPickedResponse(Response response, int responseIndex)
     {
         responseBox.gameObject.SetActive(false); // Hide the response box
 
@@ -62,6 +70,10 @@ public class ResponseHandler : MonoBehaviour
             Destroy(responseButton);
         }
         tempResponseButtons.Clear(); // Clear the list of response buttons
+
+        if (responseEvents != null && responseIndex <= responseEvents.Length){
+            responseEvents[responseIndex].OnPickedResponse?.Invoke();
+        }
 
         // Show the next part of the dialogue based on the selected response
         dialogueUI.ShowDialogue(response.DialogueObject);
