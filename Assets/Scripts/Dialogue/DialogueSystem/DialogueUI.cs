@@ -11,7 +11,6 @@ public class DialogueUI : MonoBehaviour
 
     public bool IsDialogueActive { get; private set; }
     
-
     private ResponseHandler responseHandler;
     private TypewriterEffect typewriterEffect;
     private InputAction interactAction;
@@ -20,6 +19,7 @@ public class DialogueUI : MonoBehaviour
         var playerActionMap = new InputActionMap("Player");
         interactAction = playerActionMap.AddAction("Interact", binding: "<Keyboard>/e");
         interactAction.Enable();
+
         typewriterEffect = GetComponent<TypewriterEffect>();
         responseHandler = GetComponent<ResponseHandler>();
         CloseDialogueBox();
@@ -56,6 +56,12 @@ public class DialogueUI : MonoBehaviour
         IsDialogueActive = false;
         dialogueBox.SetActive(false);
         text_label.text = string.Empty;
+
+        PlayerMovement playerMovement = FindObjectOfType<PlayerMovement>();
+        if (playerMovement != null)
+        {
+            playerMovement.EndInteraction();
+        }
     }
 
 

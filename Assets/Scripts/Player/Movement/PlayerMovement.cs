@@ -219,15 +219,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void MyInput()
     {
-        if (state == MovementState.interacting)
-        {
-            moveInput = Vector2.zero;
-            sprintInput = false;
-            jumpInput = false;
-            return;
-        }
-
-
         // Read input values
         Vector2 inputVector = moveAction.ReadValue<Vector2>();
         moveInput = new Vector2(inputVector.x, inputVector.y);
@@ -261,6 +252,15 @@ public class PlayerMovement : MonoBehaviour
             state = MovementState.interacting;
             rb.velocity = Vector3.zero;
             Interactable.Interact(player: this);
+        }
+    }
+
+    public void EndInteraction()
+    {
+        if (state == MovementState.interacting)
+        {
+            state = MovementState.walking; 
+            MovePlayer();
         }
     }
 
@@ -313,6 +313,14 @@ public class PlayerMovement : MonoBehaviour
         {
             state = MovementState.grappling;
             moveSpeed = sprintSpeed; // Maintain sprint speed during grapple
+            return;
+        }
+
+        if (state == MovementState.interacting)
+        {
+            moveInput = Vector2.zero;
+            sprintInput = false;
+            jumpInput = false;
             return;
         }
 
