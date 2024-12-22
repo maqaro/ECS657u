@@ -126,7 +126,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh38010
+  m_Name: pb_Mesh62774
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -2397,7 +2397,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh37012
+  m_Name: pb_Mesh61770
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -5923,7 +5923,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh37758
+  m_Name: pb_Mesh62522
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -6366,6 +6366,7 @@ GameObject:
   - component: {fileID: 480917499}
   - component: {fileID: 480917498}
   - component: {fileID: 480917502}
+  - component: {fileID: 480917503}
   m_Layer: 0
   m_Name: Capsule
   m_TagString: Untagged
@@ -6474,6 +6475,40 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogueObject: {fileID: 11400000, guid: 219238b3e3211ef428c215af798cd39e, type: 2}
+--- !u!114 &480917503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 480917497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca7f491ca54361046aaf5c9f222ce014, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogueObject: {fileID: 11400000, guid: 219238b3e3211ef428c215af798cd39e, type: 2}
+  events:
+  - name: Yes
+    onPickedResponse:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 480917502}
+          m_TargetAssemblyTypeName: DialogueActivator, Assembly-CSharp
+          m_MethodName: UpdateDialogueObject
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 11400000, guid: 762904ae75d34c245bdcc8b74d32df51, type: 2}
+            m_ObjectArgumentAssemblyTypeName: DialogueObject, Assembly-CSharp
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - name: No
+    onPickedResponse:
+      m_PersistentCalls:
+        m_Calls: []
 --- !u!1 &486349159
 GameObject:
   m_ObjectHideFlags: 0
@@ -6586,7 +6621,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh37344
+  m_Name: pb_Mesh62108
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -8371,7 +8406,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh37462
+  m_Name: pb_Mesh62226
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -9984,7 +10019,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh37740
+  m_Name: pb_Mesh62504
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -11897,7 +11932,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh38166
+  m_Name: pb_Mesh62930
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -14402,7 +14437,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh37596
+  m_Name: pb_Mesh62360
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -14848,7 +14883,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh37376
+  m_Name: pb_Mesh62140
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -17324,7 +17359,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh37066
+  m_Name: pb_Mesh61830
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -19312,7 +19347,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh37080
+  m_Name: pb_Mesh61844
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -20232,7 +20267,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh37804
+  m_Name: pb_Mesh62568
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -21584,7 +21619,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh37212
+  m_Name: pb_Mesh61976
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -22213,7 +22248,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh37112
+  m_Name: pb_Mesh61876
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -22966,7 +23001,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh37920
+  m_Name: pb_Mesh62684
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -23494,7 +23529,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh37890
+  m_Name: pb_Mesh62654
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -23935,7 +23970,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh38284
+  m_Name: pb_Mesh63056
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -24439,7 +24474,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh37526
+  m_Name: pb_Mesh62290
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2

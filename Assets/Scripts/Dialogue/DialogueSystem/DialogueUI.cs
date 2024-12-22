@@ -42,6 +42,10 @@ public class DialogueUI : MonoBehaviour
         StartCoroutine(StepThroughDialogue(dialogueObject));
     }
 
+    public void AddResponseEvents(ResponseEvent[] responseEvents){
+        responseHandler.AddResponseEvents(responseEvents);
+    }
+
     // Steps through the dialogue lines one by one and waits for player input to proceed
     private IEnumerator StepThroughDialogue(DialogueObject dialogueObject)
     {
@@ -93,7 +97,7 @@ public class DialogueUI : MonoBehaviour
     }
 
     // Closes the dialogue box and resets its state
-    private void CloseDialogueBox()
+    public void CloseDialogueBox()
     {
         IsDialogueActive = false;
         dialogueBox.SetActive(false);
