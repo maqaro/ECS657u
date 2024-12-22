@@ -10,15 +10,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: ecefa5e1b1206294eb92ae67ea9d017a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -4.12
+      value: 5.0186205
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ecefa5e1b1206294eb92ae67ea9d017a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.058
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ecefa5e1b1206294eb92ae67ea9d017a, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -6.317
+      value: 4.0181384
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ecefa5e1b1206294eb92ae67ea9d017a, type: 3}
       propertyPath: m_LocalRotation.w
@@ -55,6 +55,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: ecefa5e1b1206294eb92ae67ea9d017a, type: 3}
       propertyPath: m_Name
       value: Wooden_Floor
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ecefa5e1b1206294eb92ae67ea9d017a, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
