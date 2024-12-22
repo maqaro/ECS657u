@@ -9,7 +9,7 @@ public class TypewriterEffect : MonoBehaviour
 
     [SerializeField] private float typewriterSpeed = 17f;
 
-    private bool IsRunning { get; private set; }
+    public bool IsRunning { get; private set; }
 
     private readonly Dictionary<HashSet<char>, float> punctuations = new Dictionary<HashSet<char>, float>(){
         {new HashSet<char>{'.', '!', '?'}, 0.6f},

@@ -20,6 +20,8 @@ public class DialogueUI : MonoBehaviour
         interactAction = playerActionMap.AddAction("Interact", binding: "<Keyboard>/e");
         interactAction.Enable();
 
+        
+
         typewriterEffect = GetComponent<TypewriterEffect>();
         responseHandler = GetComponent<ResponseHandler>();
         CloseDialogueBox();
@@ -35,11 +37,14 @@ public class DialogueUI : MonoBehaviour
     
         for (int i = 0; i < dialogueObject.Dialogue.Length; i++){
             string dialogue = dialogueObject.Dialogue[i];
-            yield return typewriterEffect.Run(dialogue, text_label);
+            
+            yield return RunTypingEffect(dialogue);
+
+            text_label.text = dialogue;
 
             if (i == dialogueObject.Dialogue.Length - 1 && dialogueObject.HasResponses) break;
         
-
+            yield return null;
             yield return new WaitUntil(() => interactAction.triggered);
             interactAction.Reset();
         }
@@ -48,6 +53,17 @@ public class DialogueUI : MonoBehaviour
             responseHandler.ShowResponses(dialogueObject.Responses);
         } else {
             CloseDialogueBox();
+        }
+        
+    }
+
+    private IEnumerator RunTypingEffect(string dialogue){
+        typewriterEffect.Run(dialogue, text_label);
+        
+        while (typewriterEffect.IsRunning){
+            yield return null;
+
+            
         }
         
     }
