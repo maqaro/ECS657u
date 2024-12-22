@@ -18,19 +18,18 @@ public class MainMenu : MonoBehaviour
     [Header("Gameplay Settings")]
     [SerializeField] private TMP_Text SensitivityTextValue = null;
     [SerializeField] private Slider SensSlider = null;
-    [SerializeField] private int defaultSen = 1;
-    public int mainSensitivity = 1;
-
+    [SerializeField] private float defaultSen = 1.0f; // Default sensitivity as a float
+    public float mainSensitivity = 1.0f; // Changed to float
 
     public void OnNewGameClicked()
     {
         // Reset time scale to normal
         Time.timeScale = 1f;
-        
+
         // Lock and hide cursor for gameplay
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        
+
         LevelLoader.LoadNextLevel();
         DataPersistenceManager.instance.NewGame();
     }
@@ -66,21 +65,21 @@ public class MainMenu : MonoBehaviour
 
     public void SetSensitivity(float sensitivity)
     {
-        mainSensitivity = Mathf.RoundToInt(sensitivity);
-        SensitivityTextValue.text = sensitivity.ToString("0");
+        mainSensitivity = sensitivity; // No need to round since it's now a float
+        SensitivityTextValue.text = sensitivity.ToString("0.0"); // Display as a float
         Debug.Log($"Sensitivity set to: {mainSensitivity}");
     }
 
     public void GameplayApply()
     {
-        PlayerPrefs.SetFloat("masterSen", mainSensitivity);
+        PlayerPrefs.SetFloat("masterSen", mainSensitivity); // Save as a float
         //StartCoroutine(ConfirmationBox());
     }
 
     //Resets the value of the Volume
     public void ResetButton(string MenuType)
     {
-        if(MenuType == "Audio")
+        if (MenuType == "Audio")
         {
             AudioListener.volume = defaultVolume;
             volumeSlider.value = defaultVolume;
@@ -88,9 +87,9 @@ public class MainMenu : MonoBehaviour
             VolumeApply();
         }
 
-        if(MenuType == "Gameplay")
+        if (MenuType == "Gameplay")
         {
-            SensitivityTextValue.text = defaultSen.ToString("0");
+            SensitivityTextValue.text = defaultSen.ToString("0.0"); // Display default sensitivity as a float
             SensSlider.value = defaultSen;
             mainSensitivity = defaultSen;
             GameplayApply();
