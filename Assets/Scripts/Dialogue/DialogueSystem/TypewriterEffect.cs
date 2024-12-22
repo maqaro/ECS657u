@@ -6,64 +6,77 @@ using TMPro;
 
 public class TypewriterEffect : MonoBehaviour
 {
+    [SerializeField] private float typewriterSpeed = 17f; // Speed at which the text is typed out
 
-    [SerializeField] private float typewriterSpeed = 17f;
+    public bool IsRunning { get; private set; } // Indicates whether the typewriter effect is currently running
 
-    public bool IsRunning { get; private set; }
-
-    private readonly Dictionary<HashSet<char>, float> punctuations = new Dictionary<HashSet<char>, float>(){
-        {new HashSet<char>{'.', '!', '?'}, 0.6f},
-        {new HashSet<char>{',', ';', ':'}, 0.3f},
+    // Dictionary to store punctuation marks and their respective wait times for pauses
+    private readonly Dictionary<HashSet<char>, float> punctuations = new Dictionary<HashSet<char>, float>()
+    {
+        {new HashSet<char>{'.', '!', '?'}, 0.6f}, // Longer pause for sentence-ending punctuations
+        {new HashSet<char>{',', ';', ':'}, 0.3f}, // Shorter pause for mid-sentence punctuations
     };
 
-    private Coroutine typingCoroutine;
+    private Coroutine typingCoroutine; // Reference to the current typing coroutine
 
-    public void Run(string textToType, TMP_Text textLabel){
+    // Starts the typewriter effect for the given text and text label
+    public void Run(string textToType, TMP_Text textLabel)
+    {
         typingCoroutine = StartCoroutine(TypeText(textToType, textLabel));
     }
 
-    public void Stop(){
+    // Stops the typewriter effect immediately
+    public void Stop()
+    {
         StopCoroutine(typingCoroutine);
         IsRunning = false;
     }
 
-    private IEnumerator TypeText(string textToType, TMP_Text textLabel){
+    // Coroutine that types out the given text one character at a time
+    private IEnumerator TypeText(string textToType, TMP_Text textLabel)
+    {
         IsRunning = true;
-        textLabel.text = string.Empty;
-        
-        float t = 0;
-        int charIndex = 0;
+        textLabel.text = string.Empty; // Clear the text label before starting
 
+        float t = 0; // Timer to control the typing speed
+        int charIndex = 0; // Index of the character currently being typed
 
-        while (charIndex < textToType.Length){
+        while (charIndex < textToType.Length)
+        {
             int lastCharIndex = charIndex;
 
+            // Increment the timer and calculate the next character index
             t += Time.deltaTime * typewriterSpeed;
             charIndex = Mathf.FloorToInt(t);
             charIndex = Mathf.Clamp(charIndex, 0, textToType.Length);
 
-            for (int i = lastCharIndex; i < charIndex; i++){
-                bool isLast = i >= textToType.Length - 1;
+            // Type each new character in the current frame
+            for (int i = lastCharIndex; i < charIndex; i++)
+            {
+                bool isLast = i >= textToType.Length - 1; // Check if this is the last character
 
-                textLabel.text = textToType.Substring(0, i + 1);
+                textLabel.text = textToType.Substring(0, i + 1); // Update the text label with the typed characters
 
-                if (IsPunctuation(textToType[i], out float waitTime) && !isLast && !IsPunctuation(textToType[i + 1], out _)){
+                // Pause briefly if the current character is punctuation
+                if (IsPunctuation(textToType[i], out float waitTime) && !isLast && !IsPunctuation(textToType[i + 1], out _))
+                {
                     yield return new WaitForSeconds(waitTime);
                 }
             }
 
-            
-            
             yield return null;
         }
 
-        IsRunning = false;
-        
+        IsRunning = false; // Indicate that the typewriter effect has finished
     }
 
-    private bool IsPunctuation(char character, out float waitTime){
-        foreach(KeyValuePair<HashSet<char>, float> punctuationCategory in punctuations){
-            if (punctuationCategory.Key.Contains(character)){
+    // Checks if a character is a punctuation mark and returns its associated wait time
+    private bool IsPunctuation(char character, out float waitTime)
+    {
+        foreach (KeyValuePair<HashSet<char>, float> punctuationCategory in punctuations)
+        {
+            if (punctuationCategory.Key.Contains(character))
+            {
                 waitTime = punctuationCategory.Value;
                 return true;
             }
@@ -71,8 +84,5 @@ public class TypewriterEffect : MonoBehaviour
 
         waitTime = default;
         return false;
-
     }
-
-
 }
