@@ -25,7 +25,7 @@ public class DialogueActivator : MonoBehaviour, IInteractable
             // Show the interaction prompt
             isPlayerInRange = true;
             interactPrompt.SetActive(true);
-            promptText.text = "Press [E] to interact";
+            promptText.text = "Press [E] to talk to";
 
             // Assign this DialogueActivator as the player's current interactable
             player.Interactable = this;
