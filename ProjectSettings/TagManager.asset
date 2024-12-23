@@ -9,6 +9,7 @@ TagManager:
   - Enemy
   - Checkpoint
   - SpawnPoint
+  - PressurePlate
   layers:
   - Default
   - TransparentFX
@@ -21,7 +22,7 @@ TagManager:
   - HoldLayer
   - whatIsPlayer
   - whatIsWallrunnable
-  - lightray
+  - layermask
   - 
   - 
   - 

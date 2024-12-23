@@ -1,13 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 [RequireComponent(typeof(LineRenderer))]
 public class LightBeam : MonoBehaviour
 {
     [Header("Settings")]
-    public LayerMask lightray;
+    public LayerMask layermask;
     public float defaultLength = 50;
     public int numOfReflections = 4;
 
@@ -16,6 +15,9 @@ public class LightBeam : MonoBehaviour
     private RaycastHit hit;
 
     private Ray ray;
+
+    [Header("Pressure Plate Detection")]
+    public LightPressurePlate pressurePlateScript; // Reference to the PressurePlate script
 
     private void Start()
     {
@@ -32,7 +34,6 @@ public class LightBeam : MonoBehaviour
     {
         ray = new Ray(transform.position, transform.forward);
 
-
         _lineRenderer.positionCount = 1;
         _lineRenderer.SetPosition(0, transform.position);
 
@@ -41,10 +42,8 @@ public class LightBeam : MonoBehaviour
 
         for (int i = 0; i < numOfReflections; i++)
         {
-
-            if (Physics.Raycast(ray.origin, ray.direction, out hit, remainLength, lightray))
+            if (Physics.Raycast(ray.origin, ray.direction, out hit, remainLength, layermask))
             {
-
                 _lineRenderer.positionCount += 1;
                 _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, hit.point);
 
@@ -52,29 +51,18 @@ public class LightBeam : MonoBehaviour
                 ray = new Ray(hit.point, Vector3.Reflect(ray.direction, hit.normal));
 
                 currentPosition = hit.point;
+
+                // Check if the light beam hits the Pressure Plate
+                if (hit.collider.CompareTag("PressurePlate") && pressurePlateScript != null)
+                {
+                    pressurePlateScript.CheckLightBeam(); // Notify the pressure plate
+                }
             }
             else
             {
-
                 _lineRenderer.positionCount += 1;
                 _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, ray.origin + (ray.direction * remainLength));
             }
-        }
-    }
-
-    void NormalLaser()
-    {
-        // Set the start position of the laser to the object's current position
-        _lineRenderer.SetPosition(0, transform.position);
-
-        // Cast a ray forward to detect objects
-        if (Physics.Raycast(transform.position, transform.forward, out hit, defaultLength, lightray))
-        {
-            _lineRenderer.SetPosition(1, hit.point); // End at the hit point
-        }
-        else
-        {
-            _lineRenderer.SetPosition(1, transform.position + (transform.forward * defaultLength)); // End at max length
         }
     }
 }

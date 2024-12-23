@@ -10911,7 +10911,7 @@ GameObject:
   - component: {fileID: 816449214}
   - component: {fileID: 816449216}
   - component: {fileID: 816449217}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: Light Beam
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11049,11 +11049,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3967a0ca5721c364c87860b88a9dd63b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lightray:
+  layermask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   defaultLength: 50
   numOfReflections: 3
+  pressurePlateScript: {fileID: 1043487532}
 --- !u!1 &818329849
 GameObject:
   m_ObjectHideFlags: 0
@@ -14543,9 +14544,10 @@ GameObject:
   - component: {fileID: 1043487531}
   - component: {fileID: 1043487530}
   - component: {fileID: 1043487529}
+  - component: {fileID: 1043487532}
   m_Layer: 6
   m_Name: PressurePlate
-  m_TagString: Untagged
+  m_TagString: PressurePlate
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -14623,8 +14625,24 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.25, y: 0.5, z: 1.25}
-  m_Center: {x: 0, y: 0.5, z: 0}
+  m_Size: {x: 1.25, y: 0.07690063, z: 1.25}
+  m_Center: {x: 0, y: 0.28845072, z: 3.6776893e-10}
+--- !u!114 &1043487532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1043487527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5755134ca3fd484699ffdac6141f6c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  door: {fileID: 257926689}
+  lightrayLayer:
+    serializedVersion: 2
+    m_Bits: 2048
 --- !u!1 &1054829461
 GameObject:
   m_ObjectHideFlags: 0
