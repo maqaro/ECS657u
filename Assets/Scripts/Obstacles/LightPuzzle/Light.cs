@@ -7,16 +7,15 @@ using UnityEngine.UI;
 public class LightBeam : MonoBehaviour
 {
     [Header("Settings")]
-    public LayerMask layerMask; 
+    public LayerMask lightray;
     public float defaultLength = 50;
-    public int numOfReflections = 2;
+    public int numOfReflections = 4;
 
     private LineRenderer _lineRenderer;
     private Camera _myCam;
     private RaycastHit hit;
 
     private Ray ray;
-    private Vector3 direction;
 
     private void Start()
     {
@@ -33,33 +32,34 @@ public class LightBeam : MonoBehaviour
     {
         ray = new Ray(transform.position, transform.forward);
 
+
         _lineRenderer.positionCount = 1;
         _lineRenderer.SetPosition(0, transform.position);
 
         float remainLength = defaultLength;
+        Vector3 currentPosition = transform.position;
 
-        for (int i = 0; i < numOfReflections; i++) 
+        for (int i = 0; i < numOfReflections; i++)
         {
-            // Set the start position of the laser to the object's current position
-            _lineRenderer.SetPosition(0, transform.position);
 
-            // Cast a ray forward to detect objects
-            if (Physics.Raycast(ray.origin, ray.direction, out hit, remainLength, layerMask))
+            if (Physics.Raycast(ray.origin, ray.direction, out hit, remainLength, lightray))
             {
+
                 _lineRenderer.positionCount += 1;
-                _lineRenderer.SetPosition(1, hit.point); // End at the hit point
+                _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, hit.point);
 
                 remainLength -= Vector3.Distance(ray.origin, hit.point);
+                ray = new Ray(hit.point, Vector3.Reflect(ray.direction, hit.normal));
 
-                ray = new Ray(hit.point, Vector3.Reflect (ray.direction, hit.normal) );
+                currentPosition = hit.point;
             }
             else
             {
+
                 _lineRenderer.positionCount += 1;
                 _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, ray.origin + (ray.direction * remainLength));
             }
         }
-
     }
 
     void NormalLaser()
@@ -68,7 +68,7 @@ public class LightBeam : MonoBehaviour
         _lineRenderer.SetPosition(0, transform.position);
 
         // Cast a ray forward to detect objects
-        if (Physics.Raycast(transform.position, transform.forward, out hit, defaultLength, layerMask))
+        if (Physics.Raycast(transform.position, transform.forward, out hit, defaultLength, lightray))
         {
             _lineRenderer.SetPosition(1, hit.point); // End at the hit point
         }
@@ -77,5 +77,4 @@ public class LightBeam : MonoBehaviour
             _lineRenderer.SetPosition(1, transform.position + (transform.forward * defaultLength)); // End at max length
         }
     }
-
 }
