@@ -34,7 +34,7 @@ public class MainMenu : MonoBehaviour
         DataPersistenceManager.instance.NewGame();
     }
 
-    public void OnLoadGameClicked()
+    public void OnContinueGameClicked()
     {
         DataPersistenceManager.instance.LoadGame();
     }
