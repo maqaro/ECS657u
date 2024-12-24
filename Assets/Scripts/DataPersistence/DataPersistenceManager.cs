@@ -6,6 +6,9 @@ using UnityEngine.SceneManagement;
 
 public class DataPersistenceManager : MonoBehaviour
 {
+    [Header("Debugging")]
+    [SerializeField] private bool initializeDataIfNull = false;
+    
     [Header("File Storage Config")]
     [SerializeField] private string fileName;
 
@@ -61,6 +64,12 @@ public class DataPersistenceManager : MonoBehaviour
         // TODO:
         // Load game data from file
         this.gameData = dataHandler.Load();
+
+        // if no data was loaded, and we want to initialize data if null, start a new game
+        if(this.gameData == null && initializeDataIfNull)
+        {
+            NewGame();
+        }
 
         // if no data can be loaded, don't continue
         if (this.gameData == null)
