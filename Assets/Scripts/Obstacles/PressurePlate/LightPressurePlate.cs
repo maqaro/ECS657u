@@ -5,11 +5,8 @@ using UnityEngine;
 public class LightPressurePlate : MonoBehaviour
 {
     [Header("References")]
-    public GameObject door;
+    public GameObject door; // Reference to the door GameObject
     private MovingDoor doorScript;
-
-    [Header("Layer Mask for Light Beam")]
-    [SerializeField] private LayerMask lightrayLayer;
 
     private bool lightBeamActive = false;
 
@@ -17,55 +14,35 @@ public class LightPressurePlate : MonoBehaviour
     {
         doorScript = door.GetComponent<MovingDoor>();
 
-        // If the reference is missing, log an error.
+        // If the reference is missing, ensure the game doesn't break.
         if (doorScript == null)
         {
-            Debug.LogError("MovingDoor script not found on door object!");
+            return;
+        }
+    }
+
+    public void CheckLightBeam()
+    {
+        // Only trigger if the light beam state changes
+        if (!lightBeamActive)
+        {
+            doorScript.OpenDoor();
+            lightBeamActive = true;
         }
     }
 
     private void Update()
     {
-        CheckLightBeam();
-    }
-
-    public void CheckLightBeam()
-    {
-        Ray ray = new Ray(transform.position, transform.forward);
-        RaycastHit hit;
-
-        Debug.DrawRay(transform.position, transform.forward * 100, Color.red);
-
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, lightrayLayer))
+        // Optionally check if the light beam is no longer hitting the plate
+        if (lightBeamActive)
         {
-            Debug.Log($"Raycast hit: {hit.collider.name} on layer: {LayerMask.LayerToName(hit.collider.gameObject.layer)}");
+            Ray ray = new Ray(transform.position, transform.forward);
+            RaycastHit hit;
 
-            if (hit.collider.CompareTag("PressurePlate"))
-            {
-                Debug.Log("Light beam is hitting the pressure plate.");
-
-                if (!lightBeamActive)
-                {
-                    // Light beam is now hitting the plate, so open the door.
-                    doorScript.OpenDoor();
-                    Debug.Log("Door opened.");
-                    lightBeamActive = true; // Mark the beam as active.
-                }
-            }
-            else
-            {
-                Debug.LogWarning($"Raycast hit an object but it's not the pressure plate: {hit.collider.name}");
-            }
-        }
-        else
-        {
-            Debug.Log("Raycast did not hit anything.");
-
-            if (lightBeamActive)
+            if (!Physics.Raycast(ray, out hit, Mathf.Infinity) || !hit.collider.CompareTag("PressurePlate"))
             {
                 doorScript.CloseDoor();
-                Debug.Log("Door closed.");
-                lightBeamActive = false; // Mark the beam as inactive.
+                lightBeamActive = false;
             }
         }
     }
