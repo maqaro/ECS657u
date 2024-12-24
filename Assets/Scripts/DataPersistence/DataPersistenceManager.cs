@@ -42,14 +42,12 @@ public class DataPersistenceManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        Debug.Log("Scene loaded: " + scene.name);
         this.dataPersistenceObjects = FindAllDataPersistenceObjects();
         LoadGame();
     }
 
     private void OnSceneUnloaded(Scene scene)
     {
-        Debug.Log("Scene unloaded: " + scene.name);
         SaveGame();
     }
 
@@ -64,11 +62,11 @@ public class DataPersistenceManager : MonoBehaviour
         // Load game data from file
         this.gameData = dataHandler.Load();
 
-        // if no data can be loaded initialize a new game
+        // if no data can be loaded, don't continue
         if (this.gameData == null)
         {
-            Debug.Log("No game data found. Starting new game.");
-            NewGame();
+            Debug.Log("No game data found. New game needs to be started before data can be laoded.");
+            return;
         }
         // push loaded data to all scripts that need it
         foreach (IDataPersistence dataPersistenceObj in dataPersistenceObjects)
@@ -79,6 +77,13 @@ public class DataPersistenceManager : MonoBehaviour
 
     public void SaveGame()
     {
+        //check if we have saved game data, if we don't log a warning
+        if (gameData == null)
+        {
+            Debug.LogWarning("No game data was found. Make sure to load or start a new game before game data can be loaded.");
+            return;
+        }
+
         // pass data to scripts so they can update it
         foreach (IDataPersistence dataPersistenceObj in dataPersistenceObjects)
         {
@@ -100,5 +105,10 @@ public class DataPersistenceManager : MonoBehaviour
             .OfType<IDataPersistence>();
 
         return new List<IDataPersistence>(dataPersistenceObjects);
+    }
+
+    public bool HasGameData()
+    {
+        return gameData != null;
     }
 }

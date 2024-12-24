@@ -443,6 +443,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 553eebe683dd12644941d83977280291, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  newGameButton: {fileID: 0}
+  continueGameButton: {fileID: 0}
   volumeTextValue: {fileID: 0}
   volumeSlider: {fileID: 0}
   defaultVolume: 1
@@ -658,8 +660,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -428, y: 91}
-  m_SizeDelta: {x: 376.5469, y: 60.9592}
+  m_AnchoredPosition: {x: -434, y: 91}
+  m_SizeDelta: {x: 378.2141, y: 60.9592}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &291309796
 MonoBehaviour:
@@ -683,10 +685,10 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 0.21960786, g: 0.21960786, b: 0.21960786, a: 0}
-    m_HighlightedColor: {r: 0.7075472, g: 0.69085974, b: 0.69085974, a: 0.42352942}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_HighlightedColor: {r: 0.21960786, g: 0.21960786, b: 0.21960786, a: 0.42352942}
+    m_PressedColor: {r: 0, g: 0.6509804, b: 0.043137256, a: 1}
+    m_SelectedColor: {r: 0, g: 0.6509804, b: 0.043137256, a: 1}
+    m_DisabledColor: {r: 0.6698113, g: 0, b: 0, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -2405,8 +2407,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -532, y: -113}
-  m_SizeDelta: {x: 188.3901, y: 60.9592}
+  m_AnchoredPosition: {x: -434, y: -113}
+  m_SizeDelta: {x: 378.2141, y: 60.9592}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &653005321
 MonoBehaviour:
@@ -2431,9 +2433,9 @@ MonoBehaviour:
   m_Colors:
     m_NormalColor: {r: 0.21960786, g: 0.21960786, b: 0.21960786, a: 0}
     m_HighlightedColor: {r: 0.7075472, g: 0.69085974, b: 0.69085974, a: 0.42352942}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_PressedColor: {r: 0, g: 0.6509804, b: 0.043137256, a: 1}
+    m_SelectedColor: {r: 0, g: 0.6509804, b: 0.043137256, a: 1}
+    m_DisabledColor: {r: 0.67058825, g: 0, b: 0, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -2892,6 +2894,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 553eebe683dd12644941d83977280291, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  newGameButton: {fileID: 0}
+  continueGameButton: {fileID: 0}
   volumeTextValue: {fileID: 675509240}
   volumeSlider: {fileID: 1494157690}
   defaultVolume: 1
@@ -3487,11 +3491,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2808975962437356749, guid: 13dc66dbbbb66b54792a4599539806f5, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -13.28
+      value: 417
       objectReference: {fileID: 0}
     - target: {fileID: 2808975962437356749, guid: 13dc66dbbbb66b54792a4599539806f5, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.05
+      value: 281
       objectReference: {fileID: 0}
     - target: {fileID: 2808975962437356749, guid: 13dc66dbbbb66b54792a4599539806f5, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3566,8 +3570,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -420, y: 26}
-  m_SizeDelta: {x: 395.526, y: 69.0398}
+  m_AnchoredPosition: {x: -434, y: 26}
+  m_SizeDelta: {x: 378.2141, y: 69.0398}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1066701620
 MonoBehaviour:
@@ -3592,9 +3596,9 @@ MonoBehaviour:
   m_Colors:
     m_NormalColor: {r: 0.21960786, g: 0.21960786, b: 0.21960786, a: 0}
     m_HighlightedColor: {r: 0.7075472, g: 0.69085974, b: 0.69085974, a: 0.42352942}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_PressedColor: {r: 0, g: 0.6509804, b: 0.043137256, a: 1}
+    m_SelectedColor: {r: 0, g: 0.6509804, b: 0.043137256, a: 1}
+    m_DisabledColor: {r: 1, g: 0, b: 0, a: 0.8627451}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -4007,8 +4011,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -469, y: -41}
-  m_SizeDelta: {x: 311.7697, y: 60.9592}
+  m_AnchoredPosition: {x: -434, y: -36}
+  m_SizeDelta: {x: 378.2141, y: 60.9592}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1242821793
 MonoBehaviour:
@@ -4033,9 +4037,9 @@ MonoBehaviour:
   m_Colors:
     m_NormalColor: {r: 0.21960786, g: 0.21960786, b: 0.21960786, a: 0}
     m_HighlightedColor: {r: 0.7075472, g: 0.69085974, b: 0.69085974, a: 0.42352942}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_PressedColor: {r: 0, g: 0.6509804, b: 0.043137256, a: 1}
+    m_SelectedColor: {r: 0, g: 0.6509804, b: 0.043137256, a: 1}
+    m_DisabledColor: {r: 0.67058825, g: 0, b: 0, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -4242,6 +4246,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 553eebe683dd12644941d83977280291, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  newGameButton: {fileID: 291309796}
+  continueGameButton: {fileID: 1066701620}
   volumeTextValue: {fileID: 675509240}
   volumeSlider: {fileID: 1494157690}
   defaultVolume: 0.5
