@@ -13,13 +13,15 @@ public class PickUpScript : MonoBehaviour
     private float originalSenY = 0f;
     private float smoothSpeed = 10f;
 
-    public float throwForce = 500f; 
-    public float pickUpRange = 50f; 
-    private float rotationSensitivity = 1f; 
+    public float throwForce = 500f;
+    public float pickUpRange = 50f;
+    private float rotationSensitivity = 1f;
     private GameObject heldObj;
-    private Rigidbody heldObjRb; 
-    private bool canDrop = true; 
-    private int LayerNumber; 
+    private Rigidbody heldObjRb;
+    private bool canDrop = true;
+    private int LayerNumber;
+
+    private int originalLayer; // Store the original layer of the object
 
     PlayerCam PlayerCamScript;
 
@@ -31,8 +33,8 @@ public class PickUpScript : MonoBehaviour
 
     void Start()
     {
-        LayerNumber = LayerMask.NameToLayer("HoldLayer"); 
-        
+        LayerNumber = LayerMask.NameToLayer("HoldLayer");
+
         // Ensure playerCamera is assigned and get the PlayerCamScript if available
         if (playerCamera != null)
         {
@@ -93,7 +95,7 @@ public class PickUpScript : MonoBehaviour
         }
         else if (canDrop) // Drop the object if currently holding one
         {
-            StopClipping(); 
+            StopClipping();
             DropObject();
         }
     }
@@ -109,14 +111,16 @@ public class PickUpScript : MonoBehaviour
 
     private void PickUpObject(GameObject pickUpObj)
     {
-        if (pickUpObj.GetComponent<Rigidbody>()) 
+        if (pickUpObj.GetComponent<Rigidbody>())
         {
-
-            heldObj = pickUpObj; 
+            heldObj = pickUpObj;
             heldObjRb = pickUpObj.GetComponent<Rigidbody>();
             heldObjRb.isKinematic = true;
             heldObjRb.transform.parent = holdPos.transform;
-            heldObj.layer = LayerNumber;
+
+            // Store the original layer
+            originalLayer = heldObj.layer;
+            heldObj.layer = LayerNumber; // Change the layer to the hold layer
 
             Physics.IgnoreCollision(heldObj.GetComponent<Collider>(), player.GetComponent<Collider>(), true);
         }
@@ -127,12 +131,10 @@ public class PickUpScript : MonoBehaviour
         if (heldObj != null && heldObjRb != null)
         {
             Physics.IgnoreCollision(heldObj.GetComponent<Collider>(), player.GetComponent<Collider>(), false);
-            heldObj.layer = 0;
+            heldObj.layer = originalLayer; // Restore the original layer
             heldObjRb.isKinematic = false;
             heldObj.transform.parent = null;
             heldObj = null;
-
-
         }
     }
 
@@ -148,7 +150,7 @@ public class PickUpScript : MonoBehaviour
     {
         canDrop = false;
 
-        if (PlayerCamScript != null && originalSenX == 0 && originalSenY == 0) 
+        if (PlayerCamScript != null && originalSenX == 0 && originalSenY == 0)
         {
             originalSenX = PlayerCamScript.senX;
             originalSenY = PlayerCamScript.senY;
@@ -168,8 +170,8 @@ public class PickUpScript : MonoBehaviour
             float XaxisRotation = Mouse.current.delta.x.ReadValue() * rotationSensitivity;
             float YaxisRotation = Mouse.current.delta.y.ReadValue() * rotationSensitivity;
 
-            heldObj.transform.Rotate(Vector3.down, XaxisRotation);   
-            heldObj.transform.Rotate(Vector3.right, YaxisRotation); 
+            heldObj.transform.Rotate(Vector3.down, XaxisRotation);
+            heldObj.transform.Rotate(Vector3.right, YaxisRotation);
         }
     }
 
@@ -191,11 +193,18 @@ public class PickUpScript : MonoBehaviour
     {
         if (heldObj != null && heldObjRb != null)
         {
-            Physics.IgnoreCollision(heldObj.GetComponent<Collider>(), player.GetComponent<Collider>(), false);
-            heldObj.layer = 0;
+            // Get the direction from the camera's forward vector and the player's movement velocity (if any)
+            Vector3 throwDirection = playerCamera.transform.forward + player.GetComponent<Rigidbody>().velocity * 0.2f;
+
+            // Normalize the direction to avoid excessively fast throws when adding the player's velocity
+            throwDirection.Normalize();
+
+            // Apply the force along this direction
             heldObjRb.isKinematic = false;
+            heldObj.layer = originalLayer; // Restore the original layer
             heldObj.transform.parent = null;
-            heldObjRb.AddForce(transform.forward * throwForce);
+            heldObjRb.AddForce(throwDirection * throwForce); // Apply force along the throw direction
+            Physics.IgnoreCollision(heldObj.GetComponent<Collider>(), player.GetComponent<Collider>(), false);
             heldObj = null;
         }
     }
@@ -206,10 +215,10 @@ public class PickUpScript : MonoBehaviour
 
         var clipRange = Vector3.Distance(heldObj.transform.position, transform.position);
         RaycastHit[] hits = Physics.RaycastAll(transform.position, transform.TransformDirection(Vector3.forward), clipRange);
-       
+
         if (hits.Length > 1)
         {
-            heldObj.transform.position = transform.position + new Vector3(0f, -0.5f, 0f); 
+            heldObj.transform.position = transform.position + new Vector3(0f, -0.5f, 0f);
         }
     }
 

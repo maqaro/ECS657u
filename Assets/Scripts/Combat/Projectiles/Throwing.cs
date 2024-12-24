@@ -93,7 +93,10 @@ public class Throwing : MonoBehaviour, IDataPersistence
 
         // Instantiate the object to throw at attack point with the camera's rotation
         GameObject projectile = Instantiate(objectToThrow, attackPoint.position, cam.rotation);
-        
+
+        // Rotate the object by 90 degrees to fix kunai error
+        projectile.transform.Rotate(90f, 0f, 0f); // Rotate by 90 degrees on the X-axis
+
         // Add force to the projectile
         Rigidbody projectileRb = projectile.GetComponent<Rigidbody>();
 
