@@ -6291,6 +6291,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MovingDoors
       objectReference: {fileID: 0}
+    - target: {fileID: 8920021458755985940, guid: d3941b42e3a11224eabfe3b7d0d05294, type: 3}
+      propertyPath: speed
+      value: 100
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7631,7 +7635,7 @@ GameObject:
   - component: {fileID: 596601318}
   m_Layer: 6
   m_Name: Cube (2)
-  m_TagString: canPickUp
+  m_TagString: Reflector
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10913,7 +10917,7 @@ GameObject:
   - component: {fileID: 816449217}
   m_Layer: 0
   m_Name: Light Beam
-  m_TagString: Untagged
+  m_TagString: LightBeam
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -11049,9 +11053,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3967a0ca5721c364c87860b88a9dd63b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layermask:
-    serializedVersion: 2
-    m_Bits: 64
   defaultLength: 50
   numOfReflections: 3
   pressurePlateScript: {fileID: 1043487532}
@@ -12582,7 +12583,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 885, y: -24.599762}
+  m_AnchoredPosition: {x: 885, y: -24.599731}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &898016014
@@ -14543,7 +14544,6 @@ GameObject:
   - component: {fileID: 1043487528}
   - component: {fileID: 1043487531}
   - component: {fileID: 1043487530}
-  - component: {fileID: 1043487529}
   - component: {fileID: 1043487532}
   m_Layer: 6
   m_Name: PressurePlate
@@ -14569,21 +14569,6 @@ Transform:
   - {fileID: 1746711184}
   m_Father: {fileID: 1286511727}
   m_LocalEulerAnglesHint: {x: 87.667, y: 270, z: 0}
---- !u!114 &1043487529
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1043487527}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21ce30c001498db4b8909ab066a768cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  door: {fileID: 257926689}
-  playerTag: Player
-  pickupTag: canPickUp
 --- !u!95 &1043487530
 Animator:
   serializedVersion: 7
@@ -14640,9 +14625,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   door: {fileID: 257926689}
-  lightrayLayer:
-    serializedVersion: 2
-    m_Bits: 2048
 --- !u!1 &1054829461
 GameObject:
   m_ObjectHideFlags: 0
@@ -23703,7 +23685,7 @@ GameObject:
   - component: {fileID: 1774625831}
   m_Layer: 6
   m_Name: Cube (1)
-  m_TagString: canPickUp
+  m_TagString: Reflector
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -10,6 +10,8 @@ TagManager:
   - Checkpoint
   - SpawnPoint
   - PressurePlate
+  - LightBeam
+  - Reflector
   layers:
   - Default
   - TransparentFX

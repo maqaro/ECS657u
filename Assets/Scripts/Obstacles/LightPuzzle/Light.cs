@@ -6,23 +6,30 @@ using UnityEngine;
 public class LightBeam : MonoBehaviour
 {
     [Header("Settings")]
-    public LayerMask layermask;
     public float defaultLength = 50;
     public int numOfReflections = 4;
 
     private LineRenderer _lineRenderer;
-    private Camera _myCam;
     private RaycastHit hit;
 
     private Ray ray;
 
     [Header("Pressure Plate Detection")]
-    public LightPressurePlate pressurePlateScript; // Reference to the PressurePlate script
+    public LightPressurePlate pressurePlateScript; // Reference to the LightPressurePlate script
 
     private void Start()
     {
         _lineRenderer = GetComponent<LineRenderer>();
-        _myCam = Camera.main;
+
+        // Automatically find the LightPressurePlate script if it is not assigned in the Inspector
+        if (pressurePlateScript == null)
+        {
+            GameObject pressurePlate = GameObject.FindGameObjectWithTag("PressurePlate");
+            if (pressurePlate != null)
+            {
+                pressurePlateScript = pressurePlate.GetComponent<LightPressurePlate>();
+            }
+        }
     }
 
     private void Update()
@@ -38,11 +45,10 @@ public class LightBeam : MonoBehaviour
         _lineRenderer.SetPosition(0, transform.position);
 
         float remainLength = defaultLength;
-        Vector3 currentPosition = transform.position;
 
         for (int i = 0; i < numOfReflections; i++)
         {
-            if (Physics.Raycast(ray.origin, ray.direction, out hit, remainLength, layermask))
+            if (Physics.Raycast(ray.origin, ray.direction, out hit, remainLength))
             {
                 _lineRenderer.positionCount += 1;
                 _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, hit.point);
@@ -50,18 +56,16 @@ public class LightBeam : MonoBehaviour
                 remainLength -= Vector3.Distance(ray.origin, hit.point);
                 ray = new Ray(hit.point, Vector3.Reflect(ray.direction, hit.normal));
 
-                currentPosition = hit.point;
-
-                // Check if the light beam hits the Pressure Plate
                 if (hit.collider.CompareTag("PressurePlate") && pressurePlateScript != null)
                 {
-                    pressurePlateScript.CheckLightBeam(); // Notify the pressure plate
+                    pressurePlateScript.CheckLightBeam(); // Notify the LightPressurePlate
                 }
             }
             else
             {
                 _lineRenderer.positionCount += 1;
                 _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, ray.origin + (ray.direction * remainLength));
+                break;
             }
         }
     }
