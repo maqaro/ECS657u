@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum SoundType{
-    SWORD,
-    KUNAI,
+    RUN,
     WALK,
     JUMP,
-    RUN,
     DASH,
     GRAPPLE,
+    SWORD,
+    KUNAI,
     CLIMB,
     WALLRUN,
     DAMAGE,
