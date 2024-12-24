@@ -23,20 +23,13 @@ public class MainMenu : MonoBehaviour
 
     public void OnNewGameClicked()
     {
-        // Reset time scale to normal
-        Time.timeScale = 1f;
-
-        // Lock and hide cursor for gameplay
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-
-        LevelLoader.LoadNextLevel();
         DataPersistenceManager.instance.NewGame();
+        SceneManager.LoadSceneAsync("SampleScene");
     }
 
     public void OnContinueGameClicked()
     {
-        DataPersistenceManager.instance.LoadGame();
+        SceneManager.LoadSceneAsync("SampleScene");
     }
 
     public void OnSaveGameClicked()

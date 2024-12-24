@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.SceneManagement;
 
 public class DataPersistenceManager : MonoBehaviour
 {
@@ -17,21 +18,39 @@ public class DataPersistenceManager : MonoBehaviour
     {
         if (instance != null && instance != this)
         {
-            Debug.Log("Found more than one data persistence manager instance in the scene.");
-            Destroy(gameObject);
+            Debug.Log("Found more than one data persistence manager instance in the scene. Destroying newest one");
+            Destroy(this.gameObject);
+            return;
         }
-        else
-        {
-            instance = this;
-        }
-        DontDestroyOnLoad(gameObject);
+        instance = this;
+        DontDestroyOnLoad(this.gameObject);
+
+        this.dataHandler = new FileDataHandler(Application.persistentDataPath, fileName);
     }
 
-    private void Start()
+    private void OnEnable()
     {
-        this.dataHandler = new FileDataHandler(Application.persistentDataPath, fileName);
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        SceneManager.sceneUnloaded += OnSceneUnloaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        SceneManager.sceneUnloaded -= OnSceneUnloaded;  
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        Debug.Log("Scene loaded: " + scene.name);
         this.dataPersistenceObjects = FindAllDataPersistenceObjects();
         LoadGame();
+    }
+
+    private void OnSceneUnloaded(Scene scene)
+    {
+        Debug.Log("Scene unloaded: " + scene.name);
+        SaveGame();
     }
 
     public void NewGame()
@@ -56,12 +75,6 @@ public class DataPersistenceManager : MonoBehaviour
         {
             dataPersistenceObj.LoadData(gameData);
         }
-
-        Debug.Log("Loaded player Health: " + gameData.health);
-        Debug.Log("Loaded player Kunai Count: " + gameData.kunaiCount);
-        Debug.Log("Loaded player Position: " + gameData.spawnPoint);
-        Debug.Log("Loaded player kunaiPickupsCollected: " + gameData.kunaiPickupsCollected.Count);
-        Debug.Log("Loaded player healthPickupsCollected: " + gameData.healthPickupsCollected.Count);
     }
 
     public void SaveGame()
@@ -71,13 +84,6 @@ public class DataPersistenceManager : MonoBehaviour
         {
             dataPersistenceObj.SaveData(ref gameData);
         }
-
-        Debug.Log("Saved player Health: " + gameData.health);
-        Debug.Log("Saved player Kunai Count: " + gameData.kunaiCount);
-        Debug.Log("Saved player Position: " + gameData.spawnPoint);
-        Debug.Log("Saved player kunaiPickupsCollected: " + gameData.kunaiPickupsCollected.Count);
-        Debug.Log("Saved player healthPickupsCollected: " + gameData.healthPickupsCollected.Count);
-
         // save data to file using data handler
         dataHandler.Save(gameData);
     }
