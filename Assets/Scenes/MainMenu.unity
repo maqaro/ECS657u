@@ -445,6 +445,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   newGameButton: {fileID: 0}
   continueGameButton: {fileID: 0}
+  quitGameButton: {fileID: 0}
   volumeTextValue: {fileID: 0}
   volumeSlider: {fileID: 0}
   defaultVolume: 1
@@ -2896,6 +2897,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   newGameButton: {fileID: 0}
   continueGameButton: {fileID: 0}
+  quitGameButton: {fileID: 0}
   volumeTextValue: {fileID: 675509240}
   volumeSlider: {fileID: 1494157690}
   defaultVolume: 1
@@ -4248,6 +4250,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   newGameButton: {fileID: 291309796}
   continueGameButton: {fileID: 1066701620}
+  quitGameButton: {fileID: 653005321}
   volumeTextValue: {fileID: 675509240}
   volumeSlider: {fileID: 1494157690}
   defaultVolume: 0.5
