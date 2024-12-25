@@ -61,6 +61,10 @@ PrefabInstance:
       value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 3451118302482216456, guid: a62b9fdedfa0fe749a73e02f5c5a0bc2, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: -8869321900644305189, guid: 976a5deda0ff84e4fa6db16dd6cf370d, type: 3}
+    - target: {fileID: 3451118302482216456, guid: a62b9fdedfa0fe749a73e02f5c5a0bc2, type: 3}
       propertyPath: m_Convex
       value: 1
       objectReference: {fileID: 0}
