@@ -7,6 +7,10 @@ using TMPro;
 
 public class MainMenu : MonoBehaviour
 {
+    [Header("Buttons")]
+    [SerializeField] private Button newGameButton;
+    [SerializeField] private Button continueGameButton;
+    
     [Header("Volume Settings")]
     [SerializeField] private TMP_Text volumeTextValue = null;
     [SerializeField] private Slider volumeSlider = null;
@@ -21,22 +25,25 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private float defaultSen = 1.0f; // Default sensitivity as a float
     public float mainSensitivity = 1.0f; // Changed to float
 
+    public void Start()
+    {
+        if(!DataPersistenceManager.instance.HasGameData())
+        {
+            continueGameButton.interactable = false;
+        }
+    }
+    
     public void OnNewGameClicked()
     {
-        // Reset time scale to normal
-        Time.timeScale = 1f;
-
-        // Lock and hide cursor for gameplay
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-
-        LevelLoader.LoadNextLevel();
+        DisableMenuButtons();
         DataPersistenceManager.instance.NewGame();
+        SceneManager.LoadSceneAsync("SampleScene");
     }
 
-    public void OnLoadGameClicked()
+    public void OnContinueGameClicked()
     {
-        DataPersistenceManager.instance.LoadGame();
+        DisableMenuButtons();
+        SceneManager.LoadSceneAsync("SampleScene");
     }
 
     public void OnSaveGameClicked()
@@ -94,6 +101,12 @@ public class MainMenu : MonoBehaviour
             mainSensitivity = defaultSen;
             GameplayApply();
         }
+    }
+
+    public void DisableMenuButtons()
+    {
+        newGameButton.interactable = false;
+        continueGameButton.interactable = false;
     }
 
     //This is purely just to confirm the volume changing works especially as we have no sound currently
