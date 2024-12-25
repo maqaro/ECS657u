@@ -43,6 +43,7 @@ public class MainMenu : MonoBehaviour
     public void OnContinueGameClicked()
     {
         DisableMenuButtons();
+        DataPersistenceManager.instance.LoadGame();
         SceneManager.LoadSceneAsync("SampleScene");
     }
 
