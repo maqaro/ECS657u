@@ -89,6 +89,6 @@ public class PauseMenu : MonoBehaviour
         Cursor.visible = true;
 
         // This is a call that takes you back to the MainMenu using SceneManager
-        LevelLoader.LoadSpecificLevel(0);
+        SceneManager.LoadScene("MainMenu");
     }
 }
