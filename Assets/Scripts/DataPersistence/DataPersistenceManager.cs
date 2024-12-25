@@ -14,7 +14,7 @@ public class DataPersistenceManager : MonoBehaviour
 
     private GameData gameData;
     private List<IDataPersistence> dataPersistenceObjects;
-    private FileDataHandler dataHandler;
+    private IDataHandler dataHandler;
     public static DataPersistenceManager instance { get; private set; }
 
     public void Awake()
@@ -28,7 +28,15 @@ public class DataPersistenceManager : MonoBehaviour
         instance = this;
         DontDestroyOnLoad(this.gameObject);
 
-        this.dataHandler = new FileDataHandler(Application.persistentDataPath, fileName);
+        // Choose the appropriate data handler based on platform
+        if (Application.platform == RuntimePlatform.WebGLPlayer)
+        {
+            this.dataHandler = new WebGLDataHandler(fileName);
+        }
+        else
+        {
+            this.dataHandler = new FileDataHandler(Application.persistentDataPath, fileName);
+        }
     }
 
     private void OnEnable()
