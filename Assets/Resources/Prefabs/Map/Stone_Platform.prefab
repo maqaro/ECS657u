@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &8255936123083355730
+--- !u!1001 &3020701535720745395
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -54,7 +54,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 07ff49b2f54f51b4c90ac157cbf26610, type: 2}
     - target: {fileID: 919132149155446097, guid: 901694e959b34ec48ad663330c38e63c, type: 3}
       propertyPath: m_Name
-      value: Stone_Platform
+      value: Stone_Platform 1
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 901694e959b34ec48ad663330c38e63c, type: 3}
       propertyPath: m_Layer
@@ -66,20 +66,20 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 901694e959b34ec48ad663330c38e63c, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 7470856229829681935}
+      addedObject: {fileID: 5141781690381167921}
   m_SourcePrefab: {fileID: 100100000, guid: 901694e959b34ec48ad663330c38e63c, type: 3}
---- !u!1 &9102781966897367811 stripped
+--- !u!1 &2678192464070808802 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 901694e959b34ec48ad663330c38e63c, type: 3}
-  m_PrefabInstance: {fileID: 8255936123083355730}
+  m_PrefabInstance: {fileID: 3020701535720745395}
   m_PrefabAsset: {fileID: 0}
---- !u!65 &7470856229829681935
+--- !u!65 &5141781690381167921
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9102781966897367811}
+  m_GameObject: {fileID: 2678192464070808802}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
