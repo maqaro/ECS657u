@@ -1884,7 +1884,6 @@ GameObject:
   - component: {fileID: 137395364}
   - component: {fileID: 137395372}
   - component: {fileID: 137395371}
-  - component: {fileID: 137395380}
   - component: {fileID: 137395370}
   - component: {fileID: 137395369}
   - component: {fileID: 137395368}
@@ -1935,6 +1934,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3d2f60f3383b47f2aebfb9378e76479, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hitSounds:
+  - {fileID: 8300000, guid: 5583e9c9a0afdf0408f9d0946666f85a, type: 3}
+  - {fileID: 8300000, guid: 572fe06c861000149bc4b51cc1fdb09d, type: 3}
+  - {fileID: 8300000, guid: 88b91714a2e2cbb428f61e18ca4d39d8, type: 3}
+  - {fileID: 8300000, guid: 80cc6816623c9a04580970e36613d8c4, type: 3}
+  - {fileID: 8300000, guid: cad57fcf83264a4489ae5c41b55e7a8b, type: 3}
+  - {fileID: 8300000, guid: 132005c60d8148440b6f375a773d8f8e, type: 3}
   maxHealth: 100
   currentHealth: 0
   healthbar: {fileID: 898016014}
@@ -2027,8 +2033,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogueUI: {fileID: 879709072}
-  walkSpeed: 7
-  sprintSpeed: 10
+  jumpSounds:
+  - {fileID: 8300000, guid: 70d21687156c5b84dbee279f3bb6086f, type: 3}
+  - {fileID: 8300000, guid: 3f3669dc2bf61434783f4934700e82f6, type: 3}
+  - {fileID: 8300000, guid: 592fe506ec079e94d8f1df5b5bd83edf, type: 3}
+  - {fileID: 8300000, guid: 55520881781472649ac612614a24f148, type: 3}
+  - {fileID: 8300000, guid: 8fd5ff887d615154e8ba739faaf3999f, type: 3}
+  - {fileID: 8300000, guid: 2547873d23b27ec468d3928555b8a483, type: 3}
+  walkSound: {fileID: 8300000, guid: b1f1fb6681410df4587949bbb246f5bc, type: 3}
+  sprintSound: {fileID: 8300000, guid: 6481d3d07b8501145b7d39408893fc30, type: 3}
+  walkSpeed: 5
+  sprintSpeed: 11
   swingSpeed: 15
   climbSpeed: 5
   maxYSpeed: 12
@@ -2313,30 +2328,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &137395380
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 137395363}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74883c8ee51dba249a6274d1156dbf24, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  soundList:
-  - {fileID: 8300000, guid: 6481d3d07b8501145b7d39408893fc30, type: 3}
-  - {fileID: 0}
-  - {fileID: 8300000, guid: 70d21687156c5b84dbee279f3bb6086f, type: 3}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  audioSource: {fileID: 0}
 --- !u!1001 &143495273
 PrefabInstance:
   m_ObjectHideFlags: 0

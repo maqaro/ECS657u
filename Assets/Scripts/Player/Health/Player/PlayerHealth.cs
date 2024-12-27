@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour, IDataPersistence
 {
+    [SerializeField] private AudioClip[] hitSounds;
     public float maxHealth = 100f;
     public float currentHealth;
     public Healthbar healthbar;
@@ -38,6 +39,7 @@ public class PlayerHealth : MonoBehaviour, IDataPersistence
 
     public void TakeDamage(float damage)
     {
+        SoundFXManager.instance.PlayRandomSoundFXClip(hitSounds, transform, 0.3f);
         // Reduce the player's health by the damage amount
         currentHealth -= damage;
         if (currentHealth <= 0)

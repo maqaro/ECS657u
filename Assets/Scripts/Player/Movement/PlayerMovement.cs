@@ -9,6 +9,9 @@ public class PlayerMovement : MonoBehaviour
 {
 
     [SerializeField] private DialogueUI dialogueUI;
+    [SerializeField] private AudioClip[] jumpSounds;
+    [SerializeField] private AudioClip walkSound;
+    [SerializeField] private AudioClip sprintSound;
     public DialogueUI DialogueUI => dialogueUI;
     public IInteractable Interactable { get; set; }
 
@@ -384,6 +387,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 SmoothSpeedChange(walkSpeed, 0.2f); // Smooth transition if already walking
             }
+
             return;
         }
 
@@ -500,6 +504,7 @@ public class PlayerMovement : MonoBehaviour
     // handle jumping logic
     private void Jump()
     {
+        SoundFXManager.instance.PlayRandomSoundFXClip(jumpSounds, transform, 0.3f);
         exitingSlope = true;
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
@@ -510,6 +515,7 @@ public class PlayerMovement : MonoBehaviour
     {
         readyToJump = true;
         exitingSlope = false;
+        
     }
 
     // check if the player is on a slope
