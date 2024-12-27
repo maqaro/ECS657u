@@ -14,7 +14,6 @@ public enum SoundType{
     WALLRUN,
     DAMAGE,
     DEATH
-
 }
 
 [RequireComponent(typeof(AudioSource))]
