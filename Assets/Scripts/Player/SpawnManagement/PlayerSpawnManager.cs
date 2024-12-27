@@ -25,18 +25,19 @@ public class PlayerSpawnManager : MonoBehaviour, IDataPersistence
 
     public void LoadData(GameData data)
     {
+        this.hasReachedCheckpoint = data.hasReachedCheckpoint;
+        this.lastCheckpointPosition = data.checkpointPosition;
+        
         if (rb != null)
         {
-            hasReachedCheckpoint = data.hasReachedCheckpoint;
-            Vector3 loadPosition = hasReachedCheckpoint ? data.checkpointPosition : spawnPoint.position;
+            Vector3 loadPosition = hasReachedCheckpoint ? lastCheckpointPosition : data.spawnPoint;
             rb.position = loadPosition;
-            lastCheckpointPosition = loadPosition;
             rb.velocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
         }
         else
         {
-            transform.position = hasReachedCheckpoint ? data.checkpointPosition : data.spawnPoint;
+            transform.position = hasReachedCheckpoint ? lastCheckpointPosition : data.spawnPoint;
         }
     }
 

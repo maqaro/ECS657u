@@ -7,19 +7,22 @@ public class PlayerHealth : MonoBehaviour, IDataPersistence
     public float maxHealth = 100f;
     public float currentHealth;
     public Healthbar healthbar;
+    private bool hasLoadedData = false;
 
     void Start()
     {
-        // Set the player's current health to the max health
-        currentHealth = maxHealth;
-        healthbar.SetMaxHealth(maxHealth);
+        // Only set to max health if we haven't loaded data
+        if (!hasLoadedData)
+        {
+            currentHealth = maxHealth;
+            healthbar.SetMaxHealth(maxHealth);
+        }
     }
 
     public void LoadData(GameData data)
     {
-        // Load the player's health from the saved data
+        hasLoadedData = true;
         this.currentHealth = data.health;
-        // Update the healthbar to reflect the loaded health
         if (healthbar != null)
         {
             healthbar.SetMaxHealth(maxHealth);
