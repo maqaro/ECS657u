@@ -2641,7 +2641,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 516385588de328e488f50ba2796e427d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Sword: {fileID: 919132149155446097, guid: 063a34602ef52de4ca4db801b13ef697, type: 3}
+  Sword: {fileID: 772949107}
   canAttack: 1
   Cooldown: 1
   attackRange: 1.5
@@ -14086,6 +14086,11 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.25, y: 2.0000005, z: 0.66315573}
   m_Center: {x: 0.00000023841856, y: 0.9000007, z: -0.031576086}
+--- !u!1 &772949107 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 063a34602ef52de4ca4db801b13ef697, type: 3}
+  m_PrefabInstance: {fileID: 1699336123}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &776863218
 GameObject:
   m_ObjectHideFlags: 0
