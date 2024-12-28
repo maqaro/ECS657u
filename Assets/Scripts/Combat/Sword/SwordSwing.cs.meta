@@ -3,7 +3,9 @@ guid: 516385588de328e488f50ba2796e427d
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - Sword: {fileID: 919132149155446097, guid: 063a34602ef52de4ca4db801b13ef697, type: 3}
+  - inputActionAsset: {fileID: -944628639613478452, guid: 920be4ea1916cce4ea4d6e25233a37e5, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
