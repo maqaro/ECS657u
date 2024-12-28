@@ -1,0 +1,9 @@
+jump -
+damage - 
+walk - 
+jump - 
+sprint -
+dash
+crouch
+climbing
+bg audio
