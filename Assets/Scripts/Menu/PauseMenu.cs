@@ -36,6 +36,11 @@ public class PauseMenu : MonoBehaviour
 
     void Pause(InputAction.CallbackContext context)
     {
+        if (isPaused)
+        {
+            return;
+        }
+
         isPaused = !isPaused;
 
         //checks if isPaused is true or false and determines whether to activate the menu or not

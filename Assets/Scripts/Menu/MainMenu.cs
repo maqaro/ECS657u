@@ -10,10 +10,14 @@ public class MainMenu : MonoBehaviour
     [Header("Buttons")]
     [SerializeField] private Button newGameButton;
     [SerializeField] private Button continueGameButton;
-    
+
     [Header("Volume Settings")]
-    [SerializeField] private TMP_Text volumeTextValue = null;
-    [SerializeField] private Slider volumeSlider = null;
+    [SerializeField] private TMP_Text masterVolumeText = null;
+    [SerializeField] private TMP_Text soundFXVolumeText = null;
+    [SerializeField] private TMP_Text bgVolumeText = null;
+    [SerializeField] private Slider masterVolumeSlider = null;
+    [SerializeField] private Slider soundFXVolumeSlider = null;
+    [SerializeField] private Slider bgVolumeSlider = null;
     [SerializeField] private float defaultVolume = 1.0f;
 
     [Header("Confirmation")]
@@ -25,14 +29,30 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private float defaultSen = 1.0f; // Default sensitivity as a float
     public float mainSensitivity = 1.0f; // Changed to float
 
+    [Header("Sound Manager")]
+    [SerializeField] private SoundMixerManager soundMixerManager; // Reference to SoundMixerManager
+
     public void Start()
     {
-        if(!DataPersistenceManager.instance.HasGameData())
+        // Disable continue button if no saved data is available
+        if (!DataPersistenceManager.instance.HasGameData())
         {
             continueGameButton.interactable = false;
         }
+
+        // Load saved volume and sensitivity values or use defaults
+        masterVolumeSlider.value = PlayerPrefs.GetFloat("masterVolume", defaultVolume);
+        soundFXVolumeSlider.value = PlayerPrefs.GetFloat("soundFXVolume", defaultVolume);
+        bgVolumeSlider.value = PlayerPrefs.GetFloat("bgVolume", defaultVolume);
+        SensSlider.value = PlayerPrefs.GetFloat("masterSen", defaultSen);
+
+        // Initialise the settings
+        OnMasterVolumeChanged(masterVolumeSlider.value);
+        OnSoundFXVolumeChanged(soundFXVolumeSlider.value);
+        OnBGVolumeChanged(bgVolumeSlider.value);
+        SetSensitivity(SensSlider.value);
     }
-    
+
     public void OnNewGameClicked()
     {
         DisableMenuButtons();
@@ -58,19 +78,31 @@ public class MainMenu : MonoBehaviour
         Application.Quit();
     }
 
-    public void SetVolume(float volume)
+    // Adjusts the master volume
+    public void OnMasterVolumeChanged(float volume)
     {
-        AudioListener.volume = volume;
-        volumeTextValue.text = volume.ToString("0.0");
+        soundMixerManager.SetMasterVolume(volume); // Update mixer
+        masterVolumeText.text = volume.ToString("0.0"); // Update UI
+        PlayerPrefs.SetFloat("masterVolume", volume); // Save to PlayerPrefs
     }
 
-    public void VolumeApply()
+    // Adjusts the sound effects volume
+    public void OnSoundFXVolumeChanged(float volume)
     {
-        PlayerPrefs.SetFloat("masterVolume", AudioListener.volume);
-        //StartCoroutine(ConfirmationBox());
-        Debug.Log($"Volume Changed to: {AudioListener.volume.ToString("0.0")}");
+        soundMixerManager.SetSoundFXVolume(volume); // Update mixer
+        soundFXVolumeText.text = volume.ToString("0.0"); // Update UI
+        PlayerPrefs.SetFloat("soundFXVolume", volume); // Save to PlayerPrefs
     }
 
+    // Adjusts the background volume
+    public void OnBGVolumeChanged(float volume)
+    {
+        soundMixerManager.SetBGVolume(volume); // Update mixer
+        bgVolumeText.text = volume.ToString("0.0"); // Update UI
+        PlayerPrefs.SetFloat("bgVolume", volume); // Save to PlayerPrefs
+    }
+
+    // Adjusts sensitivity settings
     public void SetSensitivity(float sensitivity)
     {
         mainSensitivity = sensitivity; // No need to round since it's now a float
@@ -84,15 +116,18 @@ public class MainMenu : MonoBehaviour
         //StartCoroutine(ConfirmationBox());
     }
 
-    //Resets the value of the Volume
+    // Resets the value of the volume and/or sensitivity
     public void ResetButton(string MenuType)
     {
         if (MenuType == "Audio")
         {
-            AudioListener.volume = defaultVolume;
-            volumeSlider.value = defaultVolume;
-            volumeTextValue.text = defaultVolume.ToString("0.0");
-            VolumeApply();
+            masterVolumeSlider.value = defaultVolume;
+            soundFXVolumeSlider.value = defaultVolume;
+            bgVolumeSlider.value = defaultVolume;
+
+            OnMasterVolumeChanged(defaultVolume);
+            OnSoundFXVolumeChanged(defaultVolume);
+            OnBGVolumeChanged(defaultVolume);
         }
 
         if (MenuType == "Gameplay")
@@ -110,7 +145,7 @@ public class MainMenu : MonoBehaviour
         continueGameButton.interactable = false;
     }
 
-    //This is purely just to confirm the volume changing works especially as we have no sound currently
+    // This is purely just to confirm the volume changing works, especially as we have no sound currently
     public IEnumerator ConfirmationBox()
     {
         confirmationPrompt.SetActive(true);
