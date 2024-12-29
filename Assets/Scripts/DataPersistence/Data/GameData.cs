@@ -12,6 +12,7 @@ public class GameData
     public Vector3 checkpointPosition;
     public SerializableDictionary<string, bool> kunaiPickupsCollected;
     public SerializableDictionary<string, bool> healthPickupsCollected;
+    public SerializableDictionary<string, bool> powerUpsCollected;
 
 
     //Values in this contructor will be default values the game will start with when there's no data to load
@@ -24,5 +25,6 @@ public class GameData
         checkpointPosition = Vector3.zero;
         kunaiPickupsCollected = new SerializableDictionary<string, bool>();
         healthPickupsCollected = new SerializableDictionary<string, bool>();
+        powerUpsCollected = new SerializableDictionary<string, bool>();
     }
 }
