@@ -3206,6 +3206,7 @@ MonoBehaviour:
     m_Interactions: 
     m_SingletonActionBindings: []
     m_Flags: 0
+  cooldownSlider: {fileID: 1937843015}
 --- !u!114 &137395382
 MonoBehaviour:
   m_ObjectHideFlags: 0
