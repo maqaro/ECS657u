@@ -5,7 +5,7 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     // How much damage this projectile deals to enemies
-    public int damage;
+    private SwordSwing swordSwing;
 
     // Component references
     private Rigidbody rb;
@@ -15,6 +15,8 @@ public class Projectile : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+        // Get the SwordSwing component from the player
+        swordSwing = GameObject.FindGameObjectWithTag("Player").GetComponent<SwordSwing>();
     }
 
     // Called when this projectile collides with another collider
@@ -27,6 +29,7 @@ public class Projectile : MonoBehaviour
         // Handle different types of collisions
         HandleEnemyHit(collision);
         HandleTriggerHit(collision);
+        HandleTargetHit(collision);
     }
 
     // Stops the projectile's movement and physics
@@ -41,10 +44,25 @@ public class Projectile : MonoBehaviour
     // Handles collision with enemy targets
     private void HandleEnemyHit(Collision collision)
     {
-        TargetEnemy enemy = collision.gameObject.GetComponent<TargetEnemy>();
+        EnemyAi enemy = collision.gameObject.GetComponent<EnemyAi>();
         if (enemy != null)
         {
-            enemy.TakeDamage(damage);
+            // Apply damage to the enemy
+            enemy.health -= swordSwing.damage;
+            if (enemy.health <= 0)
+            {
+                enemy.health = 0;
+            }
+
+        }
+    }
+
+    private void HandleTargetHit(Collision collision)
+    {
+        TargetEnemy target = collision.gameObject.GetComponent<TargetEnemy>();
+        if (target != null)
+        {
+            target.TakeDamage((int)swordSwing.damage);
             Destroy(gameObject);
         }
     }

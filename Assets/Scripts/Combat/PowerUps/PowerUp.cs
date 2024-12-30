@@ -6,8 +6,8 @@ public class PowerUp : MonoBehaviour, IDataPersistence
 {
     [Header("Power-up Settings")]
     public PowerUpType powerUpType;
-    public float multiplier = 1.5f;
-    public float duration = 10f;
+    public float multiplier;
+    public float duration;
     
     private bool collected = false;
     [SerializeField] private string id;

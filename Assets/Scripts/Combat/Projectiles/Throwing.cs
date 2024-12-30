@@ -126,6 +126,5 @@ public class Throwing : MonoBehaviour, IDataPersistence
     public void AddThrows(int amount)
     {
         totalThrows += amount;
-        Debug.Log($"Kunai picked up! Total throws: {totalThrows}");
     }
 }
