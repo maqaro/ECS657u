@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class SwordSwing : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class SwordSwing : MonoBehaviour
     public InputActionAsset inputActionAsset;
     public InputAction swordSwingAction;
 
+    public Slider cooldownSlider; // Reference to the Slider for cooldown
     private WeaponAnimation wa;
     private Animator animator;
 
@@ -23,10 +25,15 @@ public class SwordSwing : MonoBehaviour
         var gameplayActionMap = inputActionAsset.FindActionMap("Player");
         swordSwingAction = gameplayActionMap.FindAction("SwordSwing");
         swordSwingAction.performed += ctx => OnSwordSwing(); // Add a listener for when the action is performed
-        swordSwingAction.Enable(); 
+        swordSwingAction.Enable();
         wa = GetComponent<WeaponAnimation>();
         animator = GetComponentInChildren<Animator>();
 
+        if (cooldownSlider != null)
+        {
+            cooldownSlider.maxValue = Cooldown;
+            cooldownSlider.value = Cooldown; // Start with Slider full
+        }
     }
 
     void OnDisable()
@@ -48,7 +55,6 @@ public class SwordSwing : MonoBehaviour
     public void Attack()
     {
         canAttack = false;
-
 
         // Check for enemies in the attack range
         Collider[] hitColliders = Physics.OverlapSphere(Sword.transform.position, attackRange);
@@ -77,7 +83,32 @@ public class SwordSwing : MonoBehaviour
     // Coroutine to reset the attack cooldown
     IEnumerator ResetAttackCooldown()
     {
-        yield return new WaitForSeconds(Cooldown);
+        float elapsed = 0f;
+
+        // Update the slider gradually
+        if (cooldownSlider != null)
+        {
+            cooldownSlider.value = 0f;
+        }
+
+        while (elapsed < Cooldown)
+        {
+            elapsed += Time.deltaTime;
+
+            // Update Slider's value
+            if (cooldownSlider != null)
+            {
+                cooldownSlider.value = elapsed;
+            }
+
+            yield return null;
+        }
+
+        if (cooldownSlider != null)
+        {
+            cooldownSlider.value = Cooldown;
+        }
+
         canAttack = true;
     }
 }
