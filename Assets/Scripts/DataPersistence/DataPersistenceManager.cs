@@ -82,7 +82,6 @@ public class DataPersistenceManager : MonoBehaviour
         // if no data can be loaded, don't continue
         if (this.gameData == null)
         {
-            Debug.Log("No game data found. New game needs to be started before data can be laoded.");
             return;
         }
         // push loaded data to all scripts that need it
@@ -97,7 +96,6 @@ public class DataPersistenceManager : MonoBehaviour
         //check if we have saved game data, if we don't log a warning
         if (gameData == null)
         {
-            Debug.LogWarning("No game data was found. Make sure to load or start a new game before game data can be loaded.");
             return;
         }
 
