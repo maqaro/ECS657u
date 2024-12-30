@@ -6,7 +6,7 @@ public class PlayerStats : MonoBehaviour
 {
     private PlayerMovement playerMovement;
     private float baseSpeed;
-    public SwordSwing swordSwing;
+    private SwordSwing swordSwing;
 
     private void Start()
     {

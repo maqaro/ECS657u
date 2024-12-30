@@ -3219,7 +3219,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ffc5c3b3fa6a004eba6e4e8d84656d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  swordSwing: {fileID: 0}
 --- !u!1001 &143495273
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6512,7 +6511,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20f3937ee12d73741b087f8090ab6e59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 20
 --- !u!54 &282736368
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -9818,7 +9816,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20f3937ee12d73741b087f8090ab6e59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 20
 --- !u!4 &397448740 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3817707099833358683, guid: 6d9297aeabf3f534bbc14e4e99f1d667, type: 3}
@@ -44105,7 +44102,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   powerUpType: 0
   multiplier: 1.5
-  duration: 20
+  duration: 10
   id: 26e00b4f-0dc9-41cf-9bbf-9f14378e9358
 --- !u!135 &1999318672
 SphereCollider:
