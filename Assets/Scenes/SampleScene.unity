@@ -15752,7 +15752,7 @@ GameObject:
   - component: {fileID: 743932941}
   - component: {fileID: 743932940}
   m_Layer: 0
-  m_Name: Damage Boost
+  m_Name: StatBooster
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
