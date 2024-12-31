@@ -36993,8 +36993,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 976c1b09a20296f4b9a4349182630b4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soundFXObject: {fileID: 0}
-  audioDetector: {fileID: 0}
+  soundFXObject: {fileID: 5530474512696774990, guid: 20439c49913297f479984be2a08e111b, type: 3}
 --- !u!1001 &1669997868
 PrefabInstance:
   m_ObjectHideFlags: 0
