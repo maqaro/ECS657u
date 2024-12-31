@@ -1,23 +1,22 @@
-using TMPro; // Required for TextMeshPro
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class SoundFXManager : MonoBehaviour
 {
     public static SoundFXManager instance;
 
     [Header("UI Elements")]
-    [SerializeField] private RectTransform soundIndicatorUI; // VisualAudio panel (entire panel)
-    [SerializeField] private Image indicatorLeft; // Left indicator image
-    [SerializeField] private Image indicatorRight; // Right indicator image
-    [SerializeField] private TMP_Text soundText; // Text object to display sound name
+    [SerializeField] private RectTransform soundIndicatorUI; // VisualAudio panel
+    [SerializeField] private Transform soundListContainer; // Parent for sound UI entries
+    [SerializeField] private GameObject soundEntryPrefab; // Prefab for a single sound entry
 
     [Header("Player Settings")]
-    [SerializeField] private Transform player; // Player's position (main camera or player object)
+    [SerializeField] private Transform player; // Player's position
     [SerializeField] private float detectionRange = 10f; // Max range to detect sounds
 
-    private AudioSource currentAudioSource; // AudioSource currently being monitored
-    private Transform currentSoundSource; // Transform of the current sound's source
+    private Dictionary<AudioSource, GameObject> activeSounds = new Dictionary<AudioSource, GameObject>(); // Tracks active sounds and their UI entries
 
     private void Awake()
     {
@@ -30,49 +29,173 @@ public class SoundFXManager : MonoBehaviour
         Debug.Log("SoundFXManager initialized and panel hidden.");
     }
 
-    /// <summary>
-    /// Monitors an AudioSource and updates the UI if the sound is detected.
-    /// </summary>
+    // -------------------
+    // MONITORING SOUNDS
+    // -------------------
+
     public void MonitorSound(AudioSource audioSource, Transform soundSource, string soundName)
     {
-        currentAudioSource = audioSource;
-        currentSoundSource = soundSource;
+        if (audioSource == null || soundSource == null)
+            return;
 
-        if (audioSource.isPlaying)
+        // Skip if the sound is out of range
+        if (Vector3.Distance(player.position, soundSource.position) > detectionRange)
         {
-            Debug.Log($"MonitorSound: Detected sound '{soundName}' at position {soundSource.position}");
-            UpdateSoundIndicators(soundSource.position, soundName);
+            RemoveSoundEntry(audioSource);
+            return;
+        }
+
+        // If the sound is already being tracked, update its entry
+        if (activeSounds.ContainsKey(audioSource))
+        {
+            UpdateSoundEntry(audioSource, soundSource.position, soundName);
         }
         else
         {
-            HidePanel();
+            // Add a new sound entry
+            AddSoundEntry(audioSource, soundSource.position, soundName);
         }
     }
 
-    /// <summary>
-    /// Plays a specific sound and updates the UI.
-    /// </summary>
+    private void AddSoundEntry(AudioSource audioSource, Vector3 soundPosition, string soundName)
+    {
+        // Create a new sound entry in the UI
+        GameObject newSoundEntry = Instantiate(soundEntryPrefab, soundListContainer);
+
+        // Get individual UI components for this sound entry
+        TMP_Text soundText = newSoundEntry.transform.Find("SoundText")?.GetComponent<TMP_Text>();
+        Image leftIndicator = newSoundEntry.transform.Find("IndicatorL")?.GetComponent<Image>();
+        Image rightIndicator = newSoundEntry.transform.Find("IndicatorR")?.GetComponent<Image>();
+
+        if (soundText == null || leftIndicator == null || rightIndicator == null)
+        {
+            Debug.LogError("AddSoundEntry: Missing components in Sound Entry Prefab. Please check the prefab setup.");
+            Destroy(newSoundEntry);
+            return;
+        }
+
+        // Assign the sound name
+        soundText.text = soundName;
+
+        // Insert the new sound entry at the top of the list
+        newSoundEntry.transform.SetSiblingIndex(0);
+
+        // Update indicators for this specific sound
+        UpdateSoundIndicators(soundPosition, leftIndicator, rightIndicator);
+
+        // Store the entry
+        activeSounds[audioSource] = newSoundEntry;
+
+        // Show the panel
+        soundIndicatorUI.gameObject.SetActive(true);
+
+        Debug.Log($"AddSoundEntry: Added sound '{soundName}'");
+    }
+
+    private void UpdateSoundEntry(AudioSource audioSource, Vector3 soundPosition, string soundName)
+    {
+        if (!activeSounds.ContainsKey(audioSource))
+            return;
+
+        // Get the UI elements for the sound entry
+        GameObject soundEntry = activeSounds[audioSource];
+        TMP_Text soundText = soundEntry.transform.Find("SoundText")?.GetComponent<TMP_Text>();
+        Image leftIndicator = soundEntry.transform.Find("IndicatorL")?.GetComponent<Image>();
+        Image rightIndicator = soundEntry.transform.Find("IndicatorR")?.GetComponent<Image>();
+
+        if (soundText != null)
+        {
+            soundText.text = soundName;
+        }
+
+        // Update indicators
+        UpdateSoundIndicators(soundPosition, leftIndicator, rightIndicator);
+
+        Debug.Log($"UpdateSoundEntry: Updated sound '{soundName}' position.");
+    }
+
+    private void RemoveSoundEntry(AudioSource audioSource)
+    {
+        if (activeSounds.ContainsKey(audioSource))
+        {
+            Destroy(activeSounds[audioSource]); // Destroy the UI entry
+            activeSounds.Remove(audioSource);
+
+            Debug.Log("RemoveSoundEntry: Removed sound entry.");
+
+            // Hide panel if no active sounds
+            if (activeSounds.Count == 0)
+            {
+                soundIndicatorUI.gameObject.SetActive(false);
+            }
+        }
+    }
+
+    private void Update()
+    {
+        // Check for stopped or out-of-range sounds
+        List<AudioSource> toRemove = new List<AudioSource>();
+
+        foreach (var sound in activeSounds)
+        {
+            if (sound.Key == null || !sound.Key.isPlaying || Vector3.Distance(player.position, sound.Key.transform.position) > detectionRange)
+            {
+                toRemove.Add(sound.Key);
+            }
+        }
+
+        foreach (var audioSource in toRemove)
+        {
+            RemoveSoundEntry(audioSource);
+        }
+    }
+
+    // -------------------
+    // INDICATOR LOGIC
+    // -------------------
+
+    private void UpdateSoundIndicators(Vector3 soundPosition, Image leftIndicator, Image rightIndicator)
+    {
+        // Get the player's camera and calculate the sound's position relative to the player
+        Transform playerCamera = Camera.main.transform;
+        Vector3 directionToSound = soundPosition - playerCamera.position;
+        float dotProduct = Vector3.Dot(playerCamera.right, directionToSound.normalized);
+
+        // Handle indicators for this specific sound entry
+        if (dotProduct > 0)
+        {
+            // Sound is on the right
+            rightIndicator.color = new Color(1, 1, 1, 1); // Turn on right indicator
+            leftIndicator.color = new Color(1, 1, 1, 0);  // Turn off left indicator
+        }
+        else
+        {
+            // Sound is on the left
+            leftIndicator.color = new Color(1, 1, 1, 1);  // Turn on left indicator
+            rightIndicator.color = new Color(1, 1, 1, 0); // Turn off right indicator
+        }
+    }
+
+    // -------------------
+    // OLD METHODS
+    // -------------------
+
     public void PlaySoundFXClip(AudioClip clip, Transform spawnTransform, float volume, string soundName)
     {
         Debug.Log($"PlaySoundFXClip: Playing sound '{soundName}' at {spawnTransform.position}");
-        
-        // Play audio
+
         AudioSource audioSource = Instantiate(new GameObject("TempAudioSource").AddComponent<AudioSource>(), spawnTransform.position, Quaternion.identity);
         audioSource.clip = clip;
         audioSource.volume = volume;
         audioSource.spatialBlend = 1.0f; // Ensure spatial audio
         audioSource.Play();
 
-        // Update UI elements
-        UpdateSoundIndicators(spawnTransform.position, soundName);
+        AddSoundEntry(audioSource, spawnTransform.position, soundName);
 
         float clipLength = audioSource.clip.length;
         Destroy(audioSource.gameObject, clipLength);
     }
 
-    /// <summary>
-    /// Plays a random sound from a list and updates the UI.
-    /// </summary>
     public void PlayRandomSoundFXClip(AudioClip[] clips, Transform spawnTransform, float volume)
     {
         if (clips == null || clips.Length == 0)
@@ -81,89 +204,20 @@ public class SoundFXManager : MonoBehaviour
             return;
         }
 
-        int rand = Random.Range(0, clips.Length); // Select a random clip
+        int rand = Random.Range(0, clips.Length);
         string soundName = clips[rand].name;
 
         Debug.Log($"PlayRandomSoundFXClip: Playing random sound '{soundName}' at {spawnTransform.position}");
 
-        // Play audio
         AudioSource audioSource = Instantiate(new GameObject("TempAudioSource").AddComponent<AudioSource>(), spawnTransform.position, Quaternion.identity);
         audioSource.clip = clips[rand];
         audioSource.volume = volume;
-        audioSource.spatialBlend = 1.0f; // Ensure spatial audio for 3D effects
+        audioSource.spatialBlend = 1.0f; // Ensure spatial audio
         audioSource.Play();
 
-        // Update UI elements
-        UpdateSoundIndicators(spawnTransform.position, soundName);
+        AddSoundEntry(audioSource, spawnTransform.position, soundName);
 
         float clipLength = audioSource.clip.length;
         Destroy(audioSource.gameObject, clipLength);
-    }
-
-    private void Update()
-    {
-        // Continuously check if a monitored sound is within range
-        if (currentAudioSource != null && currentSoundSource != null)
-        {
-            float distance = Vector3.Distance(player.position, currentSoundSource.position);
-
-            if (currentAudioSource.isPlaying && distance <= detectionRange)
-            {
-                UpdateSoundIndicators(currentSoundSource.position, currentAudioSource.clip.name);
-            }
-            else
-            {
-                HidePanel();
-            }
-        }
-    }
-
-    /// <summary>
-    /// Updates the sound indicators (UI) based on the sound's position relative to the player.
-    /// </summary>
-    private void UpdateSoundIndicators(Vector3 soundPosition, string soundName)
-    {
-        // Show the panel
-        soundIndicatorUI.gameObject.SetActive(true);
-
-        // Get the player's camera and calculate the sound's position relative to the player
-        Transform playerCamera = Camera.main.transform;
-        Vector3 directionToSound = soundPosition - playerCamera.position;
-        float dotProduct = Vector3.Dot(playerCamera.right, directionToSound.normalized);
-
-        // Display the sound name
-        soundText.text = soundName;
-        Debug.Log($"UpdateSoundIndicators: Displaying sound '{soundName}'");
-
-        if (dotProduct > 0)
-        {
-            // Sound is on the right
-            indicatorRight.color = new Color(1, 1, 1, 1); // Turn on right indicator
-            indicatorLeft.color = new Color(1, 1, 1, 0);  // Turn off left indicator
-            Debug.Log("UpdateSoundIndicators: Right indicator activated.");
-        }
-        else
-        {
-            // Sound is on the left
-            indicatorLeft.color = new Color(1, 1, 1, 1);  // Turn on left indicator
-            indicatorRight.color = new Color(1, 1, 1, 0); // Turn off right indicator
-            Debug.Log("UpdateSoundIndicators: Left indicator activated.");
-        }
-    }
-
-    /// <summary>
-    /// Hides the sound indicator UI panel and resets the indicators.
-    /// </summary>
-    private void HidePanel()
-    {
-        // Hide the entire panel
-        soundIndicatorUI.gameObject.SetActive(false);
-        Debug.Log("HidePanel: Panel hidden.");
-
-        // Clear the indicators and sound text
-        indicatorLeft.color = new Color(1, 1, 1, 0);
-        indicatorRight.color = new Color(1, 1, 1, 0);
-        soundText.text = "";
-        Debug.Log("HidePanel: Indicators and sound text cleared.");
     }
 }
