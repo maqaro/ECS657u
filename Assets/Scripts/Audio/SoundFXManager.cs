@@ -214,7 +214,7 @@ public class SoundFXManager : MonoBehaviour
         Destroy(audioSource.gameObject, clipLength);
     }
 
-    public void PlaySoundFXClipPlayer(AudioClip clip, Transform spawnTransform, float volume, string soundName)
+    public void PlaySoundFXClipPlayer(AudioClip clip, Transform spawnTransform, float volume)
     {
 
         AudioSource audioSource = Instantiate(new GameObject("TempAudioSource").AddComponent<AudioSource>(), spawnTransform.position, Quaternion.identity);
@@ -273,4 +273,42 @@ public class SoundFXManager : MonoBehaviour
         float clipLength = audioSource.clip.length;
         Destroy(audioSource.gameObject, clipLength);
     }
+
+    public void PlayLoopingSoundPersistent(Transform source, AudioClip clip, string soundName)
+    {
+        if (clip == null || source == null)
+        {
+            Debug.LogWarning("PlayLoopingSoundPersistent: Invalid clip or source!");
+            return;
+        }
+
+        // Check if there's already an AudioSource on the object
+        AudioSource audioSource = source.GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            // Add a persistent AudioSource if one doesn't exist
+            audioSource = source.gameObject.AddComponent<AudioSource>();
+            audioSource.loop = true;
+        }
+
+        // Play the sound only if it’s not already playing
+        if (audioSource.clip != clip || !audioSource.isPlaying)
+        {
+            audioSource.clip = clip;
+            audioSource.volume = 0.3f; // Adjust as needed
+            audioSource.spatialBlend = 1.0f; // Spatial sound
+            audioSource.Play();
+        }
+    }
+
+    public void StopLoopingSoundPersistent(Transform source)
+    {
+        AudioSource audioSource = source.GetComponent<AudioSource>();
+        if (audioSource != null && audioSource.isPlaying)
+        {
+            audioSource.Stop();
+        }
+    }
+
+
 }

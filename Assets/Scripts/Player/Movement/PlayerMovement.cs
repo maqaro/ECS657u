@@ -12,6 +12,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private AudioClip[] jumpSounds;
     [SerializeField] private AudioClip walkSound;
     [SerializeField] private AudioClip sprintSound;
+
+    private bool isWalkingSoundPlaying = false;
+    private bool isSprintingSoundPlaying = false;
+
     public DialogueUI DialogueUI => dialogueUI;
     public IInteractable Interactable { get; set; }
 
@@ -65,6 +69,7 @@ public class PlayerMovement : MonoBehaviour
     public Vector2 moveInput;
     private bool crouchInput;
     private bool sprintInput;
+    private bool walkInput;
 
     Vector3 moveDirection;
 
@@ -222,6 +227,7 @@ public class PlayerMovement : MonoBehaviour
         Vector2 inputVector = moveAction.ReadValue<Vector2>();
         moveInput = new Vector2(inputVector.x, inputVector.y);
 
+        walkInput = moveInput.magnitude > 0;
         sprintInput = sprintAction.ReadValue<float>() > 0;
     }
 
@@ -296,6 +302,19 @@ public class PlayerMovement : MonoBehaviour
         playerCollider.height = originalColliderHeight;
     }
 
+        // Methods for delayed sound playback
+        private void StartSprintSound()
+        {
+            if (!isSprintingSoundPlaying) return; // Ensure the state hasn't changed
+            SoundFXManager.instance.PlayLoopingSoundPersistent(transform, sprintSound, "Sprinting");
+        }
+
+        private void StartWalkingSound()
+        {
+            if (!isWalkingSoundPlaying) return; // Ensure the state hasn't changed
+            SoundFXManager.instance.PlayLoopingSoundPersistent(transform, walkSound, "Walking");
+        }
+
     // handling the movement state
     public void StateHandler()
     {
@@ -361,6 +380,13 @@ public class PlayerMovement : MonoBehaviour
         {
             state = MovementState.sprinting;
 
+            // Start or keep looping the sprint sound with a delay
+            if (!isSprintingSoundPlaying)
+            {
+                Invoke(nameof(StartSprintSound), 0.3f); // Delay sprint sound by 0.3 seconds
+                isSprintingSoundPlaying = true;
+            }
+
             // Set speed immediately to avoid slow acceleration
             if (lastState != MovementState.sprinting)
             {
@@ -372,11 +398,54 @@ public class PlayerMovement : MonoBehaviour
             }
             return;
         }
+        else
+        {
+            // Stop the sprint sound when not sprinting
+            if (isSprintingSoundPlaying)
+            {
+                SoundFXManager.instance.StopLoopingSoundPersistent(transform);
+                isSprintingSoundPlaying = false;
+            }
+        }
+
+        // Handle walking
+        if (grounded && rb.velocity.magnitude > 0.1f && state != MovementState.sprinting) // Check if there's significant movement
+        {
+            state = MovementState.walking;
+
+            // Start or keep looping the walking sound with a delay
+            if (!isWalkingSoundPlaying)
+            {
+                Invoke(nameof(StartWalkingSound), 0.3f); // Delay walking sound by 0.3 seconds
+                isWalkingSoundPlaying = true;
+            }
+
+            // Set speed immediately to avoid slow acceleration
+            if (lastState != MovementState.walking)
+            {
+                moveSpeed = walkSpeed;
+            }
+            else
+            {
+                SmoothSpeedChange(walkSpeed, 0.2f); // Smooth transition if already walking
+            }
+
+            return;
+        }
+        else
+        {
+            if (isWalkingSoundPlaying)
+            {
+                SoundFXManager.instance.StopLoopingSoundPersistent(transform);
+                isWalkingSoundPlaying = false;
+            }
+        }
 
         // Handle walking
         if (grounded)
         {
             state = MovementState.walking;
+
 
             // Set speed immediately to avoid slow acceleration
             if (lastState != MovementState.walking)
