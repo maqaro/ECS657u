@@ -8,8 +8,8 @@ public class SoundFXManager : MonoBehaviour
     public static SoundFXManager instance;
 
     [Header("UI Elements")]
-    [SerializeField] private RectTransform soundIndicatorUI; // VisualAudio panel
-    [SerializeField] private Transform soundListContainer; // Parent for sound UI entries
+    [SerializeField] private RectTransform visualAudio; // VisualAudio panel
+    [SerializeField] private RectTransform soundListContainer; // Parent for sound UI entries
     [SerializeField] private GameObject soundEntryPrefab; // Prefab for a single sound entry
 
     [Header("Player Settings")]
@@ -17,6 +17,8 @@ public class SoundFXManager : MonoBehaviour
     [SerializeField] private float detectionRange = 10f; // Max range to detect sounds
 
     private Dictionary<AudioSource, GameObject> activeSounds = new Dictionary<AudioSource, GameObject>(); // Tracks active sounds and their UI entries
+    private float baseHeight = 50f; // Default height for VisualAudio and SoundListContainer
+    private float entryHeight = 50f; // Height of a single sound entry
 
     private void Awake()
     {
@@ -25,7 +27,7 @@ public class SoundFXManager : MonoBehaviour
             instance = this;
         }
 
-        soundIndicatorUI.gameObject.SetActive(false); // Hide panel initially
+        visualAudio.gameObject.SetActive(false); // Hide panel initially
         Debug.Log("SoundFXManager initialized and panel hidden.");
     }
 
@@ -86,8 +88,11 @@ public class SoundFXManager : MonoBehaviour
         // Store the entry
         activeSounds[audioSource] = newSoundEntry;
 
+        // Adjust panel sizes dynamically
+        AdjustPanelSize();
+
         // Show the panel
-        soundIndicatorUI.gameObject.SetActive(true);
+        visualAudio.gameObject.SetActive(true);
 
         Debug.Log($"AddSoundEntry: Added sound '{soundName}'");
     }
@@ -123,10 +128,13 @@ public class SoundFXManager : MonoBehaviour
 
             Debug.Log("RemoveSoundEntry: Removed sound entry.");
 
+            // Adjust panel size
+            AdjustPanelSize();
+
             // Hide panel if no active sounds
             if (activeSounds.Count == 0)
             {
-                soundIndicatorUI.gameObject.SetActive(false);
+                visualAudio.gameObject.SetActive(false);
             }
         }
     }
@@ -174,6 +182,20 @@ public class SoundFXManager : MonoBehaviour
             leftIndicator.color = new Color(1, 1, 1, 1);  // Turn on left indicator
             rightIndicator.color = new Color(1, 1, 1, 0); // Turn off right indicator
         }
+    }
+
+    // -------------------
+    // PANEL SIZE LOGIC
+    // -------------------
+
+    private void AdjustPanelSize()
+    {
+        int soundCount = activeSounds.Count;
+        float newHeight = baseHeight + (entryHeight * soundCount);
+        soundListContainer.sizeDelta = new Vector2(soundListContainer.sizeDelta.x, newHeight);
+        visualAudio.sizeDelta = new Vector2(visualAudio.sizeDelta.x, newHeight);
+
+        Debug.Log($"AdjustPanelSize: Adjusted panel height to {newHeight}");
     }
 
     // -------------------
