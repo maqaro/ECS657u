@@ -2830,6 +2830,9 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 55520881781472649ac612614a24f148, type: 3}
   - {fileID: 8300000, guid: 8fd5ff887d615154e8ba739faaf3999f, type: 3}
   - {fileID: 8300000, guid: 2547873d23b27ec468d3928555b8a483, type: 3}
+  - {fileID: 8300000, guid: 214ae2eaa4e28d04d8dcafd97aa588e4, type: 3}
+  - {fileID: 8300000, guid: 41e992cf8181c8a478521147ffc4904a, type: 3}
+  - {fileID: 8300000, guid: 5b50263fc644a7e46b152d31541d7607, type: 3}
   walkSound: {fileID: 8300000, guid: b1f1fb6681410df4587949bbb246f5bc, type: 3}
   sprintSound: {fileID: 8300000, guid: 6481d3d07b8501145b7d39408893fc30, type: 3}
   walkSpeed: 5
