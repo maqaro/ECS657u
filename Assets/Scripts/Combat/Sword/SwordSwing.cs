@@ -10,7 +10,7 @@ public class SwordSwing : MonoBehaviour
     public bool canAttack = true;
     public float Cooldown = 1.0f;
     public float attackRange = 1.5f;
-    public float damage = 10f;
+    public float damage;
 
     public InputActionAsset inputActionAsset;
     public InputAction swordSwingAction;

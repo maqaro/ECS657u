@@ -6,12 +6,13 @@ public class PlayerStats : MonoBehaviour
 {
     private PlayerMovement playerMovement;
     private float baseSpeed;
-    private float baseDamage = 10f;
+    private SwordSwing swordSwing;
 
     private void Start()
     {
         playerMovement = GetComponent<PlayerMovement>();
         baseSpeed = playerMovement.walkSpeed;
+        swordSwing = GetComponent<SwordSwing>();
     }
 
     public void ActivatePowerUp(PowerUpType type, float multiplier, float duration)
@@ -42,17 +43,14 @@ public class PlayerStats : MonoBehaviour
     private IEnumerator DamageBoostCoroutine(float multiplier, float duration)
     {
         // Store original damage values
-        float originalDamage = baseDamage;
-        baseDamage *= multiplier;
+        float originalDamage = swordSwing.damage;
+        
+        // Apply damage boost
+        swordSwing.damage *= multiplier;
 
         yield return new WaitForSeconds(duration);
 
         // Reset damage to normal
-        baseDamage = originalDamage;
-    }
-
-    public float GetCurrentDamage()
-    {
-        return baseDamage;
+        swordSwing.damage = originalDamage;
     }
 }
