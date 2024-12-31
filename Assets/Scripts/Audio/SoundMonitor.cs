@@ -3,7 +3,6 @@ using UnityEngine;
 public class SoundMonitor : MonoBehaviour
 {
     public AudioSource audioSource; // Attach the AudioSource on the sound source
-    public string soundName = "Placeholder"; // Name of the sound
     public Transform player; // Player object (drag the player or camera here)
 
     private void Update()
@@ -16,6 +15,7 @@ public class SoundMonitor : MonoBehaviour
 
         if (audioSource.isPlaying)
         {
+            string soundName = audioSource.clip != null ? audioSource.clip.name : "Unknown"; // Get the name of the AudioClip
             SoundFXManager.instance.MonitorSound(audioSource, transform, soundName);
         }
     }
