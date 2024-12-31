@@ -17,7 +17,7 @@ public class SoundFXManager : MonoBehaviour
     [SerializeField] private float detectionRange = 10f; // Max range to detect sounds
 
     private Dictionary<AudioSource, GameObject> activeSounds = new Dictionary<AudioSource, GameObject>(); // Tracks active sounds and their UI entries
-    private float baseHeight = 50f; // Default height for VisualAudio and SoundListContainer
+    private float baseHeight = 0f; // Default height for VisualAudio and SoundListContainer
     private float entryHeight = 50f; // Height of a single sound entry
 
     private void Awake()
@@ -28,7 +28,6 @@ public class SoundFXManager : MonoBehaviour
         }
 
         visualAudio.gameObject.SetActive(false); // Hide panel initially
-        Debug.Log("SoundFXManager initialized and panel hidden.");
     }
 
     // -------------------
@@ -93,8 +92,6 @@ public class SoundFXManager : MonoBehaviour
 
         // Show the panel
         visualAudio.gameObject.SetActive(true);
-
-        Debug.Log($"AddSoundEntry: Added sound '{soundName}'");
     }
 
     private void UpdateSoundEntry(AudioSource audioSource, Vector3 soundPosition, string soundName)
@@ -116,7 +113,6 @@ public class SoundFXManager : MonoBehaviour
         // Update indicators
         UpdateSoundIndicators(soundPosition, leftIndicator, rightIndicator);
 
-        Debug.Log($"UpdateSoundEntry: Updated sound '{soundName}' position.");
     }
 
     private void RemoveSoundEntry(AudioSource audioSource)
@@ -125,8 +121,6 @@ public class SoundFXManager : MonoBehaviour
         {
             Destroy(activeSounds[audioSource]); // Destroy the UI entry
             activeSounds.Remove(audioSource);
-
-            Debug.Log("RemoveSoundEntry: Removed sound entry.");
 
             // Adjust panel size
             AdjustPanelSize();
@@ -195,7 +189,6 @@ public class SoundFXManager : MonoBehaviour
         soundListContainer.sizeDelta = new Vector2(soundListContainer.sizeDelta.x, newHeight);
         visualAudio.sizeDelta = new Vector2(visualAudio.sizeDelta.x, newHeight);
 
-        Debug.Log($"AdjustPanelSize: Adjusted panel height to {newHeight}");
     }
 
     // -------------------
@@ -204,7 +197,6 @@ public class SoundFXManager : MonoBehaviour
 
     public void PlaySoundFXClip(AudioClip clip, Transform spawnTransform, float volume, string soundName)
     {
-        Debug.Log($"PlaySoundFXClip: Playing sound '{soundName}' at {spawnTransform.position}");
 
         AudioSource audioSource = Instantiate(new GameObject("TempAudioSource").AddComponent<AudioSource>(), spawnTransform.position, Quaternion.identity);
         audioSource.clip = clip;
@@ -229,8 +221,7 @@ public class SoundFXManager : MonoBehaviour
         int rand = Random.Range(0, clips.Length);
         string soundName = clips[rand].name;
 
-        Debug.Log($"PlayRandomSoundFXClip: Playing random sound '{soundName}' at {spawnTransform.position}");
-
+    
         AudioSource audioSource = Instantiate(new GameObject("TempAudioSource").AddComponent<AudioSource>(), spawnTransform.position, Quaternion.identity);
         audioSource.clip = clips[rand];
         audioSource.volume = volume;
