@@ -60,6 +60,7 @@ public class SoundFXManager : MonoBehaviour
 
     private void AddSoundEntry(AudioSource audioSource, Vector3 soundPosition, string soundName)
     {
+        
         // Create a new sound entry in the UI
         GameObject newSoundEntry = Instantiate(soundEntryPrefab, soundListContainer);
 
@@ -99,6 +100,8 @@ public class SoundFXManager : MonoBehaviour
         if (!activeSounds.ContainsKey(audioSource))
             return;
 
+
+        
         // Get the UI elements for the sound entry
         GameObject soundEntry = activeSounds[audioSource];
         TMP_Text soundText = soundEntry.transform.Find("SoundText")?.GetComponent<TMP_Text>();
@@ -206,6 +209,20 @@ public class SoundFXManager : MonoBehaviour
 
         AddSoundEntry(audioSource, spawnTransform.position, soundName);
 
+
+        float clipLength = audioSource.clip.length;
+        Destroy(audioSource.gameObject, clipLength);
+    }
+
+    public void PlaySoundFXClipPlayer(AudioClip clip, Transform spawnTransform, float volume, string soundName)
+    {
+
+        AudioSource audioSource = Instantiate(new GameObject("TempAudioSource").AddComponent<AudioSource>(), spawnTransform.position, Quaternion.identity);
+        audioSource.clip = clip;
+        audioSource.volume = volume;
+        audioSource.spatialBlend = 1.0f; // Ensure spatial audio
+        audioSource.Play();
+
         float clipLength = audioSource.clip.length;
         Destroy(audioSource.gameObject, clipLength);
     }
@@ -229,6 +246,29 @@ public class SoundFXManager : MonoBehaviour
         audioSource.Play();
 
         AddSoundEntry(audioSource, spawnTransform.position, soundName);
+
+        float clipLength = audioSource.clip.length;
+        Destroy(audioSource.gameObject, clipLength);
+    }
+
+    public void PlayRandomSoundFXClipPlayer(AudioClip[] clips, Transform spawnTransform, float volume)
+    {
+        if (clips == null || clips.Length == 0)
+        {
+            Debug.LogWarning("PlayRandomSoundFXClip: No audio clips provided!");
+            return;
+        }
+
+        int rand = Random.Range(0, clips.Length);
+        string soundName = clips[rand].name;
+
+    
+        AudioSource audioSource = Instantiate(new GameObject("TempAudioSource").AddComponent<AudioSource>(), spawnTransform.position, Quaternion.identity);
+        audioSource.clip = clips[rand];
+        audioSource.volume = volume;
+        audioSource.spatialBlend = 1.0f; // Ensure spatial audio
+        audioSource.Play();
+
 
         float clipLength = audioSource.clip.length;
         Destroy(audioSource.gameObject, clipLength);

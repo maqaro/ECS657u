@@ -504,7 +504,7 @@ public class PlayerMovement : MonoBehaviour
     // handle jumping logic
     private void Jump()
     {
-        SoundFXManager.instance.PlayRandomSoundFXClip(jumpSounds, transform, 0.3f);
+        SoundFXManager.instance.PlayRandomSoundFXClipPlayer(jumpSounds, transform, 0.3f);
         exitingSlope = true;
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
