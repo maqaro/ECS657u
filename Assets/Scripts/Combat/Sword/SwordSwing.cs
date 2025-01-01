@@ -1,44 +1,51 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class SwordSwing : MonoBehaviour
 {
-    public GameObject Sword;
-    public bool canAttack = true;
-    public float Cooldown = 1.0f;
-    public float attackRange = 1.5f;
-    public float damage;
-
+    [Header("References")]
+    public GameObject Sword; 
+    public Image cooldownImage; 
     public InputActionAsset inputActionAsset;
-    public InputAction swordSwingAction;
 
-    public Slider cooldownSlider; // Reference to the Slider for cooldown
+    [Header("Settings")]
+    public bool canAttack = true; 
+    public float Cooldown = 1.0f; 
+    public float attackRange = 1.5f; 
+    public float damage = 10f;
+
+    private InputAction swordSwingAction;
     private WeaponAnimation wa;
     private Animator animator;
 
     void OnEnable()
     {
-        // Assuming you have an Input Action called "SwordSwing"
+        // Get the "SwordSwing" input action
         var gameplayActionMap = inputActionAsset.FindActionMap("Player");
         swordSwingAction = gameplayActionMap.FindAction("SwordSwing");
         swordSwingAction.performed += ctx => OnSwordSwing(); // Add a listener for when the action is performed
         swordSwingAction.Enable();
+
+        // Initialize components
         wa = GetComponent<WeaponAnimation>();
         animator = GetComponentInChildren<Animator>();
 
-        if (cooldownSlider != null)
+        // Initialize the cooldown fill image as empty
+        if (cooldownImage != null)
         {
-            cooldownSlider.maxValue = Cooldown;
-            cooldownSlider.value = Cooldown; // Start with Slider full
+            cooldownImage.fillAmount = 0f; 
         }
     }
 
     void OnDisable()
     {
-        swordSwingAction.Disable(); // Disable when the object is disabled
+        if (swordSwingAction != null)
+        {
+            swordSwingAction.performed -= ctx => OnSwordSwing();
+            swordSwingAction.Disable();
+        }
     }
 
     // Method that triggers when the sword swing action is performed
@@ -47,12 +54,12 @@ public class SwordSwing : MonoBehaviour
         if (canAttack && animator.GetBool("WeaponUp"))
         {
             Attack();
-            wa.SwingAnimation();
+            wa.SwingAnimation(); // Play swing animation
         }
     }
 
     // Method that triggers when the sword swing action is performed
-    public void Attack()
+    private void Attack()
     {
         canAttack = false;
 
@@ -77,18 +84,19 @@ public class SwordSwing : MonoBehaviour
             }
         }
 
+        // Start the cooldown coroutine
         StartCoroutine(ResetAttackCooldown());
     }
 
     // Coroutine to reset the attack cooldown
-    IEnumerator ResetAttackCooldown()
+    private IEnumerator ResetAttackCooldown()
     {
         float elapsed = 0f;
 
         // Update the slider gradually
-        if (cooldownSlider != null)
+        if (cooldownImage != null)
         {
-            cooldownSlider.value = 0f;
+            cooldownImage.fillAmount = 1f; // Start full
         }
 
         while (elapsed < Cooldown)
@@ -96,19 +104,20 @@ public class SwordSwing : MonoBehaviour
             elapsed += Time.deltaTime;
 
             // Update Slider's value
-            if (cooldownSlider != null)
+            if (cooldownImage != null)
             {
-                cooldownSlider.value = elapsed;
+                cooldownImage.fillAmount = 1f - (elapsed / Cooldown);
             }
 
             yield return null;
         }
 
-        if (cooldownSlider != null)
+        // Reset cooldown state
+        if (cooldownImage != null)
         {
-            cooldownSlider.value = Cooldown;
+            cooldownImage.fillAmount = 0f; // Set overlay to empty
         }
 
-        canAttack = true;
+        canAttack = true; // Allow attacking again
     }
 }

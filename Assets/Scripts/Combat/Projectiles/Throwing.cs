@@ -25,8 +25,9 @@ public class Throwing : MonoBehaviour, IDataPersistence
 
     public GameObject pickUpHolder;
 
-    // Reference to the UI Text or TextMeshPro component
-    public TextMeshProUGUI kunaiCounterText; // Use this if you're using TextMeshPro
+    // UI References
+    public TextMeshProUGUI kunaiCounterText; // To display the number of throws
+    public Image cooldownImage; // Grey overlay for the cooldown
 
     private void Awake()
     {
@@ -61,12 +62,22 @@ public class Throwing : MonoBehaviour, IDataPersistence
     {
         readyToThrow = true;
 
-        // Initialize the UI text with the totalThrows count
+        // Initialize the kunai counter
         UpdateKunaiCounter();
+        if (cooldownImage != null)
+        {
+            cooldownImage.fillAmount = 0f; // Start with no cooldown overlay
+        }
     }
 
     private void Update()
     {
+        // Update cooldown UI
+        if (nextThrowTime > Time.time && cooldownImage != null)
+        {
+            float remainingTime = nextThrowTime - Time.time;
+            cooldownImage.fillAmount = remainingTime / throwCooldown; // Adjust fill amount
+        }
     }
 
     private void HandleThrow(InputAction.CallbackContext context)
@@ -84,6 +95,10 @@ public class Throwing : MonoBehaviour, IDataPersistence
         {
             Throw();
             nextThrowTime = Time.time + throwCooldown;
+            if (cooldownImage != null)
+            {
+                cooldownImage.fillAmount = 1f; // Start cooldown fill
+            }
         }
     }
 
@@ -119,6 +134,10 @@ public class Throwing : MonoBehaviour, IDataPersistence
     private void ResetThrow()
     {
         readyToThrow = true;
+        if (cooldownImage != null)
+        {
+            cooldownImage.fillAmount = 0f; // Reset cooldown overlay
+        }
     }
 
     public void AddThrows(int amount)

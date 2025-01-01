@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using DG.Tweening;
+using UnityEngine.UI; // Required for Image components
 
 public class Dashing : MonoBehaviour
 {
@@ -28,6 +29,9 @@ public class Dashing : MonoBehaviour
     public float dashCd;
     private float dashCdTimer;
 
+    [Header("Cooldown UI")]
+    public Image cooldownImage; // Reference to the grey cooldown overlay
+
     [Header("Input Action Asset")]
     public InputActionAsset inputActionAsset;
 
@@ -51,13 +55,28 @@ public class Dashing : MonoBehaviour
         dashAction.performed += ctx => Dash();
 
         moveAction.Enable();
+
+        // Initialize the cooldown image
+        if (cooldownImage != null)
+        {
+            cooldownImage.fillAmount = 0f; // Start empty
+        }
     }
 
     // Handles cooldown for dashing
     void Update()
     {
+        // Update the cooldown timer
         if (dashCdTimer > 0)
+        {
             dashCdTimer -= Time.deltaTime;
+
+            // Update the UI overlay if it exists
+            if (cooldownImage != null)
+            {
+                cooldownImage.fillAmount = dashCdTimer / dashCd;
+            }
+        }
     }
 
     // Cleans up input bindings when the script is disabled
@@ -72,7 +91,7 @@ public class Dashing : MonoBehaviour
         if (dashCdTimer > 0 || (isAirDashing && !pm.grounded) || pm == null || rb == null || orientation == null || PlayerCam == null)
             return;
 
-        dashCdTimer = dashCd;
+        dashCdTimer = dashCd; // Start the cooldown
         pm.dashing = true;
         isAirDashing = !pm.grounded;
 
@@ -90,6 +109,12 @@ public class Dashing : MonoBehaviour
 
         Invoke(nameof(DelayedDashForce), 0.025f);
         Invoke(nameof(ResetDash), dashDuration);
+
+        // Reset the UI overlay for cooldown
+        if (cooldownImage != null)
+        {
+            cooldownImage.fillAmount = 1f; // Set to full
+        }
     }
 
     private Vector3 delayedForceToApply;
@@ -121,7 +146,7 @@ public class Dashing : MonoBehaviour
 
         // Reset air dash state and restore PlayerMovement
         isAirDashing = false;
-        pm.enabled = true; // Re-enable PlayerMovement
+        pm.enabled = true;
     }
 
     // Calculates the direction for the dash based on input
