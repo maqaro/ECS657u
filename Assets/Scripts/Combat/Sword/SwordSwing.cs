@@ -16,6 +16,9 @@ public class SwordSwing : MonoBehaviour
     public float attackRange = 1.5f; 
     public float damage = 10f;
 
+    [Header("Sound Effects")]
+    [SerializeField] private AudioClip[] swingSounds;
+
     private InputAction swordSwingAction;
     private WeaponAnimation wa;
     private Animator animator;
@@ -54,6 +57,7 @@ public class SwordSwing : MonoBehaviour
         if (canAttack && animator.GetBool("WeaponUp"))
         {
             Attack();
+            SoundFXManager.instance.PlayRandomSoundFXClipPlayer(swingSounds, transform, 0.3f);
             wa.SwingAnimation(); // Play swing animation
         }
     }
