@@ -16,6 +16,9 @@ public class SwordSwing : MonoBehaviour
     public float attackRange = 1.5f; 
     public float damage = 10f;
 
+    [Header("Sound Effects")]
+    [SerializeField] private AudioClip[] swingSounds;
+
     private InputAction swordSwingAction;
     private WeaponAnimation wa;
     private Animator animator;
@@ -54,6 +57,7 @@ public class SwordSwing : MonoBehaviour
         if (canAttack && animator.GetBool("WeaponUp"))
         {
             Attack();
+            
             wa.SwingAnimation(); // Play swing animation
         }
     }
@@ -62,7 +66,7 @@ public class SwordSwing : MonoBehaviour
     private void Attack()
     {
         canAttack = false;
-
+        SoundFXManager.instance.PlayRandomSoundFXClipPlayer(swingSounds, transform, 0.3f);
         // Check for enemies in the attack range
         Collider[] hitColliders = Physics.OverlapSphere(Sword.transform.position, attackRange);
         foreach (var hitCollider in hitColliders)

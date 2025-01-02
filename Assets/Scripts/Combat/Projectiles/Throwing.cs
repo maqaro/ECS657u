@@ -7,6 +7,8 @@ using TMPro; // If using TextMeshPro
 
 public class Throwing : MonoBehaviour, IDataPersistence
 {
+    [SerializeField] private AudioClip[] throwSounds;
+
     public Transform cam;
     public Transform attackPoint;
     public GameObject objectToThrow;
@@ -112,6 +114,7 @@ public class Throwing : MonoBehaviour, IDataPersistence
         Rigidbody projectileRb = projectile.GetComponent<Rigidbody>();
 
         Vector3 forceDirection = cam.transform.forward;
+        SoundFXManager.instance.PlayRandomSoundFXClipPlayer(throwSounds, transform, 0.3f);
 
         RaycastHit hit;
         if (Physics.Raycast(cam.position, cam.forward, out hit, 500f))
