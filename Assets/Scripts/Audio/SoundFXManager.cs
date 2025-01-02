@@ -18,7 +18,7 @@ public class SoundFXManager : MonoBehaviour
     [SerializeField] private float detectionRange = 10f;
 
     [Header("Audio Source Pool Settings")]
-    [SerializeField] private int poolSize = 5;
+    [SerializeField] private int poolSize = 2;
     private Queue<AudioSource> audioSourcePool = new Queue<AudioSource>();
 
     private Dictionary<AudioSource, GameObject> activeSounds = new Dictionary<AudioSource, GameObject>();

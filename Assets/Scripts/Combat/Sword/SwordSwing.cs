@@ -57,7 +57,7 @@ public class SwordSwing : MonoBehaviour
         if (canAttack && animator.GetBool("WeaponUp"))
         {
             Attack();
-            SoundFXManager.instance.PlayRandomSoundFXClipPlayer(swingSounds, transform, 0.3f);
+            
             wa.SwingAnimation(); // Play swing animation
         }
     }
@@ -66,7 +66,7 @@ public class SwordSwing : MonoBehaviour
     private void Attack()
     {
         canAttack = false;
-
+        SoundFXManager.instance.PlayRandomSoundFXClipPlayer(swingSounds, transform, 0.3f);
         // Check for enemies in the attack range
         Collider[] hitColliders = Physics.OverlapSphere(Sword.transform.position, attackRange);
         foreach (var hitCollider in hitColliders)
