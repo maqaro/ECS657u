@@ -41,7 +41,7 @@ The game concept is a First-Person 3D Movement-Platformer where the play has to 
         - Right-Click (M2) - Throw Kunai (Main throwable)
      
  4. Assets:
-    - All current assets have been made by a member of the group
+    - Low Poly Human - https://assetstore.unity.com/packages/3d/characters/humanoids/fantasy/free-low-poly-human-rpg-character-219979
 
 ### Creators
 - [Ade Shitta](https://github.com/ade-shitta)

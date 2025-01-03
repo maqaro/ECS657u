@@ -15,6 +15,7 @@ public class PlayerCam : MonoBehaviour
     private float xRotation;
     private float yRotation;
     public Transform Arms;
+    public MainMenu mm;
 
     [Header("Input Action Asset")]
     public InputActionAsset inputActionAsset;  
@@ -41,8 +42,8 @@ public class PlayerCam : MonoBehaviour
         // Get mouse delta values from the new input system
         Vector2 mouseDelta = lookAction.ReadValue<Vector2>();
 
-        float mouseX = mouseDelta.x * Time.deltaTime * senX;
-        float mouseY = mouseDelta.y * Time.deltaTime * senY;
+        float mouseX = mouseDelta.x * Time.deltaTime * senX * mm.mainSensitivity;
+        float mouseY = mouseDelta.y * Time.deltaTime * senY * mm.mainSensitivity;
 
         yRotation += mouseX;
         xRotation -= mouseY;
