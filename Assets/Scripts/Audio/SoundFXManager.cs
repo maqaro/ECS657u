@@ -229,6 +229,46 @@ public class SoundFXManager : MonoBehaviour
         StartCoroutine(ReturnToPoolAfterPlayback(audioSource, clip.length));
     }
 
+    public void PlaySoundFXClipFollowPlayer(AudioClip clip, Transform spawnTransform, float volume)
+    {
+        AudioSource audioSource = GetPooledAudioSource();
+        audioSource.transform.SetParent(spawnTransform); // Parent to the spawnTransform (player)
+        audioSource.transform.localPosition = Vector3.zero; // Ensure it starts at the correct position relative to the player
+        audioSource.clip = clip;
+        audioSource.volume = volume;
+        audioSource.spatialBlend = 1.0f; // Ensure spatial audio for 3D effects
+        audioSource.Play();
+
+        // Start a coroutine to return the audio source to the pool after playback
+        StartCoroutine(ReturnToPoolAfterPlayback(audioSource, clip.length));
+    }
+
+
+    public void PlayRandomSoundFXClipFollowPlayer(AudioClip[] clips, Transform spawnTransform, float volume)
+    {
+        if (clips == null || clips.Length == 0)
+        {
+            Debug.LogWarning("PlayRandomSoundFXClipFollowPlayer: No audio clips provided!");
+            return;
+        }
+
+        // Select a random clip
+        int rand = Random.Range(0, clips.Length);
+        AudioClip selectedClip = clips[rand];
+
+        AudioSource audioSource = GetPooledAudioSource();
+        audioSource.transform.SetParent(spawnTransform); // Parent to the spawnTransform (player)
+        audioSource.transform.localPosition = Vector3.zero; // Ensure it starts at the correct position relative to the player
+        audioSource.clip = selectedClip;
+        audioSource.volume = volume;
+        audioSource.spatialBlend = 1.0f; // Ensure spatial audio for 3D effects
+        audioSource.Play();
+
+        // Return the AudioSource to the pool after playback
+        StartCoroutine(ReturnToPoolAfterPlayback(audioSource, selectedClip.length));
+    }
+
+
     public void PlayRandomSoundFXClip(AudioClip[] clips, Transform spawnTransform, float volume)
     {
         if (clips == null || clips.Length == 0)

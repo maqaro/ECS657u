@@ -66,7 +66,7 @@ public class SwordSwing : MonoBehaviour
     private void Attack()
     {
         canAttack = false;
-        SoundFXManager.instance.PlayRandomSoundFXClipPlayer(swingSounds, transform, 0.3f);
+        SoundFXManager.instance.PlayRandomSoundFXClipFollowPlayer(swingSounds, transform, 0.1f);
         // Check for enemies in the attack range
         Collider[] hitColliders = Physics.OverlapSphere(Sword.transform.position, attackRange);
         foreach (var hitCollider in hitColliders)
