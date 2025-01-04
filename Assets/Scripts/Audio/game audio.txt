@@ -1,9 +1,13 @@
-jump -
-damage - 
-walk - 
-jump - 
-sprint -
-dash
-crouch
-climbing
-bg audio
+player:
+- dash
+- death
+
+level:
+- door
+- breakable items
+
+enemy:
+- grunt/hit noises
+- death
+
+Fix bg looping

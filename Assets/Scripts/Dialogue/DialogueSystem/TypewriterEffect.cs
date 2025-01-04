@@ -6,7 +6,7 @@ using TMPro;
 
 public class TypewriterEffect : MonoBehaviour
 {
-    [SerializeField] private float typewriterSpeed = 17f; // Speed at which the text is typed out
+    [SerializeField] private float typewriterSpeed = 35f; // Speed at which the text is typed out
 
     public bool IsRunning { get; private set; } // Indicates whether the typewriter effect is currently running
 

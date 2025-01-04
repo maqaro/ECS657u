@@ -26,6 +26,11 @@ public class DialogueActivator : MonoBehaviour, IInteractable
         }
     }
 
+    public void UpdateDialogueObject(DialogueObject dialogueObject)
+    {
+        this.dialogueObject = dialogueObject;
+    }
+
     // Called when another collider enters the trigger zone
     private void OnTriggerEnter(Collider other)
     {

@@ -10,10 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bba3c12bd6123344fbf3800e779a51ff, type: 3}
-  m_Name: YesResponseTest
+  m_Name: Tutorial1
   m_EditorClassIdentifier: 
   dialogue:
-  - Good to see you again! Would you like a recap of the tutorial?
+  - 'You have a Katana as your main weapon and a Kunai as your secondary weapon.
+    Press M1 (Left-click) and M2 (Right-click) respectively to use them. You also
+    have a Grapple gun, which you can use by pressing '
+  - That is all for your movement and weapon controls. Would you like me to restart
+    the tutorial?
   responses:
   - responseText: Yes
     dialogueObject: {fileID: 11400000, guid: 166f40d31a0ebca4fa69bc136947f8c7, type: 2}

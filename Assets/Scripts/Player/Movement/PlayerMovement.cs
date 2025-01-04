@@ -340,6 +340,20 @@ public class PlayerMovement : MonoBehaviour
             moveInput = Vector2.zero;
             sprintInput = false;
             jumpAction.Disable();
+
+            if (isSprintingSoundPlaying)
+            {
+                SoundFXManager.instance.StopLoopingSoundPersistent(transform);
+                isSprintingSoundPlaying = false;
+            }
+
+            if (isWalkingSoundPlaying)
+            {
+                SoundFXManager.instance.StopLoopingSoundPersistent(transform);
+                isWalkingSoundPlaying = false;
+            }
+
+
             return;
         }
 
@@ -573,7 +587,7 @@ public class PlayerMovement : MonoBehaviour
     // handle jumping logic
     private void Jump()
     {
-        SoundFXManager.instance.PlayRandomSoundFXClipPlayer(jumpSounds, transform, 0.3f);
+        SoundFXManager.instance.PlayRandomSoundFXClipFollowPlayer(jumpSounds, transform, 0.3f);
         exitingSlope = true;
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);

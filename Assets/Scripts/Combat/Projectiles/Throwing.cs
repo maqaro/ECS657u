@@ -114,7 +114,7 @@ public class Throwing : MonoBehaviour, IDataPersistence
         Rigidbody projectileRb = projectile.GetComponent<Rigidbody>();
 
         Vector3 forceDirection = cam.transform.forward;
-        SoundFXManager.instance.PlayRandomSoundFXClipPlayer(throwSounds, transform, 0.3f);
+        SoundFXManager.instance.PlayRandomSoundFXClipPlayer(throwSounds, transform, 0.1f);
 
         RaycastHit hit;
         if (Physics.Raycast(cam.position, cam.forward, out hit, 500f))
