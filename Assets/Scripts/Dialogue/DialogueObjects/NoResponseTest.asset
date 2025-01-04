@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bba3c12bd6123344fbf3800e779a51ff, type: 3}
-  m_Name: testoptionresponse
+  m_Name: NoResponseTest
   m_EditorClassIdentifier: 
   dialogue:
-  - test 3rd option
+  - Are you ready for the tutorial now?
   responses:
-  - responseText: 
-    dialogueObject: {fileID: 0}
-  - responseText: 
-    dialogueObject: {fileID: 0}
+  - responseText: Yes
+    dialogueObject: {fileID: 11400000, guid: e35cb4c9ec7bc574094d4ef34b054c68, type: 2}
+  - responseText: No
+    dialogueObject: {fileID: 11400000, guid: dbb1343513f1230448c48d23bfb4e77b, type: 2}

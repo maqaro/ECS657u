@@ -340,6 +340,20 @@ public class PlayerMovement : MonoBehaviour
             moveInput = Vector2.zero;
             sprintInput = false;
             jumpAction.Disable();
+
+            if (isSprintingSoundPlaying)
+            {
+                SoundFXManager.instance.StopLoopingSoundPersistent(transform);
+                isSprintingSoundPlaying = false;
+            }
+
+            if (isWalkingSoundPlaying)
+            {
+                SoundFXManager.instance.StopLoopingSoundPersistent(transform);
+                isWalkingSoundPlaying = false;
+            }
+
+
             return;
         }
 

@@ -13,5 +13,9 @@ MonoBehaviour:
   m_Name: Yes
   m_EditorClassIdentifier: 
   dialogue:
-  - Your answer is Yes.
-  responses: []
+  - Great! Welcome to the team.
+  - Use 'WASD' for basic movement. To Crouch, press 'C' and to Sprint, press 'L-Shift'.
+    You can also dash using 'F'.
+  responses:
+  - responseText: Okay.
+    dialogueObject: {fileID: 11400000, guid: cad14e0fc5391034fa1cd5d9690e25d9, type: 2}
