@@ -29,6 +29,12 @@ public class EnemyAi : MonoBehaviour
     public float sightRange, attackRange;
     public bool playerInSightRange, playerInAttackRange;
 
+    [Header("Animation")]
+    public Animator animator;
+    private int AttackNumber = 0;
+    private string AnimationState = "Patrolling";
+    private bool isAttacking = false;
+
     private void Awake()
     {
         player = GameObject.Find("PlayerObj").transform;
@@ -49,6 +55,13 @@ public class EnemyAi : MonoBehaviour
         // if (playerInAttackRange && playerInSightRange) AttackPlayer();
 
         if (health <= 0) DestroyEnemy();
+
+        handleAnimations();
+        Debug.Log($"Patrolling: {animator.GetBool("Patrolling")}");
+        Debug.Log($"Chasing: {animator.GetBool("Chasing")}");
+        Debug.Log($"InCombat: {animator.GetBool("InCombat")}");
+        Debug.Log($"Alive: {animator.GetBool("Alive")}");
+
     }
 
     // Enemy Behaviour 
@@ -60,7 +73,7 @@ public class EnemyAi : MonoBehaviour
         if (walkPointSet)
             agent.SetDestination(walkPoint);
 
-        Vector3 distanceToWalkPoint = transform.position - walkPoint;
+            Vector3 distanceToWalkPoint = transform.position - walkPoint;
 
         //Walkpoint reached
         if (distanceToWalkPoint.magnitude < 1f)
@@ -91,14 +104,15 @@ public class EnemyAi : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player") && canAttack)
         {
+            isAttacking = true;
             PlayerHealth playerHealth = collision.gameObject.GetComponent<PlayerHealth>();
             if (playerHealth != null)
             {
-                //This is for debugging can be removed once final enemy script is done
-                print("Player hit");
                 playerHealth.TakeDamage(damage);
                 StartCoroutine(AttackCooldown());
             }
+        } else {
+            isAttacking = false;
         }
     }
 
@@ -115,13 +129,19 @@ public class EnemyAi : MonoBehaviour
     public void TakeDamage(int damage)
     {
         health -= damage;
+        
 
-        if (health <= 0) Invoke(nameof(DestroyEnemy), 0.5f);
+        if (health <= 0){
+            Invoke(nameof(DestroyEnemy), 0.5f);
+        } else {
+            animator.SetTrigger("Hit");
+        }
     }
 
     // Enemy death
     private void DestroyEnemy()
     {
+        // animator.SetTrigger("Dead");
         Rigidbody rb = GetComponent<Rigidbody>(); 
         rb.isKinematic = false;
         rb.useGravity = true;
@@ -131,5 +151,50 @@ public class EnemyAi : MonoBehaviour
 
         Destroy(GetComponent<NavMeshAgent>());
         Destroy(GetComponent<EnemyAi>());
+        AnimationState = "Dead";
+    }
+
+    private void handleAnimations(){
+        if (isDead){
+            animator.SetBool("Alive", false);
+            animator.SetBool("Chasing", false);
+            animator.SetBool("InCombat", false);
+            animator.SetBool("Patrolling", false);
+            return; 
+        }
+
+        if (playerInSightRange && !playerInAttackRange)
+        {
+            if (AnimationState != "Chasing")
+            {
+                AnimationState = "Chasing";
+                animator.SetBool("Chasing", true);
+                animator.SetBool("InCombat", false);
+                animator.SetBool("Patrolling", false);
+            }
+        }
+        else if (playerInAttackRange && playerInSightRange)
+        {
+            if (AnimationState != "Attacking" && isAttacking)
+            {
+                AnimationState = "Attacking";
+                animator.SetBool("InCombat", true);
+                animator.SetBool("Chasing", false);
+                animator.SetBool("Patrolling", false);
+
+                AttackNumber = (AttackNumber + 1) % 2; 
+                animator.SetTrigger(AttackNumber == 0 ? "PunchLeft" : "PunchRight");
+            }
+        }
+        else if (!playerInSightRange && AnimationState != "Dead")
+        {
+            if (AnimationState != "Patrolling")
+            {
+                AnimationState = "Patrolling";
+                animator.SetBool("Patrolling", true);
+                animator.SetBool("Chasing", false);
+                animator.SetBool("InCombat", false);
+            }
+        }
     }
 }
