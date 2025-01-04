@@ -14,4 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogue:
   - test 3rd option
-  responses: []
+  responses:
+  - responseText: 
+    dialogueObject: {fileID: 0}
+  - responseText: 
+    dialogueObject: {fileID: 0}
