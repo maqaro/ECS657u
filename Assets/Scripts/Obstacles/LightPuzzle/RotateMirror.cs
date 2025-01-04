@@ -42,7 +42,6 @@ public class RotateMirror : MonoBehaviour
         if (other.CompareTag("Player"))  // Check if the entering object is the player
         {
             playerInRange = true;
-            Debug.Log("Player entered range - can rotate mirror");
         }
     }
 
@@ -53,7 +52,6 @@ public class RotateMirror : MonoBehaviour
             playerInRange = false;
             rotateLeft = false;  // Stop rotation immediately when out of range
             rotateRight = false;
-            Debug.Log("Player exited range - cannot rotate mirror");
         }
     }
 }
