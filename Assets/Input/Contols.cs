@@ -143,6 +143,24 @@ public partial class @Contols: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RotateMirrorRight"",
+                    ""type"": ""Button"",
+                    ""id"": ""4b07c4a9-c12d-43c0-9451-d603bfae91f4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RotateMirrorLeft"",
+                    ""type"": ""Button"",
+                    ""id"": ""bce92874-ea07-423e-871f-a4c86b8f62b8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -332,6 +350,28 @@ public partial class @Contols: IInputActionCollection2, IDisposable
                     ""action"": ""ThrowKnife"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8fdbd6b1-a6a3-4faf-9fe2-639055f9a604"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RotateMirrorRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f530dcd7-4452-46ba-ae3a-7ba9aa4e313f"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RotateMirrorLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -418,6 +458,8 @@ public partial class @Contols: IInputActionCollection2, IDisposable
         m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
         m_Player_ThrowKnife = m_Player.FindAction("ThrowKnife", throwIfNotFound: true);
+        m_Player_RotateMirrorRight = m_Player.FindAction("RotateMirrorRight", throwIfNotFound: true);
+        m_Player_RotateMirrorLeft = m_Player.FindAction("RotateMirrorLeft", throwIfNotFound: true);
         // Menu
         m_Menu = asset.FindActionMap("Menu", throwIfNotFound: true);
         m_Menu_Escape = m_Menu.FindAction("Escape", throwIfNotFound: true);
@@ -496,6 +538,8 @@ public partial class @Contols: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Dash;
     private readonly InputAction m_Player_Look;
     private readonly InputAction m_Player_ThrowKnife;
+    private readonly InputAction m_Player_RotateMirrorRight;
+    private readonly InputAction m_Player_RotateMirrorLeft;
     public struct PlayerActions
     {
         private @Contols m_Wrapper;
@@ -513,6 +557,8 @@ public partial class @Contols: IInputActionCollection2, IDisposable
         public InputAction @Dash => m_Wrapper.m_Player_Dash;
         public InputAction @Look => m_Wrapper.m_Player_Look;
         public InputAction @ThrowKnife => m_Wrapper.m_Player_ThrowKnife;
+        public InputAction @RotateMirrorRight => m_Wrapper.m_Player_RotateMirrorRight;
+        public InputAction @RotateMirrorLeft => m_Wrapper.m_Player_RotateMirrorLeft;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -561,6 +607,12 @@ public partial class @Contols: IInputActionCollection2, IDisposable
             @ThrowKnife.started += instance.OnThrowKnife;
             @ThrowKnife.performed += instance.OnThrowKnife;
             @ThrowKnife.canceled += instance.OnThrowKnife;
+            @RotateMirrorRight.started += instance.OnRotateMirrorRight;
+            @RotateMirrorRight.performed += instance.OnRotateMirrorRight;
+            @RotateMirrorRight.canceled += instance.OnRotateMirrorRight;
+            @RotateMirrorLeft.started += instance.OnRotateMirrorLeft;
+            @RotateMirrorLeft.performed += instance.OnRotateMirrorLeft;
+            @RotateMirrorLeft.canceled += instance.OnRotateMirrorLeft;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -604,6 +656,12 @@ public partial class @Contols: IInputActionCollection2, IDisposable
             @ThrowKnife.started -= instance.OnThrowKnife;
             @ThrowKnife.performed -= instance.OnThrowKnife;
             @ThrowKnife.canceled -= instance.OnThrowKnife;
+            @RotateMirrorRight.started -= instance.OnRotateMirrorRight;
+            @RotateMirrorRight.performed -= instance.OnRotateMirrorRight;
+            @RotateMirrorRight.canceled -= instance.OnRotateMirrorRight;
+            @RotateMirrorLeft.started -= instance.OnRotateMirrorLeft;
+            @RotateMirrorLeft.performed -= instance.OnRotateMirrorLeft;
+            @RotateMirrorLeft.canceled -= instance.OnRotateMirrorLeft;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -699,6 +757,8 @@ public partial class @Contols: IInputActionCollection2, IDisposable
         void OnDash(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
         void OnThrowKnife(InputAction.CallbackContext context);
+        void OnRotateMirrorRight(InputAction.CallbackContext context);
+        void OnRotateMirrorLeft(InputAction.CallbackContext context);
     }
     public interface IMenuActions
     {

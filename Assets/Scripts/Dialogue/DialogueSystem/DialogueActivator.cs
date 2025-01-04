@@ -3,9 +3,18 @@ using TMPro; // For TextMeshPro UI
 
 public class DialogueActivator : MonoBehaviour, IInteractable
 {
+
+    public enum InteractionType
+    {
+        TalkToNPC,
+        PickUpItem,
+        ShowHint
+    }
+
     [SerializeField] private DialogueObject dialogueObject; // The dialogue object to display when this activator is interacted with
     [SerializeField] private GameObject interactPrompt; 
-    [SerializeField] private TextMeshProUGUI promptText; 
+    [SerializeField] private TextMeshProUGUI promptText;
+    [SerializeField] private InteractionType interactionType;
 
     private bool isPlayerInRange = false; 
 
@@ -25,7 +34,21 @@ public class DialogueActivator : MonoBehaviour, IInteractable
             // Show the interaction prompt
             isPlayerInRange = true;
             interactPrompt.SetActive(true);
-            promptText.text = "Press [E] to talk to";
+            //promptText.text = "Press [E] to talk to";
+
+            // Change the text dynamically based on the interaction type
+            switch (interactionType)
+            {
+                case InteractionType.TalkToNPC:
+                    promptText.text = "Press [E] to talk to";
+                    break;
+                case InteractionType.PickUpItem:
+                    promptText.text = "Press [E] to pick up";
+                    break;
+                case InteractionType.ShowHint:
+                    promptText.text = "Press [E] for hint";
+                    break;
+            }
 
             // Assign this DialogueActivator as the player's current interactable
             player.Interactable = this;
