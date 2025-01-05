@@ -57,6 +57,11 @@ public class MainMenu : MonoBehaviour
     {
         DisableMenuButtons();
         DataPersistenceManager.instance.NewGame();
+
+        Time.timeScale = 1f;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
         SceneManager.LoadSceneAsync("SampleScene");
     }
 
@@ -64,6 +69,12 @@ public class MainMenu : MonoBehaviour
     {
         DisableMenuButtons();
         DataPersistenceManager.instance.LoadGame();
+
+        // Reset game states before loading scene
+        Time.timeScale = 1f;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
         // Use LoadSceneAsync with a callback to ensure data is loaded
         StartCoroutine(LoadGameScene());
     }
