@@ -56153,6 +56153,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DataPersistenceManager
       objectReference: {fileID: 0}
+    - target: {fileID: 2244532134407951749, guid: 13dc66dbbbb66b54792a4599539806f5, type: 3}
+      propertyPath: initializeDataIfNull
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2808975962437356749, guid: 13dc66dbbbb66b54792a4599539806f5, type: 3}
       propertyPath: m_LocalPosition.x
       value: -13.28

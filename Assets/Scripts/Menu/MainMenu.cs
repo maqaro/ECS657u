@@ -64,7 +64,19 @@ public class MainMenu : MonoBehaviour
     {
         DisableMenuButtons();
         DataPersistenceManager.instance.LoadGame();
-        SceneManager.LoadSceneAsync("SampleScene");
+        // Use LoadSceneAsync with a callback to ensure data is loaded
+        StartCoroutine(LoadGameScene());
+    }
+
+    private IEnumerator LoadGameScene()
+    {
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("SampleScene");
+        asyncLoad.allowSceneActivation = false;
+
+        // Wait a frame to ensure data is properly loaded before actually loading the scene
+        yield return new WaitForEndOfFrame();
+        
+        asyncLoad.allowSceneActivation = true;
     }
 
     public void OnSaveGameClicked()
@@ -139,6 +151,7 @@ public class MainMenu : MonoBehaviour
         }
     }
 
+    // Disables the menu buttons
     public void DisableMenuButtons()
     {
         newGameButton.interactable = false;

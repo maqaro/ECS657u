@@ -85,6 +85,9 @@ public class PauseMenu : MonoBehaviour
 
     public void LoadMainMenu()
     {
+        // Save the game before loading up the main menu
+        DataPersistenceManager.instance.SaveGame();
+
         // Resume time before changing scenes
         Time.timeScale = 1f;
         AudioListener.pause = false;
