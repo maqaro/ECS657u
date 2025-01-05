@@ -42,6 +42,7 @@ The game concept is a First-Person 3D Movement-Platformer where the play has to 
      
  4. Assets:
     - Low Poly Human - https://assetstore.unity.com/packages/3d/characters/humanoids/fantasy/free-low-poly-human-rpg-character-219979
+    - Skinned Mesh Renderer - https://assetstore.unity.com/packages/tools/utilities/skinned-mesh-transfer-219764?aid=1011liTo7
 
 ### Creators
 - [Ade Shitta](https://github.com/ade-shitta)
