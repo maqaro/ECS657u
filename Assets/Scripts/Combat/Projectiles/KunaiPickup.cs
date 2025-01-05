@@ -35,35 +35,37 @@ public class KunaiPickup : MonoBehaviour, IDataPersistence
         }
     }
 
+    // Saves any data in the case that the user has collected a pickup
     public void SaveData(ref GameData data)
     {
         if(collected)
         {
-            if (data.kunaiPickupsCollected.ContainsKey(id))
+            if (data.kunaiPickupsCollected.ContainsKey(id)) // Removes an exisiting entry with the same ID
             {
                 data.kunaiPickupsCollected.Remove(id);
             }
-            data.kunaiPickupsCollected.Add(id, collected);
+            data.kunaiPickupsCollected.Add(id, collected); //Set the status as collected
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other) 
     {
-        if (!collected && other.CompareTag("Player"))
+        if (!collected && other.CompareTag("Player"))  //Check if the collision is by the tag 'Player'
         {
-            Throwing throwingScript = other.GetComponent<Throwing>();
+            Throwing throwingScript = other.GetComponent<Throwing>(); //find 'Throwing' in the player component
 
             if (throwingScript != null)
             {
-                KunaiCollected(throwingScript);
+                KunaiCollected(throwingScript); //will add the kunai to the current user balance
             }
         }
     }
 
+    // Method for after the pickup is collected
     private void KunaiCollected(Throwing throwingScript)
     {
         collected = true;
-        throwingScript.AddThrows(kunaiAmount);
-        gameObject.SetActive(false);
+        throwingScript.AddThrows(kunaiAmount); // will add throws 
+        gameObject.SetActive(false); // will destroy the pickup once collected
     }
 }

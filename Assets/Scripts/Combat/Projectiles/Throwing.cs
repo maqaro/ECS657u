@@ -14,15 +14,15 @@ public class Throwing : MonoBehaviour, IDataPersistence
     public GameObject objectToThrow;
 
     public int totalThrows;
-    public float throwCooldown = 1f;
-    public float throwForce = 20f;
+    public float throwCooldown = 1f; // Cooldown between throws
+    public float throwForce = 20f; // Force applied when throwing 
     public float throwUpwardForce = 2f;
     public bool showCooldownDebug = true;
 
     private float nextThrowTime = 0f;
     private bool readyToThrow = true;
 
-    private Contols playerControls;
+    private Contols playerControls; // Reference to the player controls 
     private InputAction throwAction;
 
     public GameObject pickUpHolder;
@@ -33,7 +33,7 @@ public class Throwing : MonoBehaviour, IDataPersistence
 
     private void Awake()
     {
-        playerControls = new Contols();
+        playerControls = new Contols(); // Initialize player controls
     }
 
     public void LoadData(GameData data)
@@ -60,6 +60,7 @@ public class Throwing : MonoBehaviour, IDataPersistence
         throwAction.performed -= HandleThrow;
     }
 
+    // Start function that initiates the throw and updates the counter
     private void Start()
     {
         readyToThrow = true;
@@ -82,6 +83,7 @@ public class Throwing : MonoBehaviour, IDataPersistence
         }
     }
 
+    // This will listen for any player input and then initiate a throw action
     private void HandleThrow(InputAction.CallbackContext context)
     {
         if (Time.time < nextThrowTime)
@@ -104,6 +106,7 @@ public class Throwing : MonoBehaviour, IDataPersistence
         }
     }
 
+    // Will spawn a projectile at the attack 
     private void Throw()
     {
         readyToThrow = false;
@@ -114,7 +117,7 @@ public class Throwing : MonoBehaviour, IDataPersistence
         Rigidbody projectileRb = projectile.GetComponent<Rigidbody>();
 
         Vector3 forceDirection = cam.transform.forward;
-        SoundFXManager.instance.PlayRandomSoundFXClipPlayer(throwSounds, transform, 0.1f);
+        SoundFXManager.instance.PlayRandomSoundFXClipPlayer(throwSounds, transform, 0.1f); // Adds audio for the kunai being thrown 
 
         RaycastHit hit;
         if (Physics.Raycast(cam.position, cam.forward, out hit, 500f))
@@ -126,7 +129,7 @@ public class Throwing : MonoBehaviour, IDataPersistence
 
         projectileRb.AddForce(forceToAdd, ForceMode.Impulse);
         Destroy(projectile, 5f);
-        totalThrows--;
+        totalThrows--; // Reduces the kunai count 
 
         // Update the UI text
         UpdateKunaiCounter();
@@ -134,6 +137,7 @@ public class Throwing : MonoBehaviour, IDataPersistence
         Invoke(nameof(ResetThrow), throwCooldown);
     }
 
+    // This will reset the throw and show it in the UI too
     private void ResetThrow()
     {
         readyToThrow = true;
@@ -143,6 +147,7 @@ public class Throwing : MonoBehaviour, IDataPersistence
         }
     }
 
+    // Method for addingthrows to the total counter
     public void AddThrows(int amount)
     {
         totalThrows += amount;

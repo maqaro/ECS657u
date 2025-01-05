@@ -20,6 +20,7 @@ public class PlayerHealth : MonoBehaviour, IDataPersistence
         }
     }
 
+    //Load the players health from the data
     public void LoadData(GameData data)
     {
         hasLoadedData = true;
@@ -39,7 +40,7 @@ public class PlayerHealth : MonoBehaviour, IDataPersistence
 
     public void TakeDamage(float damage)
     {
-        SoundFXManager.instance.PlayRandomSoundFXClip(hitSounds, transform, 0.3f);
+        SoundFXManager.instance.PlayRandomSoundFXClip(hitSounds, transform, 0.3f); // Soundfx for when the player is hit
         // Reduce the player's health by the damage amount
         currentHealth -= damage;
         if (currentHealth <= 0)
@@ -50,11 +51,12 @@ public class PlayerHealth : MonoBehaviour, IDataPersistence
         healthbar.SetHealth(currentHealth);
     }
 
+    // Method for healing using the pickups
     public void Heal(float amount)
     {
         currentHealth += amount;
 
-        if (currentHealth > maxHealth)
+        if (currentHealth > maxHealth) // Ensure the health doesn't go over the maximum
         {
             currentHealth = maxHealth;
         }
