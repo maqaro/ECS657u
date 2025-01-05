@@ -8,6 +8,7 @@ public class DialogueUI : MonoBehaviour
 {
     [SerializeField] private GameObject dialogueBox;
     [SerializeField] private TMP_Text text_label;
+    [SerializeField] private GameObject HUD;
 
     public bool IsDialogueActive { get; private set; }
     
@@ -37,10 +38,23 @@ public class DialogueUI : MonoBehaviour
     // Activates the dialogue box and starts the dialogue display process
     public void ShowDialogue(DialogueObject dialogueObject)
     {
+        DisableHUD();
         IsDialogueActive = true;
         dialogueBox.SetActive(true);
         StartCoroutine(StepThroughDialogue(dialogueObject));
     }
+
+    public void ShowHUD()
+    {
+        HUD.SetActive(true);
+    }
+
+    private void DisableHUD()
+    {
+        HUD.SetActive(false);
+    }
+
+
 
     public void AddResponseEvents(ResponseEvent[] responseEvents){
         responseHandler.AddResponseEvents(responseEvents);
@@ -109,5 +123,6 @@ public class DialogueUI : MonoBehaviour
         {
             playerMovement.EndInteraction();
         }
+        ShowHUD();
     }
 }
