@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem; // For the new Input System
-using UnityEngine.UI; // For UI Text
-using TMPro; // If using TextMeshPro
+using UnityEngine.InputSystem;
+using UnityEngine.UI;
+using TMPro;
 
 public class Throwing : MonoBehaviour, IDataPersistence
 {
@@ -15,14 +15,14 @@ public class Throwing : MonoBehaviour, IDataPersistence
 
     public int totalThrows;
     public float throwCooldown = 1f; // Cooldown between throws
-    public float throwForce = 20f; // Force applied when throwing 
+    public float throwForce = 20f; // Force applied when throwing
     public float throwUpwardForce = 2f;
     public bool showCooldownDebug = true;
 
     private float nextThrowTime = 0f;
     private bool readyToThrow = true;
 
-    private Contols playerControls; // Reference to the player controls 
+    private Contols playerControls; // Reference to the player controls
     private InputAction throwAction;
 
     public GameObject pickUpHolder;
@@ -30,6 +30,8 @@ public class Throwing : MonoBehaviour, IDataPersistence
     // UI References
     public TextMeshProUGUI kunaiCounterText; // To display the number of throws
     public Image cooldownImage; // Grey overlay for the cooldown
+
+    private DialogueUI dialogueUI; // Reference to DialogueUI
 
     private void Awake()
     {
@@ -52,6 +54,9 @@ public class Throwing : MonoBehaviour, IDataPersistence
         throwAction = playerControls.Player.Throw;
         throwAction.Enable();
         throwAction.performed += HandleThrow;
+
+        // Find the DialogueUI in the scene
+        dialogueUI = FindObjectOfType<DialogueUI>();
     }
 
     private void OnDisable()
@@ -60,13 +65,13 @@ public class Throwing : MonoBehaviour, IDataPersistence
         throwAction.performed -= HandleThrow;
     }
 
-    // Start function that initiates the throw and updates the counter
     private void Start()
     {
         readyToThrow = true;
 
         // Initialize the kunai counter
         UpdateKunaiCounter();
+
         if (cooldownImage != null)
         {
             cooldownImage.fillAmount = 0f; // Start with no cooldown overlay
@@ -83,9 +88,15 @@ public class Throwing : MonoBehaviour, IDataPersistence
         }
     }
 
-    // This will listen for any player input and then initiate a throw action
+    // Handles throw input and ensures throwing is not allowed during dialogue
     private void HandleThrow(InputAction.CallbackContext context)
     {
+        // Prevent throwing if dialogue is active
+        if (dialogueUI != null && dialogueUI.IsDialogueActive)
+        {
+            return;
+        }
+
         if (Time.time < nextThrowTime)
         {
             if (showCooldownDebug)
@@ -106,7 +117,7 @@ public class Throwing : MonoBehaviour, IDataPersistence
         }
     }
 
-    // Will spawn a projectile at the attack 
+    // Spawns a projectile and applies force
     private void Throw()
     {
         readyToThrow = false;
@@ -117,7 +128,7 @@ public class Throwing : MonoBehaviour, IDataPersistence
         Rigidbody projectileRb = projectile.GetComponent<Rigidbody>();
 
         Vector3 forceDirection = cam.transform.forward;
-        SoundFXManager.instance.PlayRandomSfxPlayer(throwSounds, transform, 0.1f); // Adds audio for the kunai being thrown 
+        SoundFXManager.instance.PlayRandomSfxPlayer(throwSounds, transform, 0.1f); // Adds audio for the kunai being thrown
 
         RaycastHit hit;
         if (Physics.Raycast(cam.position, cam.forward, out hit, 500f))
@@ -129,7 +140,7 @@ public class Throwing : MonoBehaviour, IDataPersistence
 
         projectileRb.AddForce(forceToAdd, ForceMode.Impulse);
         Destroy(projectile, 5f);
-        totalThrows--; // Reduces the kunai count 
+        totalThrows--; // Reduces the kunai count
 
         // Update the UI text
         UpdateKunaiCounter();
@@ -137,7 +148,7 @@ public class Throwing : MonoBehaviour, IDataPersistence
         Invoke(nameof(ResetThrow), throwCooldown);
     }
 
-    // This will reset the throw and show it in the UI too
+    // Resets throwing state and updates UI
     private void ResetThrow()
     {
         readyToThrow = true;
@@ -147,7 +158,7 @@ public class Throwing : MonoBehaviour, IDataPersistence
         }
     }
 
-    // Method for addingthrows to the total counter
+    // Adds throws to the total counter
     public void AddThrows(int amount)
     {
         totalThrows += amount;
@@ -156,7 +167,7 @@ public class Throwing : MonoBehaviour, IDataPersistence
         UpdateKunaiCounter();
     }
 
-    // Method to update the UI text
+    // Updates the UI text for kunai count
     private void UpdateKunaiCounter()
     {
         if (kunaiCounterText != null)

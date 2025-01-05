@@ -22,6 +22,7 @@ public class SwordSwing : MonoBehaviour
     private InputAction swordSwingAction;
     private WeaponAnimation wa;
     private Animator animator;
+    private DialogueUI dialogueUI;
 
     void OnEnable()
     {
@@ -40,6 +41,8 @@ public class SwordSwing : MonoBehaviour
         {
             cooldownImage.fillAmount = 0f; 
         }
+
+        dialogueUI = FindObjectOfType<DialogueUI>();
     }
 
     void OnDisable()
@@ -54,6 +57,12 @@ public class SwordSwing : MonoBehaviour
     // Method that triggers when the sword swing action is performed
     private void OnSwordSwing()
     {
+        // Prevent attacking if dialogue is active
+        if (dialogueUI != null && dialogueUI.IsDialogueActive)
+        {
+            return;
+        }
+
         if (canAttack && animator.GetBool("WeaponUp"))
         {
             Attack();
