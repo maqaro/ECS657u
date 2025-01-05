@@ -22,10 +22,11 @@ public class PowerUp : MonoBehaviour, IDataPersistence
     {
         if (string.IsNullOrEmpty(id))
         {
-            GenerateId();
+            GenerateId(); //Generates a unique id for each pickup
         }
     }
 
+    // Check if powerup has already been picked up and set as active if it has been picked up
     public void LoadData(GameData data)
     {
         data.powerUpsCollected.TryGetValue(id, out collected);
@@ -35,6 +36,7 @@ public class PowerUp : MonoBehaviour, IDataPersistence
         }
     }
 
+    // Saves any data in the case that the user has collected a powerup
     public void SaveData(ref GameData data)
     {
         if (collected)
@@ -43,18 +45,18 @@ public class PowerUp : MonoBehaviour, IDataPersistence
             {
                 data.powerUpsCollected.Remove(id);
             }
-            data.powerUpsCollected.Add(id, collected);
+            data.powerUpsCollected.Add(id, collected); // Set the status as collected
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!collected && other.CompareTag("Player"))
+        if (!collected && other.CompareTag("Player")) //Check if the collision is by the tag 'Player'
         {
-            PlayerStats playerStats = other.GetComponent<PlayerStats>();
+            PlayerStats playerStats = other.GetComponent<PlayerStats>(); //find 'PlayerStats' in the player component
             if (playerStats != null)
             {
-                ApplyPowerUp(playerStats);
+                ApplyPowerUp(playerStats); // will apply powerup
             }
         }
     }
@@ -63,6 +65,6 @@ public class PowerUp : MonoBehaviour, IDataPersistence
     {
         collected = true;
         playerStats.ActivatePowerUp(powerUpType, multiplier, duration);
-        gameObject.SetActive(false);
+        gameObject.SetActive(false); // will destroy the powerup once picked up
     }
 }

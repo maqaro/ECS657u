@@ -9,6 +9,7 @@ public class HealthPickup : MonoBehaviour, IDataPersistence
     [SerializeField] private string id;
     [ContextMenu("Generate guid for id")]
     
+    //An ID is created so each pickup is unique and once picked up is destroyed
     private void GenerateId()
     {
         id = System.Guid.NewGuid().ToString();
@@ -23,6 +24,7 @@ public class HealthPickup : MonoBehaviour, IDataPersistence
         }
     }
 
+    // This will load the saved data
     public void LoadData(GameData data)
     {
         data.healthPickupsCollected.TryGetValue(id, out collected);
@@ -32,6 +34,7 @@ public class HealthPickup : MonoBehaviour, IDataPersistence
         }
     }
 
+    // Will save the data to know which pickups have been picked up
     public void SaveData(ref GameData data)
     {
         if(collected)
@@ -44,10 +47,12 @@ public class HealthPickup : MonoBehaviour, IDataPersistence
         }
     }
 
+    // User collision with the pickup
     private void OnTriggerEnter(Collider other)
     {
         if (!collected && other.CompareTag("Player"))
         {
+            //This checks if the player has the PlayerHealth Component
             PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();
 
             if (playerHealth != null)
@@ -57,10 +62,11 @@ public class HealthPickup : MonoBehaviour, IDataPersistence
         }
     }
 
+    //Method for once the health pickup is collected
     private void HealthCollected(PlayerHealth playerHealth)
     {
         collected = true;
         playerHealth.Heal(healAmount);
-        gameObject.SetActive(false);
+        gameObject.SetActive(false); //Removes the gameobject once picked up
     }
 }

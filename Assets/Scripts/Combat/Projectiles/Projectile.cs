@@ -45,7 +45,7 @@ public class Projectile : MonoBehaviour
     private void HandleEnemyHit(Collision collision)
     {
         EnemyAi enemy = collision.gameObject.GetComponent<EnemyAi>();
-        if (enemy != null)
+        if (enemy != null) // if the collided object is an enemy
         {
             // Apply damage to the enemy
             enemy.health -= swordSwing.damage;
@@ -57,13 +57,14 @@ public class Projectile : MonoBehaviour
         }
     }
 
+    // Handles collision with the targets
     private void HandleTargetHit(Collision collision)
     {
         TargetEnemy target = collision.gameObject.GetComponent<TargetEnemy>();
-        if (target != null)
+        if (target != null) // if the collided object is a target
         {
             target.TakeDamage((int)swordSwing.damage);
-            Destroy(gameObject);
+            Destroy(gameObject); // Destroys the target once enough damage is done  
         }
     }
 
