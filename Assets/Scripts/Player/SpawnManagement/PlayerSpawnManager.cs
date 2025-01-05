@@ -10,27 +10,46 @@ public class PlayerSpawnManager : MonoBehaviour, IDataPersistence
     private Rigidbody rb;
     private Vector3 lastCheckpointPosition;
     private bool hasReachedCheckpoint = false;
+    private bool isInitialized = false;
+    
 
     void Start()
     {
-        GameObject spawnObj = GameObject.FindGameObjectWithTag(spawnTag);
-        if (spawnObj != null)
+        InitializeIfNeeded();
+    }
+
+    private void InitializeIfNeeded()
+    {
+        if (!isInitialized)
         {
-            spawnPoint = spawnObj.transform;
-            lastCheckpointPosition = spawnPoint.position;
+            GameObject spawnObj = GameObject.FindGameObjectWithTag(spawnTag);
+            if (spawnObj != null)
+            {
+                spawnPoint = spawnObj.transform;
+                // Only set lastCheckpointPosition if we haven't loaded data yet
+                if (!hasReachedCheckpoint)
+                {
+                    lastCheckpointPosition = spawnPoint.position;
+                }
+            }
+            playerHealth = GetComponent<PlayerHealth>();
+            rb = GetComponent<Rigidbody>();
+            isInitialized = true;
         }
-        playerHealth = GetComponent<PlayerHealth>();
-        rb = GetComponent<Rigidbody>();
     }
 
     public void LoadData(GameData data)
     {
+        InitializeIfNeeded();
+        
         this.hasReachedCheckpoint = data.hasReachedCheckpoint;
         this.lastCheckpointPosition = data.checkpointPosition;
+
+        Vector3 loadPosition = hasReachedCheckpoint ? lastCheckpointPosition : data.spawnPoint;
+        Debug.Log($"Loading position data - Checkpoint: {hasReachedCheckpoint}, Position: {loadPosition}");
         
         if (rb != null)
         {
-            Vector3 loadPosition = hasReachedCheckpoint ? lastCheckpointPosition : data.spawnPoint;
             rb.position = loadPosition;
             rb.velocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
@@ -43,13 +62,22 @@ public class PlayerSpawnManager : MonoBehaviour, IDataPersistence
 
     public void SaveData(ref GameData data)
     {
+        // Saving the players position
+
+        // Saving the checkpoint position
         data.hasReachedCheckpoint = hasReachedCheckpoint;
         data.checkpointPosition = lastCheckpointPosition;
+
+        // Saving the spawn point
         data.spawnPoint = spawnPoint != null ? spawnPoint.position : Vector3.zero;
+
+        Debug.Log($"Saving position data - Checkpoint: {hasReachedCheckpoint}, " +
+              $"Position: {(hasReachedCheckpoint ? lastCheckpointPosition : data.spawnPoint)}");
     }
 
     void Update()
     {
+        // Check if the player is dead or if the player fell below the map
         if ((playerHealth != null && playerHealth.currentHealth <= 0) || transform.position.y < threshold)
         {
             gameOverScreen.Setup();
@@ -82,14 +110,15 @@ public class PlayerSpawnManager : MonoBehaviour, IDataPersistence
 
     private void OnTriggerEnter(Collider other)
     {
+        // Check if the trigger is a spawn point
         if (other.CompareTag("SpawnPoint"))
         {
             hasReachedCheckpoint = true;
             spawnPoint = other.transform;
             lastCheckpointPosition = spawnPoint.position;
-            Debug.Log("Reached spawn point");
             
         }
+        // Check if the trigger is a checkpoint
         else if (other.CompareTag("Checkpoint"))
         {
             hasReachedCheckpoint = true;

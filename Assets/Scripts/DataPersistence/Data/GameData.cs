@@ -20,8 +20,8 @@ public class GameData
     {
         this.health = 100;
         this.kunaiCount = 100;
-        this.spawnPoint = new Vector3(0f, 3.5f, 85f);
-        hasReachedCheckpoint = true;
+        this.spawnPoint = Vector3.zero;
+        hasReachedCheckpoint = false;
         checkpointPosition = Vector3.zero;
         kunaiPickupsCollected = new SerializableDictionary<string, bool>();
         healthPickupsCollected = new SerializableDictionary<string, bool>();
