@@ -3,10 +3,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Audio;
 
 public class SoundFXManager : MonoBehaviour
 {
     public static SoundFXManager instance;
+
+    [Header("Audio Mixer Groups")] 
+    [SerializeField] private AudioMixerGroup soundFXMixerGroup;
 
     [Header("UI Elements")]
     [SerializeField] private RectTransform visualAudio;
@@ -16,10 +20,6 @@ public class SoundFXManager : MonoBehaviour
     [Header("Player Settings")]
     [SerializeField] private Transform player;
     [SerializeField] private float detectionRange = 10f;
-
-    [Header("Audio Source Pool Settings")]
-    [SerializeField] private int poolSize = 2;
-    private Queue<AudioSource> audioSourcePool = new Queue<AudioSource>();
 
     private Dictionary<AudioSource, GameObject> activeSounds = new Dictionary<AudioSource, GameObject>();
     private float baseHeight = 0f;
@@ -35,43 +35,7 @@ public class SoundFXManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
-        // Initialize the audio source pool
-        InitializeAudioSourcePool();
         visualAudio.gameObject.SetActive(false);
-    }
-
-    private void InitializeAudioSourcePool()
-    {
-        for (int i = 0; i < poolSize; i++)
-        {
-            AudioSource pooledSource = new GameObject("PooledAudioSource").AddComponent<AudioSource>();
-            pooledSource.gameObject.SetActive(false);
-            audioSourcePool.Enqueue(pooledSource);
-        }
-    }
-
-    private AudioSource GetPooledAudioSource()
-    {
-        if (audioSourcePool.Count > 0)
-        {
-            AudioSource source = audioSourcePool.Dequeue();
-            source.gameObject.SetActive(true);
-            return source;
-        }
-        else
-        {
-            Debug.LogWarning("AudioSource pool is empty. Consider increasing the pool size.");
-            return new GameObject("TempAudioSource").AddComponent<AudioSource>();
-        }
-    }
-
-    private void ReturnToPool(AudioSource source)
-    {
-        source.Stop();
-        source.clip = null;
-        source.gameObject.SetActive(false);
-        audioSourcePool.Enqueue(source);
     }
 
     // -------------------
@@ -204,123 +168,121 @@ public class SoundFXManager : MonoBehaviour
     // PLAYBACK METHODS
     // -------------------
 
-    public void PlaySoundFXClip(AudioClip clip, Transform spawnTransform, float volume, string soundName)
+    public void PlaySfx(AudioClip clip, Transform spawnTransform, float volume, string soundName)
     {
-        AudioSource audioSource = GetPooledAudioSource();
-        audioSource.transform.position = spawnTransform.position;
-        audioSource.clip = clip;
-        audioSource.volume = volume;
+        if (clip == null)
+        {
+            Debug.LogWarning("PlaySfx: No audio clip provided!");
+            return;
+        }
+
+        // Create a temporary AudioSource
+        GameObject tempAudioSource = new GameObject("NonPlayerAudioSource");
+        tempAudioSource.transform.position = spawnTransform.position;
+
+        AudioSource audioSource = tempAudioSource.AddComponent<AudioSource>();
         audioSource.spatialBlend = 1.0f;
-        audioSource.Play();
+        audioSource.volume = volume;
+        audioSource.outputAudioMixerGroup = soundFXMixerGroup; // Assign the SFX Mixer Group
+
+        // Play the sound using PlayOneShot
+        audioSource.PlayOneShot(clip);
 
         AddSoundEntry(audioSource, spawnTransform.position, soundName);
-        StartCoroutine(ReturnToPoolAfterPlayback(audioSource, clip.length));
+
+        // Destroy the AudioSource after the sound finishes playing
+        Destroy(tempAudioSource, clip.length);
     }
 
-    public void PlaySoundFXClipPlayer(AudioClip clip, Transform spawnTransform, float volume)
-    {
-        AudioSource audioSource = GetPooledAudioSource();
-        audioSource.transform.position = spawnTransform.position;
-        audioSource.clip = clip;
-        audioSource.volume = volume;
-        audioSource.spatialBlend = 1.0f;
-        audioSource.Play();
 
-        StartCoroutine(ReturnToPoolAfterPlayback(audioSource, clip.length));
-    }
-
-    public void PlaySoundFXClipFollowPlayer(AudioClip clip, Transform spawnTransform, float volume)
+    public void PlaySfxPlayer(AudioClip clip, Transform spawnTransform, float volume)
     {
-        AudioSource audioSource = GetPooledAudioSource();
+        if (clip == null)
+        {
+            Debug.LogWarning("PlaySfxPlayer: No audio clip provided!");
+            return;
+        }
+
+        // Create a temporary AudioSource
+        GameObject tempAudioSource = new GameObject("PlayerAudioSource");
+        tempAudioSource.transform.position = spawnTransform.position;
+
+        AudioSource audioSource = tempAudioSource.AddComponent<AudioSource>();
         audioSource.transform.SetParent(spawnTransform); // Parent to the spawnTransform (player)
-        audioSource.transform.localPosition = Vector3.zero; // Ensure it starts at the correct position relative to the player
-        audioSource.clip = clip;
-        audioSource.volume = volume;
-        audioSource.spatialBlend = 1.0f; // Ensure spatial audio for 3D effects
-        audioSource.Play();
-
-        // Start a coroutine to return the audio source to the pool after playback
-        StartCoroutine(ReturnToPoolAfterPlayback(audioSource, clip.length));
-    }
-
-
-    public void PlayRandomSoundFXClipFollowPlayer(AudioClip[] clips, Transform spawnTransform, float volume)
-    {
-        if (clips == null || clips.Length == 0)
-        {
-            Debug.LogWarning("PlayRandomSoundFXClipFollowPlayer: No audio clips provided!");
-            return;
-        }
-
-        // Select a random clip
-        int rand = Random.Range(0, clips.Length);
-        AudioClip selectedClip = clips[rand];
-
-        AudioSource audioSource = GetPooledAudioSource();
-        audioSource.transform.SetParent(spawnTransform); // Parent to the spawnTransform (player)
-        audioSource.transform.localPosition = Vector3.zero; // Ensure it starts at the correct position relative to the player
-        audioSource.clip = selectedClip;
-        audioSource.volume = volume;
-        audioSource.spatialBlend = 1.0f; // Ensure spatial audio for 3D effects
-        audioSource.Play();
-
-        // Return the AudioSource to the pool after playback
-        StartCoroutine(ReturnToPoolAfterPlayback(audioSource, selectedClip.length));
-    }
-
-
-    public void PlayRandomSoundFXClip(AudioClip[] clips, Transform spawnTransform, float volume)
-    {
-        if (clips == null || clips.Length == 0)
-        {
-            Debug.LogWarning("PlayRandomSoundFXClip: No audio clips provided!");
-            return;
-        }
-
-        int rand = Random.Range(0, clips.Length);
-        AudioClip selectedClip = clips[rand];
-
-        AudioSource audioSource = GetPooledAudioSource();
-        audioSource.transform.position = spawnTransform.position;
-        audioSource.clip = selectedClip;
-        audioSource.volume = volume;
+        audioSource.transform.localPosition = Vector3.zero;
         audioSource.spatialBlend = 1.0f;
-        audioSource.Play();
+        audioSource.volume = volume;
+        audioSource.outputAudioMixerGroup = soundFXMixerGroup; // Assign the SFX Mixer Group
 
-        StartCoroutine(ReturnToPoolAfterPlayback(audioSource, selectedClip.length));
+        // Play the sound using PlayOneShot
+        audioSource.PlayOneShot(clip);
+
+        // Destroy the AudioSource after the sound finishes playing
+        Destroy(tempAudioSource, clip.length);
     }
 
-    public void PlayRandomSoundFXClipPlayer(AudioClip[] clips, Transform spawnTransform, float volume)
+
+    public void PlayRandomSfx(AudioClip[] clips, Transform spawnTransform, float volume, string soundName)
     {
         if (clips == null || clips.Length == 0)
         {
-            Debug.LogWarning("PlayRandomSoundFXClipPlayer: No audio clips provided!");
+            Debug.LogWarning("PlayRandomSfx: No audio clips provided!");
             return;
         }
 
         int rand = Random.Range(0, clips.Length);
         AudioClip selectedClip = clips[rand];
 
-        AudioSource audioSource = GetPooledAudioSource();
-        audioSource.transform.position = spawnTransform.position;
+        // Create a temporary AudioSource
+        GameObject tempAudioSource = new GameObject("TempAudioSource");
+        tempAudioSource.transform.position = spawnTransform.position;
+
+        AudioSource audioSource = tempAudioSource.AddComponent<AudioSource>();
         audioSource.clip = selectedClip;
+        audioSource.spatialBlend = 1.0f;
         audioSource.volume = volume;
-        audioSource.spatialBlend = 1.0f; // Ensure spatial audio
-        audioSource.Play();
+        audioSource.outputAudioMixerGroup = soundFXMixerGroup; // Assign the SFX Mixer Group
 
-        // Return the AudioSource to the pool after playback
-        StartCoroutine(ReturnToPoolAfterPlayback(audioSource, selectedClip.length));
+        // Play the sound using PlayOneShot
+        audioSource.PlayOneShot(selectedClip);
+
+        AddSoundEntry(audioSource, spawnTransform.position, soundName);
+
+        // Destroy the AudioSource after the sound finishes playing
+        Destroy(tempAudioSource, selectedClip.length);
     }
 
-    private IEnumerator ReturnToPoolAfterPlayback(AudioSource audioSource, float delay)
+
+    public void PlayRandomSfxPlayer(AudioClip[] clips, Transform spawnTransform, float volume)
     {
-        yield return new WaitForSeconds(delay);
-
-        if (audioSource != null)
+        if (clips == null || clips.Length == 0)
         {
-            ReturnToPool(audioSource);
+            Debug.LogWarning("PlayRandomSfxPlayer: No audio clips provided!");
+            return;
         }
+
+        int rand = Random.Range(0, clips.Length);
+        AudioClip selectedClip = clips[rand];
+
+        // Create a temporary AudioSource
+        GameObject tempAudioSource = new GameObject("TempAudioSource");
+        tempAudioSource.transform.position = spawnTransform.position;
+
+        AudioSource audioSource = tempAudioSource.AddComponent<AudioSource>();
+        audioSource.transform.SetParent(spawnTransform); // Parent to the spawnTransform (player)
+        audioSource.transform.localPosition = Vector3.zero;
+        audioSource.clip = selectedClip;
+        audioSource.spatialBlend = 1.0f;
+        audioSource.volume = volume;
+        audioSource.outputAudioMixerGroup = soundFXMixerGroup; // Assign the SFX Mixer Group
+
+        // Play the sound using PlayOneShot
+        audioSource.PlayOneShot(selectedClip);
+
+        // Destroy the AudioSource after the sound finishes playing
+        Destroy(tempAudioSource, selectedClip.length);
     }
+
 
     public void PlayLoopingSoundPersistent(Transform source, AudioClip clip, string soundName)
     {
@@ -340,7 +302,7 @@ public class SoundFXManager : MonoBehaviour
         if (audioSource.clip != clip || !audioSource.isPlaying)
         {
             audioSource.clip = clip;
-            audioSource.volume = 0.3f;
+            audioSource.volume = 0.2f;
             audioSource.spatialBlend = 1.0f;
             audioSource.Play();
         }

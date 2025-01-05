@@ -40,7 +40,7 @@ public class PlayerHealth : MonoBehaviour, IDataPersistence
 
     public void TakeDamage(float damage)
     {
-        SoundFXManager.instance.PlayRandomSoundFXClip(hitSounds, transform, 0.3f); // Soundfx for when the player is hit
+        SoundFXManager.instance.PlayRandomSfxPlayer(hitSounds, transform, 0.3f); // Soundfx for when the player is hit
         // Reduce the player's health by the damage amount
         currentHealth -= damage;
         if (currentHealth <= 0)

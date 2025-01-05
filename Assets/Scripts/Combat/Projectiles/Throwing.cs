@@ -117,7 +117,7 @@ public class Throwing : MonoBehaviour, IDataPersistence
         Rigidbody projectileRb = projectile.GetComponent<Rigidbody>();
 
         Vector3 forceDirection = cam.transform.forward;
-        SoundFXManager.instance.PlayRandomSoundFXClipPlayer(throwSounds, transform, 0.1f); // Adds audio for the kunai being thrown 
+        SoundFXManager.instance.PlayRandomSfxPlayer(throwSounds, transform, 0.1f); // Adds audio for the kunai being thrown 
 
         RaycastHit hit;
         if (Physics.Raycast(cam.position, cam.forward, out hit, 500f))

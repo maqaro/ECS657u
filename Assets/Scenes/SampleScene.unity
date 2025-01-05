@@ -43895,12 +43895,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 976c1b09a20296f4b9a4349182630b4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  soundFXMixerGroup: {fileID: 8198768227712865964, guid: f90a78b7e947e964ba6bcba75a8e1916, type: 2}
   visualAudio: {fileID: 1708117518}
   soundListContainer: {fileID: 1344354929}
   soundEntryPrefab: {fileID: 8999246023326467481, guid: bb6bd89fd95eea3449dedea6b6bcf568, type: 3}
   player: {fileID: 2110341023}
   detectionRange: 10
-  poolSize: 10
 --- !u!1 &1666420967
 GameObject:
   m_ObjectHideFlags: 0
