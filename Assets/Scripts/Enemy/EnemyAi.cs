@@ -58,7 +58,7 @@ public class EnemyAi : MonoBehaviour
         handleAnimations();
     }
 
-    // Enemy Behaviour
+    // Enemy Behaviour Finite State Machine
     private void Patroling()
     {
         if (!walkPointSet) SearchWalkPoint();
@@ -131,6 +131,7 @@ public class EnemyAi : MonoBehaviour
         canAttack = true;
     }
 
+    //Allows the player to damage the enemy
     public void TakeDamage(int damage)
     {
         health -= damage;
@@ -138,6 +139,7 @@ public class EnemyAi : MonoBehaviour
         else animator.SetTrigger("Hit");
     }
 
+    //The enemy death state
     private void DestroyEnemy()
     {
         Rigidbody rb = GetComponent<Rigidbody>();
@@ -152,8 +154,10 @@ public class EnemyAi : MonoBehaviour
         AnimationState = "Dead";
     }
 
+    //The animation handlers 
     private void handleAnimations()
     {
+        //Animations for when the enemy is dead
         if (isDead)
         {
             animator.SetBool("Alive", false);
@@ -163,6 +167,7 @@ public class EnemyAi : MonoBehaviour
             return;
         }
 
+        //Animations for the enemy chasing the player
         if (playerInSightRange && !playerInAttackRange)
         {
             if (AnimationState != "Chasing")
@@ -175,6 +180,7 @@ public class EnemyAi : MonoBehaviour
         }
         else if (playerInAttackRange && playerInSightRange)
         {
+            // Setting animations for the enemy attacking the player
             if (AnimationState != "Attacking" && isAttacking)
             {
                 AnimationState = "Attacking";
@@ -185,6 +191,7 @@ public class EnemyAi : MonoBehaviour
         }
         else if (!playerInSightRange && AnimationState != "Dead")
         {
+            // Setting the animation for the enemy patrolling
             if (AnimationState != "Patrolling")
             {
                 AnimationState = "Patrolling";

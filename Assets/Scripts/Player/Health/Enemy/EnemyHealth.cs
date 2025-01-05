@@ -10,7 +10,7 @@ public class EnemyHealth : MonoBehaviour
     public float maxHealth = 100;
     public float currentHealth = 100;
     private float smoothSpeed = 0.05f;
-    private SwordSwing swordSwing; 
+    private SwordSwing swordSwing; // Reference to the swordswing
 
     void Start()
     {
