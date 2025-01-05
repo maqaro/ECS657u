@@ -40,6 +40,7 @@ public class Dashing : MonoBehaviour
     private Vector2 moveInput;
 
     private bool isAirDashing;
+    private DialogueUI dialogueUI; // Reference to DialogueUI
 
     // Initializes references and sets up input bindings
     void Start()
@@ -61,6 +62,9 @@ public class Dashing : MonoBehaviour
         {
             cooldownImage.fillAmount = 0f; // Start empty
         }
+
+        // Find the DialogueUI in the scene
+        dialogueUI = FindObjectOfType<DialogueUI>();
     }
 
     // Handles cooldown for dashing
@@ -85,9 +89,15 @@ public class Dashing : MonoBehaviour
         if (dashAction != null) dashAction.performed -= ctx => Dash();
     }
 
-    // Executes the dash action when triggered
+    // Executes the dash action when triggered, ensuring dashing is disabled during dialogue
     private void Dash()
     {
+        // Prevent dashing if dialogue is active
+        if (dialogueUI != null && dialogueUI.IsDialogueActive)
+        {
+            return;
+        }
+
         if (dashCdTimer > 0 || (isAirDashing && !pm.grounded) || pm == null || rb == null || orientation == null || PlayerCam == null)
             return;
 

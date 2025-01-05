@@ -27,7 +27,9 @@ public class Grapple : MonoBehaviour
     private InputAction grappleAction; // Define the grapple action
 
     private bool isGrappling;
+    private DialogueUI dialogueUI; // Reference to DialogueUI
 
+    // Initializes references and sets up input bindings
     void Start()
     {
         pm = GetComponent<PlayerMovement>();
@@ -39,6 +41,9 @@ public class Grapple : MonoBehaviour
         // Enable the grapple action and bind the StartGrapple method to its performed event
         grappleAction.Enable();
         grappleAction.performed += ctx => StartGrapple();
+
+        // Find the DialogueUI in the scene
+        dialogueUI = FindObjectOfType<DialogueUI>();
     }
 
     private void LateUpdate()
@@ -64,8 +69,15 @@ public class Grapple : MonoBehaviour
         if (grappleAction != null) grappleAction.performed -= ctx => StartGrapple();
     }
 
+    // Starts the grappling process, ensuring it is disabled during dialogue
     private void StartGrapple()
     {
+        // Prevent grappling if dialogue is active
+        if (dialogueUI != null && dialogueUI.IsDialogueActive)
+        {
+            return;
+        }
+
         if (grapplingCDTimer > 0 || isGrappling || pm == null || cam == null || lr == null || gunTip == null)
             return;
 
@@ -88,7 +100,7 @@ public class Grapple : MonoBehaviour
         lr.SetPosition(1, grapplePoint);
     }
 
-
+    // Executes the grappling action
     private void ExecuteGrapple()
     {
         // Execute the grapple
@@ -107,6 +119,7 @@ public class Grapple : MonoBehaviour
         Invoke(nameof(StopGrapple), 1f);
     }
 
+    // Stops the grappling process
     public void StopGrapple()
     {
         pm.freeze = false;
