@@ -12,9 +12,11 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private AudioClip[] jumpSounds;
     [SerializeField] private AudioClip walkSound;
     [SerializeField] private AudioClip sprintSound;
+    [SerializeField] private AudioClip climbingSound;
 
     private bool isWalkingSoundPlaying = false;
     private bool isSprintingSoundPlaying = false;
+    private bool isClimbingSoundPlaying = false;
 
     public DialogueUI DialogueUI => dialogueUI;
     public IInteractable Interactable { get; set; }
@@ -303,22 +305,57 @@ public class PlayerMovement : MonoBehaviour
         playerCollider.height = originalColliderHeight;
     }
 
-        // Methods for delayed sound playback
-        private void StartSprintSound()
-        {
-            if (!isSprintingSoundPlaying) return; // Ensure the state hasn't changed
-            SoundFXManager.instance.PlayLoopingSoundPersistent(transform, sprintSound, "Sprinting");
-        }
+    // Methods for delayed sound playback
+    private void StartSprintingSound()
+    {
+        if (!isSprintingSoundPlaying) return; // Ensure the state hasn't changed
+        SoundFXManager.instance.PlayLoopingSoundPersistent(transform, sprintSound, "Sprinting");
+        isSprintingSoundPlaying = true;
+    }
 
-        private void StartWalkingSound()
-        {
-            if (!isWalkingSoundPlaying) return; // Ensure the state hasn't changed
-            SoundFXManager.instance.PlayLoopingSoundPersistent(transform, walkSound, "Walking");
-        }
+    private void StartWalkingSound()
+    {
+        if (!isWalkingSoundPlaying) return; // Ensure the state hasn't changed
+        SoundFXManager.instance.PlayLoopingSoundPersistent(transform, walkSound, "Walking");
+        isWalkingSoundPlaying = true;
+    }
+
+    private void StartClimbingSound()
+    {
+        if (!isClimbingSoundPlaying) return; // Ensure sound only plays when necessary and exists
+
+        SoundFXManager.instance.PlayLoopingSoundPersistent(transform, climbingSound, "Climbing");
+        isClimbingSoundPlaying = true;
+    }
+
+    private void StopClimbingSound()
+    {
+        if (!isClimbingSoundPlaying) return; // Ensure we don't stop a sound that's not playing
+        SoundFXManager.instance.StopLoopingSoundPersistent(transform);
+        isClimbingSoundPlaying = false;
+    }
+
 
     // handling the movement state
     public void StateHandler()
     {
+        // Stop sounds when transitioning out of states
+        if (state != MovementState.walking && isWalkingSoundPlaying)
+        {
+            SoundFXManager.instance.StopLoopingSoundPersistent(transform);
+            isWalkingSoundPlaying = false;
+        }
+        if (state != MovementState.sprinting && isSprintingSoundPlaying)
+        {
+            SoundFXManager.instance.StopLoopingSoundPersistent(transform);
+            isSprintingSoundPlaying = false;
+        }
+        if (state != MovementState.climbing && isClimbingSoundPlaying)
+        {
+            SoundFXManager.instance.StopLoopingSoundPersistent(transform);
+            isClimbingSoundPlaying = false;
+        }
+
         // Freeze state stops all movement
         if (freeze)
         {
@@ -342,18 +379,6 @@ public class PlayerMovement : MonoBehaviour
             sprintInput = false;
             jumpAction.Disable();
             crouchAction.Disable();
-
-            if (isSprintingSoundPlaying)
-            {
-                SoundFXManager.instance.StopLoopingSoundPersistent(transform);
-                isSprintingSoundPlaying = false;
-            }
-
-            if (isWalkingSoundPlaying)
-            {
-                SoundFXManager.instance.StopLoopingSoundPersistent(transform);
-                isWalkingSoundPlaying = false;
-            }
 
 
             return;
@@ -379,6 +404,14 @@ public class PlayerMovement : MonoBehaviour
         if (climbing)
         {
             state = MovementState.climbing;
+
+            // Start climbing sound
+            if (!isClimbingSoundPlaying)
+            {
+                Invoke(nameof(StartClimbingSound), 0.01f);
+                isClimbingSoundPlaying = true;
+            }
+
             SmoothSpeedChange(climbSpeed, 0.3f); // Smooth transition to climb speed
             return;
         }
@@ -392,14 +425,14 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Handle sprinting
-        if (grounded && sprintInput)
+        if (grounded && sprintInput && rb.velocity.magnitude > 0.1f) 
         {
             state = MovementState.sprinting;
 
             // Start or keep looping the sprint sound with a delay
             if (!isSprintingSoundPlaying)
             {
-                Invoke(nameof(StartSprintSound), 0.3f); // Delay sprint sound by 0.3 seconds
+                Invoke(nameof(StartSprintingSound), 0.03f); // Delay sprint sound by 0.3 seconds
                 isSprintingSoundPlaying = true;
             }
 
@@ -448,13 +481,11 @@ public class PlayerMovement : MonoBehaviour
 
             return;
         }
-        else
+        
+        if (isWalkingSoundPlaying)
         {
-            if (isWalkingSoundPlaying)
-            {
-                SoundFXManager.instance.StopLoopingSoundPersistent(transform);
-                isWalkingSoundPlaying = false;
-            }
+            SoundFXManager.instance.StopLoopingSoundPersistent(transform);
+            isWalkingSoundPlaying = false;
         }
 
         // Handle walking
