@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bba3c12bd6123344fbf3800e779a51ff, type: 3}
+  m_Name: StoryStart
+  m_EditorClassIdentifier: 
+  dialogue:
+  - Haruhiko sama?! You have returned to us?
+  - After 8 long years you have finally returned to the land of Hiroshima. We thought
+    you had died along with the Asano clan in the final clash. How did you survive?
+    Were there any other survivors? But more importantly...
+  - What is the reason for your return?
+  responses:
+  - responseText: For Vengnence
+    dialogueObject: {fileID: 11400000, guid: 2a98dbd4aea7b3e42b614399338a44b5, type: 2}

@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bba3c12bd6123344fbf3800e779a51ff, type: 3}
+  m_Name: FinalResponse
+  m_EditorClassIdentifier: 
+  dialogue:
+  - 'Haruhiko-sama!! Is this true? You know how frowned upon the ninjutsu arts are
+    as one of Samurai descent. '
+  - How could you betray your creed for such meesly...
+  - You know what, my apologies sire. It must have been hard on you these past 8
+    years. You need not listen to the lectures of an old man such as myself.
+  - Just past this tori gate lies a difficult journey ahead of you. Beware of the
+    road ahead and may you venture prove fruitfull.
+  responses:
+  - responseText: I'll return
+    dialogueObject: {fileID: 0}
