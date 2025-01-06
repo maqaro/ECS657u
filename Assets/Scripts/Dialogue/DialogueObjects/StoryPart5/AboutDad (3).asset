@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bba3c12bd6123344fbf3800e779a51ff, type: 3}
+  m_Name: AboutDad (3)
+  m_EditorClassIdentifier: 
+  dialogue:
+  - But to commit seppuku. Lord Asano as great as he was feared your father who was
+    even greater.
+  - He was driven to such a corner that he had to take your mother hostage in order
+    to best your father in their match.
+  - Young warrior, Haruhiko sama. Descendant of the great Nozarashi. Your final foe
+    lies ahead. May fortune be with you on this final batle.
+  responses: []

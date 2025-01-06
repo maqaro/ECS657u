@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bba3c12bd6123344fbf3800e779a51ff, type: 3}
+  m_Name: StoryPart2
+  m_EditorClassIdentifier: 
+  dialogue:
+  - Haruhiko sama! Over here!
+  - Great you may not remember but I am Kento Miyagi. I served as your fathers retainer
+    for many years.
+  - Though I may not be able to follow you on your thorny path of revenge I will
+    provide aid as best I can as you venture to your final battle.
+  responses: []
