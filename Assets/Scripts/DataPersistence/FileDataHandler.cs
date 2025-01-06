@@ -11,6 +11,7 @@ public class FileDataHandler : IDataHandler
 
     public FileDataHandler(string dataDirPath, string dataFileName)
     {
+        //set the dataDirPath and dataFileName fields
         this.dataDirPath = dataDirPath;
         this.dataFileName = dataFileName;
     }
