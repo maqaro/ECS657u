@@ -19,7 +19,7 @@ public class GameData
     public GameData()
     {
         this.health = 100;
-        this.kunaiCount = 100;
+        this.kunaiCount = 25;
         this.spawnPoint = Vector3.zero;
         hasReachedCheckpoint = false;
         checkpointPosition = Vector3.zero;

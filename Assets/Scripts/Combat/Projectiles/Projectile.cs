@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    // How much damage this projectile deals to enemies
+    [SerializeField] private float damage = 10f; // Default damage value
     private SwordSwing swordSwing;
 
     // Component references
@@ -16,7 +16,16 @@ public class Projectile : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         // Get the SwordSwing component from the player
-        swordSwing = GameObject.FindGameObjectWithTag("Player").GetComponent<SwordSwing>();
+        // Try to get the SwordSwing component, but don't rely on it
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+        {
+            swordSwing = player.GetComponent<SwordSwing>();
+            if (swordSwing != null)
+            {
+                damage = swordSwing.damage; // Use the sword's damage if available
+            }
+        }
     }
 
     // Called when this projectile collides with another collider
@@ -47,8 +56,8 @@ public class Projectile : MonoBehaviour
         EnemyAi enemy = collision.gameObject.GetComponent<EnemyAi>();
         if (enemy != null) // if the collided object is an enemy
         {
-            // Apply damage to the enemy
-            enemy.health -= swordSwing.damage;
+            // Use the damage variable directly instead of accessing through swordSwing
+            enemy.health -= damage;
             if (enemy.health <= 0)
             {
                 enemy.health = 0;
@@ -63,7 +72,7 @@ public class Projectile : MonoBehaviour
         TargetEnemy target = collision.gameObject.GetComponent<TargetEnemy>();
         if (target != null) // if the collided object is a target
         {
-            target.TakeDamage((int)swordSwing.damage);
+            target.TakeDamage((int)damage);
             Destroy(gameObject); // Destroys the target once enough damage is done  
         }
     }

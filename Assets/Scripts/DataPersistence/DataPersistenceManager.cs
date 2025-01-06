@@ -20,6 +20,7 @@ public class DataPersistenceManager : MonoBehaviour
     public void Awake()
     {
         if (instance != null && instance != this)
+        // If there is already an instance of the data persistence manager in the scene, destroy the newest one
         {
             Debug.Log("Found more than one data persistence manager instance in the scene. Destroying newest one");
             Destroy(this.gameObject);
@@ -41,35 +42,39 @@ public class DataPersistenceManager : MonoBehaviour
 
     private void OnEnable()
     {
+        // Subscribe to scene loaded and unloaded events
         SceneManager.sceneLoaded += OnSceneLoaded;
         SceneManager.sceneUnloaded += OnSceneUnloaded;
     }
 
     private void OnDisable()
     {
+        // Unsubscribe from scene loaded and unloaded events
         SceneManager.sceneLoaded -= OnSceneLoaded;
         SceneManager.sceneUnloaded -= OnSceneUnloaded;  
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        // Find all objects in the scene that implement the IDataPersistence interface
         this.dataPersistenceObjects = FindAllDataPersistenceObjects();
         LoadGame();
     }
 
     private void OnSceneUnloaded(Scene scene)
     {
+        // Save game data when scene is unloaded
         SaveGame();
     }
 
     public void NewGame()
     {
+        // Create a new instance of the game data
         this.gameData = new GameData();
     }
 
     public void LoadGame()
     {
-        // TODO:
         // Load game data from file
         this.gameData = dataHandler.Load();
 
@@ -110,6 +115,7 @@ public class DataPersistenceManager : MonoBehaviour
 
     private void OnApplicationQuit()
     {
+        // Save game data when application is quit
         SaveGame();
     }
 
@@ -124,6 +130,7 @@ public class DataPersistenceManager : MonoBehaviour
 
     public bool HasGameData()
     {
+        // Check if game data is not null
         return gameData != null;
     }
 }
