@@ -29,7 +29,6 @@ public class MovingDoor : MonoBehaviour
     {
         if (leftDoor == null || rightDoor == null)
         {
-            Debug.LogError("Left or Right door is not assigned.");
             return;
         }
 

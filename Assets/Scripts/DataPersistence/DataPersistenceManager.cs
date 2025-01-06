@@ -22,7 +22,6 @@ public class DataPersistenceManager : MonoBehaviour
         if (instance != null && instance != this)
         // If there is already an instance of the data persistence manager in the scene, destroy the newest one
         {
-            Debug.Log("Found more than one data persistence manager instance in the scene. Destroying newest one");
             Destroy(this.gameObject);
             return;
         }

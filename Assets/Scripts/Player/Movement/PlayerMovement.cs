@@ -150,11 +150,6 @@ public class PlayerMovement : MonoBehaviour
             interactAction.performed += ctx => OnInteract();
             crouchAction.canceled += ctx => OnCrouchEnd();
         }
-        else
-        {
-            // print error if empty
-            Debug.Log("Player Action Map not found!");
-        }
     }
 
     void OnEnable()

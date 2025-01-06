@@ -25,7 +25,6 @@ public class ExtendablePlatform : MonoBehaviour
     {
         if (extendablePlatform == null)
         {
-            Debug.LogError("Extendable platform is not assigned.");
             return;
         }
 

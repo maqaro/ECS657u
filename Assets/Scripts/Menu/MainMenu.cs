@@ -97,7 +97,6 @@ public class MainMenu : MonoBehaviour
 
     public void QuitGame()
     {
-        Debug.Log("QUIT FUNCTION WORKED");
         Application.Quit();
     }
 
@@ -130,7 +129,6 @@ public class MainMenu : MonoBehaviour
     {
         mainSensitivity = sensitivity; // No need to round since it's now a float
         SensitivityTextValue.text = sensitivity.ToString("0.0"); // Display as a float
-        Debug.Log($"Sensitivity set to: {mainSensitivity}");
     }
 
     public void GameplayApply()

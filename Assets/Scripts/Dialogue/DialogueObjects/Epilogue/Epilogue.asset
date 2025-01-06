@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bba3c12bd6123344fbf3800e779a51ff, type: 3}
+  m_Name: Epilogue
+  m_EditorClassIdentifier: 
+  dialogue:
+  - Haruhiko sama, you've fought well. Your father would indeed be so very proud
+    of you for restoring honour back to our lineage.
+  - Behind me is your escape from this cursed land. Flee before the daimyo and the
+    shogunate catch you. May you be blessed wherever the wind takes you.
+  responses: []

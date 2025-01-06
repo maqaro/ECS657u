@@ -15,11 +15,6 @@ public class LightPressurePlate : MonoBehaviour
     {
         // Get the MovingDoor script from the door GameObject
         doorScript = door.GetComponent<MovingDoor>();
-
-        if (doorScript == null)
-        {
-            Debug.LogError("MovingDoor script not found on the door object!");
-        }
     }
 
     public void CheckLightBeam()
