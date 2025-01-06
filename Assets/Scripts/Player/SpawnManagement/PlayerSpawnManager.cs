@@ -107,15 +107,15 @@ public class PlayerSpawnManager : MonoBehaviour, IDataPersistence
     private void OnTriggerEnter(Collider other)
     {
         // Check if the trigger is a spawn point
-        if (other.CompareTag("SpawnPoint"))
-        {
-            hasReachedCheckpoint = true;
-            spawnPoint = other.transform;
-            lastCheckpointPosition = spawnPoint.position;
+        // if (other.CompareTag("SpawnPoint"))
+        // {
+        //     hasReachedCheckpoint = true;
+        //     spawnPoint = other.transform;
+        //     lastCheckpointPosition = spawnPoint.position;
             
-        }
+        // }
         // Check if the trigger is a checkpoint
-        else if (other.CompareTag("Checkpoint"))
+        if (other.CompareTag("Checkpoint") || other.CompareTag("SpawnPoint"))
         {
             hasReachedCheckpoint = true;
             spawnPoint = other.transform;
