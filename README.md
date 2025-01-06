@@ -39,10 +39,23 @@ The game concept is a First-Person 3D Movement-Platformer where the play has to 
         - E - Pick-up Throwables
         - Right-Click (M2) - Rotate picked up item
         - Right-Click (M2) - Throw Kunai (Main throwable)
+        - LeftArrow - Move Mirror Left
+        - RightArrow - Move Mirror Right
      
  4. Assets:
     - Low Poly Human - https://assetstore.unity.com/packages/3d/characters/humanoids/fantasy/free-low-poly-human-rpg-character-219979
     - Skinned Mesh Renderer - https://assetstore.unity.com/packages/tools/utilities/skinned-mesh-transfer-219764?aid=1011liTo7
+    - Dash - https://www.youtube.com/watch?v=b9hBHt317mw
+    - DOTween (HOTween v2) https://assetstore.unity.com/packages/tools/animation/dotween-hotween-v2-27676
+    - Voices - Essentials - https://assetstore.unity.com/packages/audio/sound-fx/voices/voices-essentials-214441
+    - Nature - Essentials - https://assetstore.unity.com/packages/audio/ambient/nature/nature-essentials-208227
+    - Dark Atmospheric FREE TRACK Music Pack | Adaptive Tracks - https://assetstore.unity.com/packages/audio/music/electronic/dark-atmospheric-free-track-music-pack-adaptive-tracks-244634
+    - SwordSoundPack - https://assetstore.unity.com/packages/audio/sound-fx/weapons/swordsoundpack-177824
+    - bush noise - https://www.youtube.com/watch?v=oHQFMa9ObZE
+    - brown noise - https://www.youtube.com/watch?v=rmzvVYaYqq0
+    - crumble - https://www.youtube.com/watch?v=RvKKLuQ9jpw
+    - Sliding Gate Sound Effects - https://www.fesliyanstudios.com/royalty-free-sound-effects-download/sliding-gate-232
+    - 2D SKILLS ICON SET - HANDPAINTED - https://assetstore.unity.com/packages/2d/gui/icons/2d-skills-icon-set-handpainted-210622
 
 ### Creators
 - [Ade Shitta](https://github.com/ade-shitta)
