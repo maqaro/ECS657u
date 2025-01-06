@@ -4356,7 +4356,6 @@ GameObject:
   - component: {fileID: 137395381}
   - component: {fileID: 137395380}
   - component: {fileID: 137395382}
-  - component: {fileID: 137395385}
   m_Layer: 9
   m_Name: Player
   m_TagString: Player
@@ -4402,6 +4401,9 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 80cc6816623c9a04580970e36613d8c4, type: 3}
   - {fileID: 8300000, guid: cad57fcf83264a4489ae5c41b55e7a8b, type: 3}
   - {fileID: 8300000, guid: 132005c60d8148440b6f375a773d8f8e, type: 3}
+  deathSounds:
+  - {fileID: 8300000, guid: 6857c17d0b39a594298d2c0ebc09f389, type: 3}
+  - {fileID: 8300000, guid: 9ac9e455e130968459fc7ff35a33428c, type: 3}
   maxHealth: 100
   currentHealth: 0
   healthbar: {fileID: 898016014}
@@ -4727,20 +4729,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ffc5c3b3fa6a004eba6e4e8d84656d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &137395385
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 137395363}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 94accd2f88fa3ac489ca0b2fdf3d9b9f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  audioSource: {fileID: 0}
-  player: {fileID: 0}
 --- !u!1001 &140567460
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4792,6 +4780,18 @@ PrefabInstance:
     - target: {fileID: 4224752255811457030, guid: adefb9a6cc9abe645a00dc9cd9de20e0, type: 3}
       propertyPath: randomStart
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4224752255811457030, guid: adefb9a6cc9abe645a00dc9cd9de20e0, type: 3}
+      propertyPath: pendulumSound
+      value: 
+      objectReference: {fileID: 8300000, guid: a896906f400e4974ba64e7c93a4294d9, type: 3}
+    - target: {fileID: 4224752255811457030, guid: adefb9a6cc9abe645a00dc9cd9de20e0, type: 3}
+      propertyPath: soundFXMixerGroup
+      value: 
+      objectReference: {fileID: 8198768227712865964, guid: f90a78b7e947e964ba6bcba75a8e1916, type: 2}
+    - target: {fileID: 4224752255811457030, guid: adefb9a6cc9abe645a00dc9cd9de20e0, type: 3}
+      propertyPath: pendulumSoundVolume
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 4485540512974686503, guid: adefb9a6cc9abe645a00dc9cd9de20e0, type: 3}
       propertyPath: m_Name
@@ -5529,6 +5529,8 @@ MonoBehaviour:
   distance: 5
   direction: {x: 0, y: 0, z: -2}
   isOpen: 0
+  platformMoveSound: {fileID: 0}
+  soundFXMixerGroup: {fileID: 0}
 --- !u!65 &175496849
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7506,6 +7508,8 @@ MonoBehaviour:
   distance: 5
   direction: {x: 0, y: 1, z: 0}
   isOpen: 0
+  platformMoveSound: {fileID: 8300000, guid: 541c344cb5bae27469b4c138c69c76d7, type: 3}
+  soundFXMixerGroup: {fileID: 8198768227712865964, guid: f90a78b7e947e964ba6bcba75a8e1916, type: 2}
 --- !u!1 &260159392
 GameObject:
   m_ObjectHideFlags: 0
@@ -7710,6 +7714,18 @@ PrefabInstance:
     - target: {fileID: 4224752255811457030, guid: adefb9a6cc9abe645a00dc9cd9de20e0, type: 3}
       propertyPath: randomStart
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4224752255811457030, guid: adefb9a6cc9abe645a00dc9cd9de20e0, type: 3}
+      propertyPath: pendulumSound
+      value: 
+      objectReference: {fileID: 8300000, guid: a896906f400e4974ba64e7c93a4294d9, type: 3}
+    - target: {fileID: 4224752255811457030, guid: adefb9a6cc9abe645a00dc9cd9de20e0, type: 3}
+      propertyPath: soundFXMixerGroup
+      value: 
+      objectReference: {fileID: 8198768227712865964, guid: f90a78b7e947e964ba6bcba75a8e1916, type: 2}
+    - target: {fileID: 4224752255811457030, guid: adefb9a6cc9abe645a00dc9cd9de20e0, type: 3}
+      propertyPath: pendulumSoundVolume
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 4485540512974686503, guid: adefb9a6cc9abe645a00dc9cd9de20e0, type: 3}
       propertyPath: m_Name
@@ -10484,6 +10500,8 @@ MonoBehaviour:
   disappearTime: 1
   canReset: 1
   resetTime: 1
+  crumbleSound: {fileID: 8300000, guid: d3009baea443fc540bc2da58a01c08ab, type: 3}
+  soundOrigin: {fileID: 0}
 --- !u!95 &341648889
 Animator:
   serializedVersion: 7
@@ -12205,6 +12223,8 @@ MonoBehaviour:
   distance: 5
   direction: {x: 0, y: 0, z: -2}
   isOpen: 0
+  platformMoveSound: {fileID: 0}
+  soundFXMixerGroup: {fileID: 0}
 --- !u!65 &425567185
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -16736,6 +16756,8 @@ MonoBehaviour:
   distance: 5
   direction: {x: 0, y: 1, z: 0}
   isOpen: 0
+  platformMoveSound: {fileID: 0}
+  soundFXMixerGroup: {fileID: 0}
 --- !u!1 &597169538
 GameObject:
   m_ObjectHideFlags: 0
@@ -19575,6 +19597,8 @@ MonoBehaviour:
   disappearTime: 1
   canReset: 1
   resetTime: 1
+  crumbleSound: {fileID: 8300000, guid: d3009baea443fc540bc2da58a01c08ab, type: 3}
+  soundOrigin: {fileID: 0}
 --- !u!95 &729118295
 Animator:
   serializedVersion: 7
@@ -19920,6 +19944,8 @@ MonoBehaviour:
   disappearTime: 1
   canReset: 1
   resetTime: 1
+  crumbleSound: {fileID: 8300000, guid: d3009baea443fc540bc2da58a01c08ab, type: 3}
+  soundOrigin: {fileID: 0}
 --- !u!95 &738749060
 Animator:
   serializedVersion: 7
@@ -21353,6 +21379,8 @@ MonoBehaviour:
   distance: 5
   direction: {x: 0, y: 1, z: 0}
   isOpen: 0
+  platformMoveSound: {fileID: 0}
+  soundFXMixerGroup: {fileID: 0}
 --- !u!1 &788728410
 GameObject:
   m_ObjectHideFlags: 0
@@ -23722,6 +23750,8 @@ MonoBehaviour:
   distance: 5
   direction: {x: 0, y: 0, z: -2}
   isOpen: 0
+  platformMoveSound: {fileID: 0}
+  soundFXMixerGroup: {fileID: 0}
 --- !u!65 &859924812
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -24115,6 +24145,8 @@ MonoBehaviour:
   disappearTime: 1
   canReset: 1
   resetTime: 1
+  crumbleSound: {fileID: 8300000, guid: d3009baea443fc540bc2da58a01c08ab, type: 3}
+  soundOrigin: {fileID: 0}
 --- !u!95 &867371276
 Animator:
   serializedVersion: 7
@@ -27705,6 +27737,8 @@ MonoBehaviour:
   distance: 5
   direction: {x: 0, y: 1, z: 0}
   isOpen: 0
+  platformMoveSound: {fileID: 0}
+  soundFXMixerGroup: {fileID: 0}
 --- !u!4 &1003493432 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 285742891264789429, guid: 21b433fd33171954a955cf6b1203c0f6, type: 3}
@@ -29530,6 +29564,8 @@ MonoBehaviour:
   disappearTime: 1
   canReset: 1
   resetTime: 1
+  crumbleSound: {fileID: 8300000, guid: d3009baea443fc540bc2da58a01c08ab, type: 3}
+  soundOrigin: {fileID: 0}
 --- !u!95 &1052518548
 Animator:
   serializedVersion: 7
@@ -31174,6 +31210,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: MovingDoors2
       objectReference: {fileID: 0}
+    - target: {fileID: 8920021458755985940, guid: d3941b42e3a11224eabfe3b7d0d05294, type: 3}
+      propertyPath: doorMoveSound
+      value: 
+      objectReference: {fileID: 8300000, guid: f708335cb2264fc4a9e8f47d2fcec31f, type: 3}
+    - target: {fileID: 8920021458755985940, guid: d3941b42e3a11224eabfe3b7d0d05294, type: 3}
+      propertyPath: soundFXMixerGroup
+      value: 
+      objectReference: {fileID: 8198768227712865964, guid: f90a78b7e947e964ba6bcba75a8e1916, type: 2}
+    - target: {fileID: 8920021458755985940, guid: d3941b42e3a11224eabfe3b7d0d05294, type: 3}
+      propertyPath: doorOpenCloseSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 85e6ac3214cfdf349bcc9c50e4fac7f7, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -31645,6 +31693,8 @@ MonoBehaviour:
   distance: 5
   direction: {x: 0, y: 1, z: 0}
   isOpen: 0
+  platformMoveSound: {fileID: 0}
+  soundFXMixerGroup: {fileID: 0}
 --- !u!1001 &1134253647
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -33176,6 +33226,8 @@ MonoBehaviour:
   distance: 5
   direction: {x: 0, y: 1, z: 0}
   isOpen: 0
+  platformMoveSound: {fileID: 8300000, guid: 541c344cb5bae27469b4c138c69c76d7, type: 3}
+  soundFXMixerGroup: {fileID: 8198768227712865964, guid: f90a78b7e947e964ba6bcba75a8e1916, type: 2}
 --- !u!4 &1174498465 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8631126763600802238, guid: 4164184bb16958f46a7a73cc98fc2a90, type: 3}
@@ -35574,6 +35626,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: MovingDoors1
       objectReference: {fileID: 0}
+    - target: {fileID: 8920021458755985940, guid: d3941b42e3a11224eabfe3b7d0d05294, type: 3}
+      propertyPath: doorMoveSound
+      value: 
+      objectReference: {fileID: 8300000, guid: f708335cb2264fc4a9e8f47d2fcec31f, type: 3}
+    - target: {fileID: 8920021458755985940, guid: d3941b42e3a11224eabfe3b7d0d05294, type: 3}
+      propertyPath: soundFXMixerGroup
+      value: 
+      objectReference: {fileID: 8198768227712865964, guid: f90a78b7e947e964ba6bcba75a8e1916, type: 2}
+    - target: {fileID: 8920021458755985940, guid: d3941b42e3a11224eabfe3b7d0d05294, type: 3}
+      propertyPath: doorOpenCloseSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 85e6ac3214cfdf349bcc9c50e4fac7f7, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -35761,6 +35825,18 @@ PrefabInstance:
       propertyPath: isOpen
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8920021458755985940, guid: d3941b42e3a11224eabfe3b7d0d05294, type: 3}
+      propertyPath: doorMoveSound
+      value: 
+      objectReference: {fileID: 8300000, guid: f708335cb2264fc4a9e8f47d2fcec31f, type: 3}
+    - target: {fileID: 8920021458755985940, guid: d3941b42e3a11224eabfe3b7d0d05294, type: 3}
+      propertyPath: soundFXMixerGroup
+      value: 
+      objectReference: {fileID: 8198768227712865964, guid: f90a78b7e947e964ba6bcba75a8e1916, type: 2}
+    - target: {fileID: 8920021458755985940, guid: d3941b42e3a11224eabfe3b7d0d05294, type: 3}
+      propertyPath: doorOpenCloseSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 85e6ac3214cfdf349bcc9c50e4fac7f7, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -36658,6 +36734,8 @@ MonoBehaviour:
   distance: 5
   direction: {x: 0, y: 1, z: 0}
   isOpen: 0
+  platformMoveSound: {fileID: 0}
+  soundFXMixerGroup: {fileID: 0}
 --- !u!1001 &1300055528
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -39251,6 +39329,18 @@ PrefabInstance:
       propertyPath: randomStart
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4224752255811457030, guid: adefb9a6cc9abe645a00dc9cd9de20e0, type: 3}
+      propertyPath: pendulumSound
+      value: 
+      objectReference: {fileID: 8300000, guid: a896906f400e4974ba64e7c93a4294d9, type: 3}
+    - target: {fileID: 4224752255811457030, guid: adefb9a6cc9abe645a00dc9cd9de20e0, type: 3}
+      propertyPath: soundFXMixerGroup
+      value: 
+      objectReference: {fileID: 8198768227712865964, guid: f90a78b7e947e964ba6bcba75a8e1916, type: 2}
+    - target: {fileID: 4224752255811457030, guid: adefb9a6cc9abe645a00dc9cd9de20e0, type: 3}
+      propertyPath: pendulumSoundVolume
+      value: 0.3
+      objectReference: {fileID: 0}
     - target: {fileID: 4485540512974686503, guid: adefb9a6cc9abe645a00dc9cd9de20e0, type: 3}
       propertyPath: m_Name
       value: Hammer
@@ -41309,6 +41399,8 @@ MonoBehaviour:
   disappearTime: 1
   canReset: 1
   resetTime: 1
+  crumbleSound: {fileID: 8300000, guid: d3009baea443fc540bc2da58a01c08ab, type: 3}
+  soundOrigin: {fileID: 0}
 --- !u!95 &1456391079
 Animator:
   serializedVersion: 7
@@ -42001,6 +42093,18 @@ PrefabInstance:
       propertyPath: randomStart
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4224752255811457030, guid: adefb9a6cc9abe645a00dc9cd9de20e0, type: 3}
+      propertyPath: pendulumSound
+      value: 
+      objectReference: {fileID: 8300000, guid: a896906f400e4974ba64e7c93a4294d9, type: 3}
+    - target: {fileID: 4224752255811457030, guid: adefb9a6cc9abe645a00dc9cd9de20e0, type: 3}
+      propertyPath: soundFXMixerGroup
+      value: 
+      objectReference: {fileID: 8198768227712865964, guid: f90a78b7e947e964ba6bcba75a8e1916, type: 2}
+    - target: {fileID: 4224752255811457030, guid: adefb9a6cc9abe645a00dc9cd9de20e0, type: 3}
+      propertyPath: pendulumSoundVolume
+      value: 0.3
+      objectReference: {fileID: 0}
     - target: {fileID: 4485540512974686503, guid: adefb9a6cc9abe645a00dc9cd9de20e0, type: 3}
       propertyPath: m_Name
       value: Hammer
@@ -42521,6 +42625,18 @@ PrefabInstance:
     - target: {fileID: 4224752255811457030, guid: adefb9a6cc9abe645a00dc9cd9de20e0, type: 3}
       propertyPath: randomStart
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4224752255811457030, guid: adefb9a6cc9abe645a00dc9cd9de20e0, type: 3}
+      propertyPath: pendulumSound
+      value: 
+      objectReference: {fileID: 8300000, guid: a896906f400e4974ba64e7c93a4294d9, type: 3}
+    - target: {fileID: 4224752255811457030, guid: adefb9a6cc9abe645a00dc9cd9de20e0, type: 3}
+      propertyPath: soundFXMixerGroup
+      value: 
+      objectReference: {fileID: 8198768227712865964, guid: f90a78b7e947e964ba6bcba75a8e1916, type: 2}
+    - target: {fileID: 4224752255811457030, guid: adefb9a6cc9abe645a00dc9cd9de20e0, type: 3}
+      propertyPath: pendulumSoundVolume
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 4485540512974686503, guid: adefb9a6cc9abe645a00dc9cd9de20e0, type: 3}
       propertyPath: m_Name
@@ -46595,7 +46711,7 @@ MonoBehaviour:
   soundListContainer: {fileID: 1344354929}
   soundEntryPrefab: {fileID: 8999246023326467481, guid: bb6bd89fd95eea3449dedea6b6bcf568, type: 3}
   player: {fileID: 2110341023}
-  detectionRange: 10
+  detectionRange: 25
 --- !u!1 &1666420967
 GameObject:
   m_ObjectHideFlags: 0
@@ -48733,6 +48849,8 @@ MonoBehaviour:
   distance: 3
   direction: {x: 0, y: 1, z: 0}
   isOpen: 0
+  platformMoveSound: {fileID: 0}
+  soundFXMixerGroup: {fileID: 0}
 --- !u!4 &1752081060 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 406216486182301722, guid: 03327a66a25572740b4003257f177d34, type: 3}
@@ -50668,6 +50786,8 @@ MonoBehaviour:
   distance: 5
   direction: {x: 0, y: 1, z: 0}
   isOpen: 0
+  platformMoveSound: {fileID: 0}
+  soundFXMixerGroup: {fileID: 0}
 --- !u!1 &1826959441 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 629651868470874383, guid: 21b433fd33171954a955cf6b1203c0f6, type: 3}
@@ -51514,6 +51634,18 @@ PrefabInstance:
       propertyPath: randomStart
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4224752255811457030, guid: adefb9a6cc9abe645a00dc9cd9de20e0, type: 3}
+      propertyPath: pendulumSound
+      value: 
+      objectReference: {fileID: 8300000, guid: a896906f400e4974ba64e7c93a4294d9, type: 3}
+    - target: {fileID: 4224752255811457030, guid: adefb9a6cc9abe645a00dc9cd9de20e0, type: 3}
+      propertyPath: soundFXMixerGroup
+      value: 
+      objectReference: {fileID: 8198768227712865964, guid: f90a78b7e947e964ba6bcba75a8e1916, type: 2}
+    - target: {fileID: 4224752255811457030, guid: adefb9a6cc9abe645a00dc9cd9de20e0, type: 3}
+      propertyPath: pendulumSoundVolume
+      value: 0.3
+      objectReference: {fileID: 0}
     - target: {fileID: 4485540512974686503, guid: adefb9a6cc9abe645a00dc9cd9de20e0, type: 3}
       propertyPath: m_Name
       value: Hammer
@@ -51720,6 +51852,18 @@ PrefabInstance:
     - target: {fileID: 4224752255811457030, guid: adefb9a6cc9abe645a00dc9cd9de20e0, type: 3}
       propertyPath: randomStart
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4224752255811457030, guid: adefb9a6cc9abe645a00dc9cd9de20e0, type: 3}
+      propertyPath: pendulumSound
+      value: 
+      objectReference: {fileID: 8300000, guid: a896906f400e4974ba64e7c93a4294d9, type: 3}
+    - target: {fileID: 4224752255811457030, guid: adefb9a6cc9abe645a00dc9cd9de20e0, type: 3}
+      propertyPath: soundFXMixerGroup
+      value: 
+      objectReference: {fileID: 8198768227712865964, guid: f90a78b7e947e964ba6bcba75a8e1916, type: 2}
+    - target: {fileID: 4224752255811457030, guid: adefb9a6cc9abe645a00dc9cd9de20e0, type: 3}
+      propertyPath: pendulumSoundVolume
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 4485540512974686503, guid: adefb9a6cc9abe645a00dc9cd9de20e0, type: 3}
       propertyPath: m_Name
@@ -52114,6 +52258,8 @@ MonoBehaviour:
   disappearTime: 1
   canReset: 1
   resetTime: 1
+  crumbleSound: {fileID: 8300000, guid: d3009baea443fc540bc2da58a01c08ab, type: 3}
+  soundOrigin: {fileID: 0}
 --- !u!95 &1890861779
 Animator:
   serializedVersion: 7
@@ -52193,6 +52339,8 @@ MonoBehaviour:
   distance: 5
   direction: {x: 0, y: 0, z: 2}
   isOpen: 0
+  platformMoveSound: {fileID: 0}
+  soundFXMixerGroup: {fileID: 0}
 --- !u!65 &1891950269
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -54810,6 +54958,18 @@ PrefabInstance:
       propertyPath: randomStart
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4224752255811457030, guid: adefb9a6cc9abe645a00dc9cd9de20e0, type: 3}
+      propertyPath: pendulumSound
+      value: 
+      objectReference: {fileID: 8300000, guid: a896906f400e4974ba64e7c93a4294d9, type: 3}
+    - target: {fileID: 4224752255811457030, guid: adefb9a6cc9abe645a00dc9cd9de20e0, type: 3}
+      propertyPath: soundFXMixerGroup
+      value: 
+      objectReference: {fileID: 8198768227712865964, guid: f90a78b7e947e964ba6bcba75a8e1916, type: 2}
+    - target: {fileID: 4224752255811457030, guid: adefb9a6cc9abe645a00dc9cd9de20e0, type: 3}
+      propertyPath: pendulumSoundVolume
+      value: 0.3
+      objectReference: {fileID: 0}
     - target: {fileID: 4485540512974686503, guid: adefb9a6cc9abe645a00dc9cd9de20e0, type: 3}
       propertyPath: m_Name
       value: Hammer
@@ -55396,6 +55556,8 @@ MonoBehaviour:
   distance: 5
   direction: {x: 0, y: 1, z: 0}
   isOpen: 0
+  platformMoveSound: {fileID: 0}
+  soundFXMixerGroup: {fileID: 0}
 --- !u!1001 &2034840117
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -56904,6 +57066,8 @@ MonoBehaviour:
   distance: 5
   direction: {x: 0, y: 1, z: 0}
   isOpen: 0
+  platformMoveSound: {fileID: 0}
+  soundFXMixerGroup: {fileID: 0}
 --- !u!1001 &2071607084
 PrefabInstance:
   m_ObjectHideFlags: 0
