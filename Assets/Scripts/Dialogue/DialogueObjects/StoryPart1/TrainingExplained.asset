@@ -15,5 +15,5 @@ MonoBehaviour:
   dialogue:
   - 'Am I to assume you have been training? '
   responses:
-  - responseText: Ninjutsu training
+  - responseText: Ninjutsu
     dialogueObject: {fileID: 11400000, guid: eea3122cb0b09b9419fb3c04b8770f91, type: 2}

@@ -19,5 +19,5 @@ MonoBehaviour:
     Were there any other survivors? But more importantly...
   - What is the reason for your return?
   responses:
-  - responseText: For Vengnence
+  - responseText: Vengnence
     dialogueObject: {fileID: 11400000, guid: 2a98dbd4aea7b3e42b614399338a44b5, type: 2}
