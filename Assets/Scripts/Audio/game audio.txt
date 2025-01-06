@@ -1,10 +1,11 @@
 player:
 - dash
-- death
+
 
 level:
-- door
-- breakable items
+- vines
+- hammer pendulum
+- pressure plate ding
 
 enemy:
 - grunt/hit noises

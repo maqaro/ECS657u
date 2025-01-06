@@ -392,7 +392,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Handle sprinting
-        if (grounded && sprintInput)
+        if (grounded && sprintInput && rb.velocity.magnitude > 0.1f) 
         {
             state = MovementState.sprinting;
 
