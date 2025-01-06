@@ -1,21 +1,27 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class ExtendablePlatform : MonoBehaviour
 {
-    public GameObject extendablePlatform;
-    public float speed = 1.0f;
-    public float distance;
-    public Vector3 direction = Vector3.forward; // Direction can be set in the inspector
+    [Header("Platform Settings")]
+    public GameObject extendablePlatform; // The platform to extend/retract
+    public float speed = 1.0f; // Speed of movement
+    public float distance; // Distance to extend/retract
+    public Vector3 direction = Vector3.forward; // Direction of extension/retraction
 
     private Vector3 extendablePlatformStart;
     private Vector3 extendablePlatformEnd;
     public bool isOpen = false;
     private Coroutine extendablePlatformCoroutine;
 
-    // Start is called before the first frame update
-    void Start()
+    [Header("Audio Settings")]
+    [SerializeField] private AudioClip platformMoveSound; // Sound while platform is moving
+    [SerializeField] private AudioMixerGroup soundFXMixerGroup; // Reference to the SFX mixer group
+
+    private AudioSource platformAudioSource; // AudioSource for platform sounds
+
+    private void Start()
     {
         if (extendablePlatform == null)
         {
@@ -25,35 +31,50 @@ public class ExtendablePlatform : MonoBehaviour
 
         extendablePlatformStart = extendablePlatform.transform.position;
         extendablePlatformEnd = extendablePlatformStart + direction.normalized * distance;
+
+        // Add a single AudioSource component for platform movement sound
+        platformAudioSource = gameObject.AddComponent<AudioSource>();
+        platformAudioSource.spatialBlend = 1.0f; // Enable 3D sound
+
+        // Assign the mixer group to the AudioSource
+        if (soundFXMixerGroup != null)
+        {
+            platformAudioSource.outputAudioMixerGroup = soundFXMixerGroup;
+        }
     }
 
-    // Extend the platform to the end position
     public void ExtendPlatform()
     {
         if (!isOpen)
         {
-            // Stop any existing coroutines first
-            if (extendablePlatformCoroutine != null) StopCoroutine(extendablePlatformCoroutine);
-            
+            // Stop any existing coroutines
+            StopPlatformAction();
+
+            // Play platform movement sound
+            PlayPlatformMovementSound();
+
+            // Start platform extension coroutine
             extendablePlatformCoroutine = StartCoroutine(MovePlatform(extendablePlatform, extendablePlatformEnd));
             isOpen = true;
         }
     }
 
-    // Retract the platform to the start position
     public void RetractPlatform()
     {
         if (isOpen)
         {
-            // Stop any existing coroutines first
-            if (extendablePlatformCoroutine != null) StopCoroutine(extendablePlatformCoroutine);
-            
+            // Stop any existing coroutines
+            StopPlatformAction();
+
+            // Play platform movement sound
+            PlayPlatformMovementSound();
+
+            // Start platform retraction coroutine
             extendablePlatformCoroutine = StartCoroutine(MovePlatform(extendablePlatform, extendablePlatformStart));
             isOpen = false;
         }
     }
 
-    // Toggle the platform between extended and retracted states
     public void TogglePlatform()
     {
         if (isOpen)
@@ -66,7 +87,6 @@ public class ExtendablePlatform : MonoBehaviour
         }
     }
 
-    // Coroutine to move the platform to the target position
     private IEnumerator MovePlatform(GameObject platform, Vector3 target)
     {
         while (Vector3.Distance(platform.transform.position, target) > 0.01f)
@@ -74,5 +94,39 @@ public class ExtendablePlatform : MonoBehaviour
             platform.transform.position = Vector3.MoveTowards(platform.transform.position, target, speed * Time.deltaTime);
             yield return null;
         }
+
+        platform.transform.position = target; // Ensure platform reaches the exact position
+
+        // Stop movement sound
+        StopPlatformMovementSound();
+    }
+
+    private void PlayPlatformMovementSound()
+    {
+        if (platformMoveSound != null)
+        {
+            // Use SoundFXManager to play the movement sound
+            SoundFXManager.instance.PlaySfx(platformMoveSound, transform, 1.0f, "Sliding Wall");
+        }
+    }
+
+    private void StopPlatformMovementSound()
+    {
+        if (platformAudioSource.isPlaying)
+        {
+            platformAudioSource.Stop();
+        }
+    }
+
+    private void StopPlatformAction()
+    {
+        // Stop any ongoing coroutine
+        if (extendablePlatformCoroutine != null)
+        {
+            StopCoroutine(extendablePlatformCoroutine);
+        }
+
+        // Stop the movement sound
+        StopPlatformMovementSound();
     }
 }

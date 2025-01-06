@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerHealth : MonoBehaviour, IDataPersistence
 {
     [SerializeField] private AudioClip[] hitSounds;
+    [SerializeField] private AudioClip[] deathSounds;
     public float maxHealth = 100f;
     public float currentHealth;
     public Healthbar healthbar;
@@ -47,6 +48,7 @@ public class PlayerHealth : MonoBehaviour, IDataPersistence
         {
             // If the player's health is less than or equal to 0, set the health to 0
             currentHealth = 0;
+            SoundFXManager.instance.PlayRandomSfxPlayer(deathSounds, transform, 0.3f);
         }
         healthbar.SetHealth(currentHealth);
     }
