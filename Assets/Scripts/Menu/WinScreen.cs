@@ -16,17 +16,21 @@ public class WinScreen : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("WinTrigger"))
+        Debug.Log("Entered Trigger: " + other.tag);
+        if (other.CompareTag("Player")) // Change to match your player tag if needed
         {
+            Debug.Log("Win Trigger Activated");
             Setup();
         }
     }
 
+
     public void Setup()
     {
-        winScreenUI.SetActive(true);
-        Time.timeScale = 0f; // Pause the game
-        // Show and unlock cursor
+        Debug.Log("Setting winScreenUI to active");
+        winScreenUI.SetActive(true);  // Show the UI
+
+        Time.timeScale = 1f;  // Keep game running to ensure UI is visible
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
@@ -44,4 +48,6 @@ public class WinScreen : MonoBehaviour
         // Load the main menu scene
         SceneManager.LoadScene("MainMenu");
     }
+
+
 }
