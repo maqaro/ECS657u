@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: StoryPart4
   m_EditorClassIdentifier: 
   dialogue:
-  - Sir Haruhiko your nearly there! To be able to be so great at such a young age...
-    You must have trained incredibly hard.
+  - Haruhiko-sama, you're nearly there! To be able to be so great at such a young
+    age... You must have trained incredibly hard.
   - Your father would be so proud to have an heir such as you.
   responses:
   - responseText: My father?

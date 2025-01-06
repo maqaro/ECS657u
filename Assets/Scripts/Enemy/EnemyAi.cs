@@ -35,6 +35,10 @@ public class EnemyAi : MonoBehaviour
     private string AnimationState = "Patrolling";
     private bool isAttacking = false;
 
+    [Header("Audio")]
+    
+    [SerializeField] private AudioClip[] deathSounds;
+
     private void Awake()
     {
         player = GameObject.Find("PlayerObj").transform;
@@ -132,10 +136,12 @@ public class EnemyAi : MonoBehaviour
     }
 
     //Allows the player to damage the enemy
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
         health -= damage;
-        if (health <= 0) Invoke(nameof(DestroyEnemy), 0.5f);
+        if (health <= 0) {
+            Invoke(nameof(DestroyEnemy), 0.5f);
+        }
         else animator.SetTrigger("Hit");
     }
 
@@ -148,6 +154,7 @@ public class EnemyAi : MonoBehaviour
         rb.AddForce(transform.forward * 2f + Vector3.up * 2f, ForceMode.Impulse);
 
         isDead = true;
+        SoundFXManager.instance.PlayRandomSfx(deathSounds, transform, 0.3f, "Enemy Death");
 
         Destroy(GetComponent<NavMeshAgent>());
         Destroy(GetComponent<EnemyAi>());

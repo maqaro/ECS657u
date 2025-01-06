@@ -4,6 +4,7 @@ public class PlayerSpawnManager : MonoBehaviour, IDataPersistence
 {
     public float threshold;
     [SerializeField] private string spawnTag = "SpawnPoint";
+    [SerializeField] private AudioClip checkpointSound;
     private Transform spawnPoint;
     private PlayerHealth playerHealth;
     public GameOverScreen gameOverScreen;
@@ -106,17 +107,9 @@ public class PlayerSpawnManager : MonoBehaviour, IDataPersistence
 
     private void OnTriggerEnter(Collider other)
     {
-        // Check if the trigger is a spawn point
-        // if (other.CompareTag("SpawnPoint"))
-        // {
-        //     hasReachedCheckpoint = true;
-        //     spawnPoint = other.transform;
-        //     lastCheckpointPosition = spawnPoint.position;
-            
-        // }
-        // Check if the trigger is a checkpoint
         if (other.CompareTag("Checkpoint") || other.CompareTag("SpawnPoint"))
         {
+            SoundFXManager.instance.PlaySfx(checkpointSound, transform, 2f, "Checkpoint");
             hasReachedCheckpoint = true;
             spawnPoint = other.transform;
             lastCheckpointPosition = spawnPoint.position;

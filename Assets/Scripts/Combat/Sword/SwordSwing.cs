@@ -19,6 +19,8 @@ public class SwordSwing : MonoBehaviour
     [Header("Sound Effects")]
     [SerializeField] private AudioClip[] swingSounds;
 
+    [SerializeField] private AudioClip[] enemyHitSounds;
+
     private InputAction swordSwingAction;
     private WeaponAnimation wa;
     private Animator animator;
@@ -89,6 +91,7 @@ public class SwordSwing : MonoBehaviour
                 {
                     // Apply damage to the enemy
                     enemyScript.health -= damage;
+                    SoundFXManager.instance.PlayRandomSfx(enemyHitSounds, transform, 0.3f, "Enemy Hit");
                     if (enemyScript.health <= 0)
                     {
                         enemyScript.health = 0;

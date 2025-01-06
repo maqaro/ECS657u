@@ -39,6 +39,8 @@ public class Dashing : MonoBehaviour
     private InputAction moveAction;
     private Vector2 moveInput;
 
+    [SerializeField] private AudioClip dashSound; // Sound to play when dashing
+
     private bool isAirDashing;
     private DialogueUI dialogueUI; // Reference to DialogueUI
 
@@ -98,9 +100,9 @@ public class Dashing : MonoBehaviour
             return;
         }
 
-        if (dashCdTimer > 0 || (isAirDashing && !pm.grounded) || pm == null || rb == null || orientation == null || PlayerCam == null)
-            return;
+        if (dashCdTimer > 0 || (isAirDashing && !pm.grounded) || pm == null || rb == null || orientation == null || PlayerCam == null){return;}
 
+        SoundFXManager.instance.PlaySfxPlayer(dashSound, transform, 0.3f);
         dashCdTimer = dashCd; // Start the cooldown
         pm.dashing = true;
         isAirDashing = !pm.grounded;
