@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bba3c12bd6123344fbf3800e779a51ff, type: 3}
+  m_Name: ForRevenge
+  m_EditorClassIdentifier: 
+  dialogue:
+  - WHAT?! But Haruhiko sama the one you which to do battle is Lord Asano.
+  - The greatest warrior in Japan since your ancestor Musashi. How do you hope to
+    defeat such a foe when you have so little experience in battle yet Lord Asano
+    has years of grueling battles under his belt?
+  responses:
+  - responseText: I trained
+    dialogueObject: {fileID: 11400000, guid: e3a95c7304fdc3e46b52163849feb063, type: 2}
