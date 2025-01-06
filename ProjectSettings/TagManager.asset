@@ -12,6 +12,7 @@ TagManager:
   - PressurePlate
   - LightBeam
   - Reflector
+  - WinTrigger
   layers:
   - Default
   - TransparentFX
