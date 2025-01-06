@@ -9,7 +9,7 @@ The game concept is a First-Person 3D Movement-Platformer where the play has to 
 
 ## Link to WebGL build
 - [Build Repo](https://github.com/maqaro/ECS657u-Builds/)
-- [Latest Build](https://maqaro.github.io/ECS657u-Builds/PrototypeBuild/index.html)
+- [Latest Build](https://maqaro.github.io/ECS657u-Builds/FinalBuild/)
 
 ## Getting Started
 
