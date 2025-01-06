@@ -45,13 +45,18 @@ public class GameOverScreen : MonoBehaviour
 
     public void MainMenuButton()
     {
-        // Don't call Hide() since it locks the cursor
-        Time.timeScale = 1f; // Resume normal time scale
-        
-        // Make cursor visible and unlocked for menu
+        // Save the game before loading up the main menu
+        DataPersistenceManager.instance.SaveGame();
+
+        // Resume time before changing scenes
+        Time.timeScale = 1f;
+        AudioListener.pause = false;
+
+        //unlocks cursor once taken back to the mainMenu
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        
-        LevelLoader.LoadSpecificLevel(0);
+
+        // This is a call that takes you back to the MainMenu using SceneManager
+        SceneManager.LoadScene("MainMenu");
     }
 }
