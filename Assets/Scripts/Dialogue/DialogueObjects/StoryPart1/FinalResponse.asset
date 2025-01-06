@@ -15,11 +15,11 @@ MonoBehaviour:
   dialogue:
   - 'Haruhiko-sama!! Is this true? You know how frowned upon the ninjutsu arts are
     as one of Samurai descent. '
-  - How could you betray your creed for such meesly...
+  - How could you betray your creed for such measly...
   - You know what, my apologies sire. It must have been hard on you these past 8
     years. You need not listen to the lectures of an old man such as myself.
   - Just past this tori gate lies a difficult journey ahead of you. Beware of the
-    road ahead and may you venture prove fruitfull.
+    road ahead and may you venture prove fruitful.
   responses:
   - responseText: I'll return
     dialogueObject: {fileID: 0}

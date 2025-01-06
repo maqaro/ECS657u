@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogue:
   - Haruhiko sama! Over here!
-  - Great you may not remember but I am Kento Miyagi. I served as your fathers retainer
-    for many years.
-  - Though I may not be able to follow you on your thorny path of revenge I will
+  - Great, you may not remember but I am Kento Miyagi. I have served as your fathers
+    retainer for many years.
+  - Though I may not be able to follow you on your thorny path of revenge, I will
     provide aid as best I can as you venture to your final battle.
   responses: []

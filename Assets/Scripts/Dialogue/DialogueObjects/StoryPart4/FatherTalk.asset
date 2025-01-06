@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogue:
   - Yes, your father. He who's sword was known as the white flash. Your father stayed
-    true to his creed as a samura and waited atop the valley of death for Lord Asano.
+    true to his creed as a samurai and waited atop the valley of death for Lord Asano.
   - Your father was a force to be reckoned with. Even Lord Asano had to be weary...
   - Corpse after corpse, left in his wake. As he awaited... Lord Asano's arrival.
     Heed my words Haruhiko. He was Nozarashi. Blade of the Shogunate. And till he
-    faced Lord Asano he had never known defeat.
+    faced Lord Asano, he had never known defeat.
   responses:
   - responseText: '*In shock*'
     dialogueObject: {fileID: 11400000, guid: ad79ae8c7dfc2e449a2e49178092ecf0, type: 2}
