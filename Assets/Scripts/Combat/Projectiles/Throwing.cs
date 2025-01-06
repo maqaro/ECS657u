@@ -99,10 +99,6 @@ public class Throwing : MonoBehaviour, IDataPersistence
 
         if (Time.time < nextThrowTime)
         {
-            if (showCooldownDebug)
-            {
-                Debug.Log($"Throw on cooldown. Ready in {nextThrowTime - Time.time:F1} seconds");
-            }
             return;
         }
 

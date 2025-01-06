@@ -73,7 +73,6 @@ public class SoundFXManager : MonoBehaviour
 
         if (soundText == null || leftIndicator == null || rightIndicator == null)
         {
-            Debug.LogError("AddSoundEntry: Missing components in Sound Entry Prefab. Please check the prefab setup.");
             Destroy(newSoundEntry);
             return;
         }
@@ -172,7 +171,6 @@ public class SoundFXManager : MonoBehaviour
     {
         if (clip == null)
         {
-            Debug.LogWarning("PlaySfx: No audio clip provided!");
             return;
         }
 
@@ -199,7 +197,6 @@ public class SoundFXManager : MonoBehaviour
     {
         if (clip == null)
         {
-            Debug.LogWarning("PlaySfxPlayer: No audio clip provided!");
             return;
         }
 
@@ -226,7 +223,6 @@ public class SoundFXManager : MonoBehaviour
     {
         if (clips == null || clips.Length == 0)
         {
-            Debug.LogWarning("PlayRandomSfx: No audio clips provided!");
             return;
         }
 
@@ -257,7 +253,6 @@ public class SoundFXManager : MonoBehaviour
     {
         if (clips == null || clips.Length == 0)
         {
-            Debug.LogWarning("PlayRandomSfxPlayer: No audio clips provided!");
             return;
         }
 
@@ -288,7 +283,6 @@ public class SoundFXManager : MonoBehaviour
     {
         if (clip == null || source == null)
         {
-            Debug.LogWarning("PlayLoopingSoundPersistent: Invalid clip or source!");
             return;
         }
 

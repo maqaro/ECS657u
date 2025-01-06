@@ -46,7 +46,6 @@ public class PlayerSpawnManager : MonoBehaviour, IDataPersistence
         this.lastCheckpointPosition = data.checkpointPosition;
 
         Vector3 loadPosition = hasReachedCheckpoint ? lastCheckpointPosition : data.spawnPoint;
-        Debug.Log($"Loading position data - Checkpoint: {hasReachedCheckpoint}, Position: {loadPosition}");
         
         if (rb != null)
         {
@@ -70,9 +69,6 @@ public class PlayerSpawnManager : MonoBehaviour, IDataPersistence
 
         // Saving the spawn point
         data.spawnPoint = spawnPoint != null ? spawnPoint.position : Vector3.zero;
-
-        Debug.Log($"Saving position data - Checkpoint: {hasReachedCheckpoint}, " +
-              $"Position: {(hasReachedCheckpoint ? lastCheckpointPosition : data.spawnPoint)}");
     }
 
     void Update()
